@@ -1,0 +1,193 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Threading.Tasks;
+using FinanceProcessor.IEXSharp.Helper;
+using FinanceProcessor.IEXSharp.Model;
+using FinanceProcessor.IEXSharp.Model.CoreData.FutureSymbols.Response;
+using FinanceProcessor.IEXSharp.Model.CoreData.ReferenceData.Request;
+using FinanceProcessor.IEXSharp.Model.CoreData.ReferenceData.Response;
+
+namespace FinanceProcessor.IEXSharp.Service.Cloud.CoreData.ReferenceData
+{
+	internal class ReferenceDataService : IReferenceDataService
+	{
+		private readonly ExecutorREST executor;
+
+		internal ReferenceDataService(ExecutorREST executor)
+		{
+			this.executor = executor;
+		}
+
+		public async Task<IEXResponse<IEnumerable<SearchResponse>>> SearchAsync(string fragment)
+		{
+			const string urlPattern = "search/[fragment]";
+
+			var pathNvc = new NameValueCollection
+			{
+				{"fragment", fragment},
+			};
+
+			return await executor.ExecuteAsync<IEnumerable<SearchResponse>>(urlPattern, pathNvc, null);
+		}
+
+		public async Task<IEXResponse<SymbolFXResponse>> SymbolFXAsync() =>
+			await executor.NoParamExecute<SymbolFXResponse>("ref-data/fx/symbols");
+
+		public async Task<IEXResponse<IEnumerable<SymbolCryptoResponse>>> SymbolCryptoAsync() =>
+			await executor.NoParamExecute<IEnumerable<SymbolCryptoResponse>>("ref-data/crypto/symbols");
+
+		public async Task<IEXResponse<IEnumerable<SymbolIEXResponse>>> SymbolsIEXAsync() =>
+			await executor.NoParamExecute<IEnumerable<SymbolIEXResponse>>("ref-data/iex/symbols");
+
+		public async Task<IEXResponse<IEnumerable<SymbolInternationalResponse>>> SymbolsInternationalRegionAsync(string region)
+		{
+			const string urlPattern = "ref-data/region/[region]/symbols";
+
+			var qsb = new QueryStringBuilder();
+
+			var pathNvc = new NameValueCollection
+			{
+				{"region", region}
+			};
+
+			return await executor.ExecuteAsync<IEnumerable<SymbolInternationalResponse>>(urlPattern, pathNvc, qsb);
+		}
+
+		public async Task<IEXResponse<IEnumerable<SymbolInternationalResponse>>> SymbolsInternationalExchangeAsync(string exchange)
+		{
+			const string urlPattern = "ref-data/exchange/[exchange]/symbols";
+
+			var qsb = new QueryStringBuilder();
+
+			var pathNvc = new NameValueCollection
+			{
+				{"exchange", exchange}
+			};
+
+			return await executor.ExecuteAsync<IEnumerable<SymbolInternationalResponse>>(urlPattern, pathNvc, qsb);
+		}
+
+		public async Task<IEXResponse<IEnumerable<ExchangeInternationalResponse>>> ExchangeInternationalAsync() =>
+			await executor.NoParamExecute<IEnumerable<ExchangeInternationalResponse>>("ref-data/exchanges");
+
+		public async Task<IEXResponse<IEnumerable<FutureSymbolResponse>>> SymbolsFuturesAsync() =>
+			await executor.NoParamExecute<IEnumerable<FutureSymbolResponse>>("ref-data/futures/symbols");
+
+		public async Task<IEXResponse<IEnumerable<FutureSymbolUnderlyingResponse>>> SymbolsFuturesUnderlyingAsync(string underlying)
+		{
+			const string urlPattern = "ref-data/futures/symbols/[underlying]";
+
+			var qsb = new QueryStringBuilder();
+
+			var pathNvc = new NameValueCollection
+			{
+				{"underlying", underlying}
+			};
+
+			return await executor.ExecuteAsync<IEnumerable<FutureSymbolUnderlyingResponse>>(urlPattern, pathNvc, qsb);
+		}
+
+		public async Task<IEXResponse<IEnumerable<SymbolMutualFundResponse>>> SymbolsMutualFundAsync() =>
+			await executor.NoParamExecute<IEnumerable<SymbolMutualFundResponse>>("ref-data/mutual-funds/symbols");
+
+		public async Task<IEXResponse<Dictionary<string, string[]>>> SymbolsOptionsAsync() =>
+			await executor.NoParamExecute<Dictionary<string, string[]>>("ref-data/options/symbols");
+
+		public async Task<IEXResponse<IEnumerable<SymbolOTCResponse>>> SymbolsOTCAsync() =>
+			await executor.NoParamExecute<IEnumerable<SymbolOTCResponse>>("ref-data/otc/symbols");
+
+		public async Task<IEXResponse<IEnumerable<SectorResponse>>> SectorsAsync() =>
+			await executor.NoParamExecute<IEnumerable<SectorResponse>>("ref-data/sectors");
+
+		public async Task<IEXResponse<IEnumerable<SymbolResponse>>> SymbolsAsync() =>
+			await executor.NoParamExecute<IEnumerable<SymbolResponse>>("ref-data/symbols");
+
+		public async Task<IEXResponse<IEnumerable<TagResponse>>> TagsAsync() =>
+			await executor.NoParamExecute<IEnumerable<TagResponse>>("ref-data/tags");
+
+		public async Task<IEXResponse<IEnumerable<ExchangeUSResponse>>> ExchangeUSAsync() =>
+			await executor.NoParamExecute<IEnumerable<ExchangeUSResponse>>("ref-data/market/us/exchanges");
+
+		public async Task<IEXResponse<IEnumerable<HolidaysAndTradingDatesUSResponse>>> HolidaysAndTradingDatesUSAsync(
+			DateType type, DirectionType direction = DirectionType.Next, int last = 1, DateTime? startDate = null)
+		{
+			const string urlPattern = "ref-data/us/dates/[type]/[direction]/[last]/[startDate]";
+
+			var qsb = new QueryStringBuilder();
+
+			var pathNvc = new NameValueCollection
+			{
+				{"type", type.GetDescriptionFromEnum()},
+				{"direction", direction.GetDescriptionFromEnum()},
+				{"last", last.ToString()},
+				{"startDate", startDate == null ? DateTime.Now.ToString("yyyyMMdd") : ((DateTime) startDate).ToString("yyyyMMdd")}
+			};
+
+			return await executor.ExecuteAsync<IEnumerable<HolidaysAndTradingDatesUSResponse>>(urlPattern, pathNvc, qsb);
+		}
+
+		public async Task<IEXResponse<IEnumerable<SymbolOptionResponse>>> SymbolsOptionsAsync(string optionName)
+		{
+			const string urlPattern = "ref-data/options/symbols/[optionName]";
+			var qsb = new QueryStringBuilder();
+
+			var pathNvc = new NameValueCollection
+			{
+				{"optionName", optionName}
+			};
+
+			return await executor.ExecuteAsync<IEnumerable<SymbolOptionResponse>>(urlPattern, pathNvc, qsb);
+		}
+
+		public async Task<IEXResponse<IEnumerable<MappingResponse>>> FIGIMappingAsync(string figi)
+		{
+			const string urlPattern = "ref-data/figi";
+			var qsb = new QueryStringBuilder();
+
+			qsb.Add("figi", figi);
+
+			var pathNvc = new NameValueCollection();
+
+			return await executor.ExecuteAsync<IEnumerable<MappingResponse>>(urlPattern, pathNvc, qsb);
+		}
+
+		public async Task<IEXResponse<IEnumerable<MappingResponse>>> ISINMappingAsync(string isin)
+		{
+			const string urlPattern = "ref-data/isin";
+			var qsb = new QueryStringBuilder();
+
+			qsb.Add("isin", isin);
+
+			var pathNvc = new NameValueCollection();
+
+			return await executor.ExecuteAsync<IEnumerable<MappingResponse>>(urlPattern, pathNvc, qsb);
+		}
+
+		public async Task<IEXResponse<IEnumerable<MappingResponse>>> RICMappingAsync(string ric)
+		{
+			const string urlPattern = "ref-data/ric";
+			var qsb = new QueryStringBuilder();
+
+			qsb.Add("ric", ric);
+
+			var pathNvc = new NameValueCollection();
+
+			return await executor.ExecuteAsync<IEnumerable<MappingResponse>>(urlPattern, pathNvc, qsb);
+		}
+
+		public async Task<IEXResponse<IEnumerable<SymbolOptionResponse>>> SymbolsOptionsAsync(string optionName, string expiration)
+		{
+			const string urlPattern = "ref-data/options/symbols/[optionName]/[expiration]";
+			var qsb = new QueryStringBuilder();
+
+			var pathNvc = new NameValueCollection
+			{
+				{"optionName", optionName},
+				{"expiration", expiration }
+			};
+
+			return await executor.ExecuteAsync<IEnumerable<SymbolOptionResponse>>(urlPattern, pathNvc, qsb);
+		}
+	}
+}

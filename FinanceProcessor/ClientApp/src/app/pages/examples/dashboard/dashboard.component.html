@@ -1,0 +1,4702 @@
+<app-navbar (globalSearchEvent)="onGlobalSearch($event)"></app-navbar>
+<div class=" content">
+  <div class=" row">
+    <div class=" col-md-4 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'text-align': 'center', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/charts']">Intraday price chart for SPY</a>
+        <div class=" card-body">
+          <div class=" chart-area" style="height: 250px;">
+            <canvas id="spyIntradayPrice"> </canvas>
+          </div>
+        </div>
+      </p-card>
+    </div>
+    <div class=" col-md-4 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'text-align': 'center', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/charts']">Intraday price chart for QQQ</a>
+        <div class=" card-body">
+          <div class=" chart-area" style="height: 250px;">
+            <canvas id="qqqIntradayPrice"> </canvas>
+          </div>
+        </div>
+      </p-card>
+    </div>
+    <div class=" col-md-4 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'text-align': 'center', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/charts']">Intraday price chart for IWM</a>
+        <div class=" card-body">
+          <div class=" chart-area" style="height: 250px;">
+            <canvas id="iwmIntradayPrice"> </canvas>
+          </div>
+        </div>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/list']">Biggest Gainers</a>
+        <p-table #dt1 [value]="gainers" dataKey="symbol"
+                 [rows]="5" [showCurrentPageReport]="true" [loading]="gainerloading"
+                 [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+                 [globalFilterFields]="['symbol']" responsiveLayout="scroll" class="custom-bg-blue">
+          <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search for symbol..." />
+              </span>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                Change
+              </th>
+              <th>
+                Change Percent
+              </th>
+              <th>
+                Market Cap
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                {{collection.symbol}}
+              </td>
+              <td [ngClass]="{ 'text-success': collection.changePercent > 0, 'text-danger': collection.changePercent <= 0 }">
+                {{collection.change}}
+              </td>
+              <td [ngClass]="{ 'text-success': collection.changePercent > 0, 'text-danger': collection.changePercent <= 0 }">
+                {{collection.changePercent}}%
+              </td>
+              <td>
+                {{collection.marketCap}}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="4">No collections found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/list']">Biggest Losers</a>
+        <p-table #dt2 [value]="losers" dataKey="symbol"
+                 [rows]="5" [showCurrentPageReport]="true" [loading]="loserloading"
+                 [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+                 [globalFilterFields]="['symbol']" responsiveLayout="scroll" class="custom-bg-blue">
+          <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Search for symbol..." />
+              </span>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                Change
+              </th>
+              <th>
+                Change Percent
+              </th>
+              <th>
+                Market Cap
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                {{collection.symbol}}
+              </td>
+              <td [ngClass]="{ 'text-success': collection.changePercent > 0, 'text-danger': collection.changePercent <= 0 }">
+                {{collection.change}}
+              </td>
+              <td [ngClass]="{ 'text-success': collection.changePercent > 0, 'text-danger': collection.changePercent <= 0 }">
+                {{collection.changePercent}}%
+              </td>
+              <td>
+                {{collection.marketCap}}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="4">No collections found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+       </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/sector-performance']">Sector Performance</a>
+        <p-table #dt3 [value]="sectors" dataKey="name"
+                 [rows]="5" [showCurrentPageReport]="true" [loading]="sectorloading"
+                 [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+                 [globalFilterFields]="['type', 'name']" responsiveLayout="scroll" class="custom-bg-blue">
+          <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt3.filterGlobal($event.target.value, 'contains')" placeholder="Search for symbol..." />
+              </span>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Type
+              </th>
+              <th>
+                Name
+              </th>
+              <th>
+                Performance
+              </th>
+              <th>
+                Last Updated
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                {{collection.type}}
+              </td>
+              <td>
+                {{collection.name}}
+              </td>
+              <td [ngClass]="{ 'text-success': collection.performance > 0, 'text-danger': collection.performance <= 0 }">
+                {{collection.performance}}%
+              </td>
+              <td>
+                {{collection.lastUpdated | date: 'MM/dd/yyyy'}}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="4">No collections found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/market-volume-us']">Market Volume(US)</a>
+        <p-table #dt4 [value]="volumes" dataKey="venueName"
+                 [rows]="5" [showCurrentPageReport]="true" [loading]="volumeloading"
+                 [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+                 [globalFilterFields]="['venueName']" responsiveLayout="scroll" class="custom-bg-blue">
+          <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt4.filterGlobal($event.target.value, 'contains')" placeholder="Search for symbol..." />
+              </span>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Venue Name
+              </th>
+              <th>
+                Volume
+              </th>
+              <th>
+                Market Percent
+              </th>
+              <th>
+                Last Updated
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                {{collection.venueName}}
+              </td>
+              <td>
+                {{collection.volume}}
+              </td>
+              <td [ngClass]="{ 'text-success': collection.marketPercent > 0, 'text-danger': collection.marketPercent <= 0 }">
+                {{collection.marketPercent}}%
+              </td>
+              <td>
+                {{collection.lastUpdated | date: 'MM/dd/yyyy'}}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="4">No collections found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/dividends']">Dividends</a>
+        <p-table #dt11 [value]="dividends" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="dividendsLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['symbol','securityType', 'figi']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <span class="p-input-icon-left mr-auto">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" (input)="dt11.filterGlobal($event.target.value, 'contains')" placeholder="Search for symbol..." />
+              </span>
+              <p-dropdown #dividendsRange
+                          [options]="ranges"
+                          optionLabel="label"
+                          optionValue="value"
+                          [(ngModel)]="selectedDividendsRange"
+                          (onChange)="getDividends(dividendsRange.value, dividendsCalendar.value, selectedDividendsLast)">
+              </p-dropdown>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                  Symbol
+                </th>
+                <th>
+                  Security Type
+                </th>
+                <th>
+                  Figi
+                </th>
+                <th>
+                  Last Updated
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.securityType}}
+                </td>
+                <td>
+                    {{collection.figi}}
+                </td>
+                <td>
+                    {{collection.lastUpdated | date: 'MM/dd/yyyy'}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="5">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/bonus-issue']">Bonus Issues</a>
+        <p-table #dt6 [value]="bonusIssues" dataKey="id"
+                 [rows]="5" [showCurrentPageReport]="true" [loading]="bonusissueloading"
+                 [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+                 [globalFilterFields]="['resultSecurityType','currency', 'symbol']" responsiveLayout="scroll">
+          <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <span class="p-input-icon-left mr-auto">
+                <i class="pi pi-search"></i>
+                <input pInputText
+                       type="text"
+                       (input)="dt6.filterGlobal($event.target.value, 'contains')"
+                       placeholder="Search for symbol..."
+                       />
+              </span>
+              <p-dropdown #bonusIssueRange
+                          [options]="ranges"
+                          optionLabel="label"
+                          optionValue="value"
+                          [(ngModel)]="selectedRange"
+                          (onChange)="getBonusIssues(bonusIssueRange.value, bonusIssueCalendar.value, selectedBonusIssueLast)"
+                          [virtualScroll]="true">
+              </p-dropdown>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                Key
+              </th>
+              <th>
+                Lapsed Premium
+              </th>
+              <th>
+                Record Date
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                {{collection.symbol}}
+              </td>
+              <td>
+                {{collection.key}}
+              </td>
+              <td>
+                {{collection.lapsedPremium | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                {{collection.recordDate | date: 'MM/dd/yyyy'}}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="4">No collections found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/collections']">Collections</a>
+        <p-table #dt9 [value]="collections" dataKey="symbol"
+                 [rows]="5" [showCurrentPageReport]="true" [loading]="collectionsloading"
+                 [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+                 responsiveLayout="scroll" [globalFilterFields]="['symbol']">
+          <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <span class="p-input-icon-left mr-auto">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt9.filterGlobal($event.target.value, 'contains')" placeholder="Search for symbol..." />
+              </span>
+              <p-dropdown #collectionType [options]="collectionTypes" [(ngModel)]="selectedCollectionType" (onChange)="getCollections(collectionType.value, collectionName.value)"></p-dropdown>
+              <p-dropdown #collectionName [options]="collectionNames" [(ngModel)]="selectedCollectionName" (onChange)="getCollections(collectionType.value, collectionName.value)"></p-dropdown>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                Open
+              </th>
+              <th>
+                High
+              </th>
+              <th>
+                Low
+              </th>
+              <th>
+                Close
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                {{collection.symbol}}
+              </td>
+              <td>
+                {{collection.open}}
+              </td>
+              <td>
+                {{collection.high}}
+              </td>
+              <td>
+                {{collection.low}}
+              </td>
+              <td>
+                {{collection.close}}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="5">No collections found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/distribution']">Distribution</a>
+        <p-table #dt10 [value]="distributionList" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="distributionLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <span class="p-input-icon-left mr-auto">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" (input)="dt10.filterGlobal($event.target.value, 'contains')" placeholder="Search for symbol..." />
+              </span>
+                <p-dropdown #distributionRange 
+                            [options]="ranges" 
+                            optionLabel="label"
+                            optionValue="value"
+                            [(ngModel)]="selectedRange" 
+                            (onChange)="getDistributionList(distributionRange.value, distributionCalendar.value, selectedDistributionLast)">
+                </p-dropdown>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                  Symbol
+                </th>
+                <th>
+                  Ex Date
+                </th>
+                <th>
+                  Description
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.exDate | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{collection.description}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="5">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/book']">Book</a>
+        <p-table #dt7 [value]="trades" dataKey="id"
+                 [rows]="5" [showCurrentPageReport]="true" [loading]="tradesloading"
+                 [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+                 responsiveLayout="scroll" [globalFilterFields]="['tradeId']">
+          <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <p-autoComplete #bookSymbol [(ngModel)]="selectedBookSymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                              [minLength]="1" (onSelect)="getStockBooks(bookSymbol.value)" placeholder="Search for symbol..."></p-autoComplete>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                Price
+              </th>
+              <th>
+                Size
+              </th>
+              <th>
+                Trade Id
+              </th>
+              <th>
+                Time stamp
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                {{collection.symbol}}
+              </td>
+              <td>
+                {{collection.price}}
+              </td>
+              <td>
+                {{collection.size}}
+              </td>
+              <td>
+                {{collection.tradeId}}
+              </td>
+              <td>
+                {{collection.timestamp | date: 'dd/MM/yyyy'}}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="4">No collections found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/cash-flow']">Cash Flow</a>
+        <p-table #dt8 [value]="cashflow" dataKey="id"
+                 [rows]="5" [showCurrentPageReport]="true" [loading]="cashflowloading"
+                 [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+                 responsiveLayout="scroll" [globalFilterFields]="['key','subkey']">
+          <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <p-autoComplete #cashflowSymbol [(ngModel)]="selectedCashflowSymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                              [minLength]="1" (onSelect)="getCashflow(cashflowSymbol.value, cashflowPeriod.value)" placeholder="Search for symbol...">
+                            </p-autoComplete>
+              <p-dropdown #cashflowPeriod [options]="periods" [(ngModel)]="selectedCashflowPeriod" (onChange)="getCashflow(cashflowSymbol.value, cashflowPeriod.value)" optionLabel="label" optionValue="value"></p-dropdown>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                Report Date
+              </th>
+              <th>
+                Net Income
+              </th>
+              <th>
+                Cash Flow
+              </th>
+              <th>
+                Expenditures
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                {{collection.symbol}}
+              </td>
+              <td>
+                {{collection.reportDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                {{collection.netIncome}}
+              </td>
+              <td>
+                {{collection.cashFlow}}
+              </td>
+              <td>
+                {{collection.capitalExpenditures}}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="5">No collections found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/balance-sheet']">Balance Sheet</a>
+        <p-table #dt5 [value]="balancesheets" dataKey="id"
+                 [rows]="5" [showCurrentPageReport]="true" [loading]="sheetloading"
+                 [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+                 [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+          <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <p-autoComplete #balanceSheetSymbol [(ngModel)]="selectedSheetSymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                              [minLength]="1" (onSelect)="getBalanceSheets(balanceSheetSymbol.value, balanceSheetPeriod.value)" placeholder="Search for symbol...">
+              </p-autoComplete>
+              <p-dropdown #balanceSheetPeriod [options]="periods" [(ngModel)]="selectedSheetPeriod" (onChange)="getBalanceSheets(balanceSheetSymbol.value, balanceSheetPeriod.value)" optionLabel="label" optionValue="value"></p-dropdown>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                Fiscal Date
+              </th>
+              <th>
+                Current Assets
+              </th>
+              <th>
+                Currency
+              </th>
+              <th>
+                Date
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                {{collection.symbol}}
+              </td>
+              <td>
+                {{collection.fiscalDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                {{collection.currentAssets}}
+              </td>
+              <td>
+                {{collection.currency}}
+              </td>
+              <td>
+                {{collection.date | date: 'dd/MM/yyyy'}}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="5">No collections found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/financials']">Financials Summary</a>
+        <p-table #dt13 [value]="financials" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true"  [loading]="financialsLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['id', 'key', 'subkey']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <p-autoComplete #financialsSymbol [(ngModel)]="selectedFinancialsSymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                              [minLength]="1" (onSelect)="getFinancials(financialsSymbol.value, selectedFinancialsLast)" placeholder="Search for symbol...">
+              </p-autoComplete>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+                <th>
+                  Cash Change
+                </th>
+                <th>
+                  Cash Flow
+                </th>
+                <th>
+                  Financing
+                </th>
+                <th>
+                  Date
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.cashChange}}
+                </td>
+                <td>
+                    {{collection.cashFlow}}
+                </td>
+                <td>
+                    {{collection.cashFlowFinancing}}
+                </td>
+                <td>
+                    {{collection.date | date: 'MM/dd/yyyy'}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="4">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/ceo-compensation']">CEO Compensation</a>
+        <p-table [value]="ceo" dataKey="symbol"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="ceoLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+         responsiveLayout="scroll">
+          <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <p-autoComplete #ceoCompensationSymbol [(ngModel)]="selectedCeoSymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                              [minLength]="1" (onSelect)="getCeoCompensation(ceoCompensationSymbol.value)" placeholder="Search for symbol...">
+              </p-autoComplete>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+              <tr>
+                  <th>Symbol</th>
+                  <th>Name</th>
+                  <th>Company Name</th>
+                  <th>Location</th>
+                  <th>Salary</th>
+                  <th>Bonus</th>
+                  <th>Stock Awards</th>
+                  <th>Option Awards</th>
+                  <th>Total</th>
+                  <th>Year</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-summary>
+              <tr>
+                  <td>{{summary.symbol}}</td>
+                  <td>{{summary.name}}</td>
+                  <td>{{summary.companyName}}</td>
+                  <td>{{summary.location}}</td>
+                  <td>{{summary.salary}}</td>
+                  <td>{{summary.bonus}}</td>
+                  <td>{{summary.stockAwards}}</td>
+                  <td>{{summary.optionAwards}}</td>
+                  <td>{{summary.total}}%</td>
+                  <td>{{summary.year}}</td>
+                </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+              <tr>
+                  <td colspan="13">No collections found.</td>
+              </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/ceo-compensation']">Financials as Reported</a>
+        <p-table #dt14 [value]="reportedFinancials" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="reportedFinancialsLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <p-autoComplete #reportedFinancialsSymbol [(ngModel)]="selectedReportedFinancialsSymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                              [minLength]="1" (onSelect)="getReportedFinancials(reportedFinancialsSymbol.value, reportedFinancialsPeriod.value)" placeholder="Search for symbol...">
+              </p-autoComplete>
+              <p-dropdown #reportedFinancialsPeriod [options]="periods" [(ngModel)]="selectedReportedFinancialsPeriod" (onChange)="getReportedFinancials(reportedFinancialsSymbol.value, reportedFinancialsPeriod.value)" optionLabel="label" optionValue="value"></p-dropdown>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                  Symbol
+                </th>
+                <th>
+                  Id
+                </th>
+                <th>
+                  Source
+                </th>
+                <th>
+                  Key
+                </th>
+                <th>
+                  Subkey
+                </th>
+                <th>
+                  Date
+                </th>
+                <th>
+                  Updated
+                </th>
+                <th>
+                  Decrease In Unrecognized Tax Benefits Is Reasonably Possible
+                </th>
+                <th>
+                  Version
+                </th>
+                <th>
+                  Period Start
+                </th>
+                <th>
+                  Period End
+                </th>
+                <th>
+                  Date Filed
+                </th>
+                <th>
+                  Report Link
+                </th>
+                <th>
+                  Other Accrued Liabilities Current
+                </th>
+                <th>
+                  Other Assets Current
+                </th>
+                <th>
+                  Deferred Federal State And Local Tax Expense Benefit
+                </th>
+                <th>
+                  Other Assets Non current
+                </th>
+                <th>
+                  Deferred Foreign Income Tax Expense Benefit
+                </th>
+                <th>
+                  Deferred Income Tax AssetsNet
+                </th>
+                <th>
+                  Deferred Income Taxes And Tax Credits
+                </th>
+                <th>
+                  Deferred Income Tax Expense Benefit
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                  {{collection.symbol}}
+              </td>
+              <td>
+                  {{collection.id}}
+              </td>
+              <td>
+                  {{collection.source}}
+              </td>
+              <td>
+                  {{collection.key}}
+              </td>
+              <td>
+                  {{collection.subkey}}
+              </td>
+              <td>
+                  {{collection.date | date: 'dd/MM/yyyy'}}
+              </td>
+              <td>
+                  {{collection.updated | date: 'dd/MM/yyyy'}}
+              </td>
+              <td>
+                  {{collection.decreaseInUnrecognizedTaxBenefitsIsReasonablyPossible}}
+              </td>
+              <td>
+                  {{collection.version}}
+              </td>
+              <td>
+                  {{collection.periodStart}}
+              </td>
+              <td>
+                  {{collection.periodEnd}}
+              </td>
+              <td>
+                  {{collection.dateFiled}}
+              </td>
+              <td>
+                  {{collection.reportLink}}
+              </td>
+              <td>
+                  {{collection.otherAccruedLiabilitiesCurrent}}
+              </td>
+              <td>
+                  {{collection.otherAssetsCurrent}}
+              </td>
+              <td>
+                  {{collection.deferredFederalStateAndLocalTaxExpenseBenefit}}
+              </td>
+              <td>
+                  {{collection.otherAssetsNoncurrent}}
+              </td>
+              <td>
+                  {{collection.deferredForeignIncomeTaxExpenseBenefit}}
+              </td>
+              <td>
+                  {{collection.deferredIncomeTaxAssetsNet}}
+              </td>
+              <td>
+                  {{collection.deferredIncomeTaxesAndTaxCredits}}
+              </td>
+              <td>
+                  {{collection.deferredIncomeTaxExpenseBenefit}}
+              </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="22">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/insider-roster']">Insider Roster</a>
+        <p-table #dt16 [value]="insiderRosters" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="insiderRostersLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <p-autoComplete #insiderRosterSymbol [(ngModel)]="selectedInsiderRosterSymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                              [minLength]="1" (onSelect)="getInsiderRosters(insiderRosterSymbol.value)" placeholder="Search for symbol...">
+              </p-autoComplete>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+              Symbol
+              </th>
+              <th>
+                Entity Name
+              </th>
+              <th>
+                Position
+              </th>
+              <th>
+                Report Date
+              </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                  {{collection.symbol}}
+              </td>
+              <td>
+                  {{collection.entityName}}
+              </td>
+              <td>
+                  {{collection.position}}
+              </td>
+              <td>
+                  {{collection.reportDate | date: 'dd/MM/yyyy'}}
+              </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="3">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/insider-summary']">Insider Summary</a>
+        <p-table #dt17 [value]="insiderSummary" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="insiderSummaryLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <p-autoComplete #insiderSummarySymbol [(ngModel)]="selectedInsiderSummarySymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                              [minLength]="1" (onSelect)="getInsiderSummary(insiderSummarySymbol.value)" placeholder="Search for symbol...">
+              </p-autoComplete>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                Net Transacted
+              </th>
+              <th>
+                Total Bought
+              </th>
+              <th>
+                Total Sold
+              </th>
+              <th>
+                Updated
+              </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                  {{collection.symbol}}
+              </td>
+              <td>
+                  {{collection.netTransacted}}
+              </td>
+              <td>
+                  {{collection.totalBought}}
+              </td>
+              <td>
+                  {{collection.totalSold}}
+              </td>
+              <td>
+                  {{collection.updated | date: 'dd/MM/yyyy'}}
+              </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="10">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/insider-transactions']">Insider Transactions</a>
+        <p-table #dt18 [value]="insiderTransactions" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="insiderTransactionsLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <p-autoComplete #insiderTransactionsSymbol [(ngModel)]="selectedInsiderTransactionsSymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                              [minLength]="1" (onSelect)="getInsiderTransactions(insiderTransactionsSymbol.value)" placeholder="Search for symbol...">
+              </p-autoComplete>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                DirectIndirect
+              </th>
+              <th>
+                Effective Date
+              </th>
+              <th>
+                Filing Date
+              </th>
+              <th>
+                Is10b51
+              </th>
+              <th>
+                Post Shares
+              </th>
+              <th>
+                Transaction Date
+              </th>
+              <th>
+                Transaction Shares
+              </th>
+              <th>
+                Transaction Price
+              </th>
+              <th>
+                Transaction Value
+              </th>
+              <th>
+                Date
+              </th>
+              <th>
+                Updated
+              </th>
+              <th>
+                Tran Price
+              </th>
+              <th>
+                Tran Shares
+              </th>
+              <th>
+                Tran Value
+              </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                  {{collection.symbol}}
+              </td>
+              <td>
+                  {{collection.directIndirect}}
+              </td>
+              <td>
+                  {{collection.effectiveDate | date: 'dd/MM/yyyy'}}
+              </td>
+              <td>
+                  {{collection.filingDate | date: 'dd/MM/yyyy'}}
+              </td>
+              <td>
+                  {{collection.is10b51}}
+              </td>
+              <td>
+                  {{collection.postShares}}
+              </td>
+              <td>
+                  {{collection.transactionDate | date: 'dd/MM/yyyy'}}
+              </td>
+              <td>
+                  {{collection.transactionPrice}}
+              </td>
+              <td>
+                  {{collection.transactionShares}}
+              </td>
+              <td>
+                  {{collection.transactionValue}}
+              </td>
+              <td>
+                  {{collection.date | date: 'dd/MM/yyyy'}}
+              </td>
+              <td>
+                  {{collection.updated | date: 'dd/MM/yyyy'}}
+              </td>
+              <td>
+                  {{collection.tranPrice}}
+              </td>
+              <td>
+                  {{collection.tranShares}}
+              </td>
+              <td>
+                  {{collection.tranValue}}
+              </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="22">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/intraday-prices']">Intraday Prices</a>
+        <p-table #dt19 [value]="intradayPrices" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="intradayPricesLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <p-autoComplete #intradayPricesSymbol [(ngModel)]="selectedIntradayPricesSymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                              [minLength]="1" (onSelect)="getIntradayPrices(intradayPricesSymbol.value)" placeholder="Search for symbol...">
+              </p-autoComplete>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                Date
+              </th>
+              <th>
+                Minute
+              </th>
+              <th>
+                Label
+              </th>
+              <th>
+                High
+              </th>
+              <th>
+                Low
+              </th>
+              <th>
+                Open
+              </th>
+              <th>
+                Close
+              </th>
+              <th>
+                Average
+              </th>
+              <th>
+                Volume
+              </th>
+              <th>
+                Notional
+              </th>
+              <th>
+                NumberOfTrades
+              </th>
+              <th>
+                ChangeOverTime
+              </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                  {{collection.symbol}}
+              </td>
+              <td>
+                  {{collection.date | date: 'dd/MM/yyyy'}}
+              </td>
+              <td>
+                  {{collection.minute}}
+              </td>
+              <td>
+                  {{collection.label}}
+              </td>
+              <td>
+                  {{collection.high}}
+              </td>
+              <td>
+                  {{collection.low}}
+              </td>
+              <td>
+                  {{collection.open}}
+              </td>
+              <td>
+                  {{collection.close}}
+              </td>
+              <td>
+                  {{collection.average}}
+              </td>
+              <td>
+                  {{collection.volume}}
+              </td>
+              <td>
+                  {{collection.volume}}
+              </td>
+              <td>
+                  {{collection.notional}}
+              </td>
+              <td>
+                  {{collection.numberOfTrades}}
+              </td>
+              <td>
+                  {{collection.changeOverTime}}
+              </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="13">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/right-to-purchase']">Right To Purchase</a>
+        <p-table #dt22 [value]="rightToPurchase" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="rightToPurchaseLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <span class="p-input-icon-left mr-auto">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" (input)="dt22.filterGlobal($event.target.value, 'contains')" placeholder="Search for symbol..." />
+              </span>
+              <p-dropdown #rightToPurchaseRange
+                          [options]="ranges"
+                          optionLabel="label"
+                          optionValue="value"
+                          [(ngModel)]="selectedRightToPurchaseRange"
+                          (onChange)="getRightToPurchase(rightToPurchaseRange.value, rightToPurchaseCalendarOption.value, selectedRightToPurchaseLast)"
+                          [virtualScroll]="true"
+                          [itemSize]="1">
+              </p-dropdown>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                Subscription Start
+              </th>
+              <th>
+                Subscription End
+              </th>
+              <th>
+                Is Over Subscription
+              </th>
+              <th>
+                Ratio
+              </th>
+              <th>
+                Min Price
+              </th>
+              <th>
+                Max Price
+              </th>
+              <th>
+                Source
+              </th>
+              <th>
+                Date
+              </th>
+              <th>
+                Updated
+              </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                  {{collection.symbol}}
+              </td>
+              <td>
+                  {{collection.subscriptionStart | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.subscriptionEnd | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.isOverSubscription}}
+              </td>
+              <td>
+                  {{collection.ratio}}
+              </td>
+              <td>
+                  {{collection.minPrice}}
+              </td>
+              <td>
+                  {{collection.maxPrice}}
+              </td>
+              <td>
+                  {{collection.source}}
+              </td>
+              <td>
+                  {{collection.date | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.updated | date: 'MM/dd/yyyy'}}
+              </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="31">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/rights-issue']">Rights Issue</a>
+        <p-table #dt23 [value]="rightsIssue" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="rightsIssueLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <span class="p-input-icon-left mr-auto">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" (input)="dt23.filterGlobal($event.target.value, 'contains')" placeholder="Search for symbol..." />
+              </span>
+              <p-dropdown #rightsIssueRange
+                          [options]="ranges"
+                          optionLabel="label"
+                          optionValue="value"
+                          [(ngModel)]="selectedRightsIssueRange"
+                          (onChange)="getRightsIssue(rightsIssueRange.value, rightsIssueCalendarOption.value, selectedRightsIssueLast)"
+                          [virtualScroll]="true"
+                          [itemSize]="1">
+              </p-dropdown>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                Subscription Start
+              </th>
+              <th>
+                Subscription End
+              </th>
+              <th>
+                Issue Price
+              </th>
+              <th>
+                Country Code
+              </th>
+              <th>
+                Date
+              </th>
+              <th>
+                Updated
+              </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                  {{collection.symbol}}
+              </td>
+              <td>
+                  {{collection.subscriptionStart | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.subscriptionEnd | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.issuePrice}}
+              </td>
+              <td>
+                  {{collection.countryCode}}
+              </td>
+              <td>
+                  {{collection.date | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.updated | date: 'MM/dd/yyyy'}}
+              </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="31">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/return-of-capital']">Return Of Capital</a>
+        <p-table #d24 [value]="returnOfCapital" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="returnOfCapitalLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <span class="p-input-icon-left mr-auto">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" (input)="d24.filterGlobal($event.target.value, 'contains')" placeholder="Search for symbol..." />
+              </span>
+              <p-dropdown #returnOfCapitalRange
+                          [options]="ranges"
+                          optionLabel="label"
+                          optionValue="value"
+                          [(ngModel)]="selectedReturnOfCapitalRange"
+                          (onChange)="getReturnOfCapital(returnOfCapitalRange.value, returnOfCapitalCalendarOption.value, selectedReturnOfCapitalLast)"
+                          [virtualScroll]="true"
+                          [itemSize]="1">
+              </p-dropdown>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                Ex Date
+              </th>
+              <th>
+                Record Date
+              </th>
+              <th>
+                Cash Back
+              </th>
+              <th>
+                Payment Date
+              </th>
+              <th>
+                Ratio
+              </th>
+              <th>
+                Min Price
+              </th>
+              <th>
+                Max Price
+              </th>
+              <th>
+                Country Code
+              </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                  {{collection.symbol}}
+              </td>
+              <td>
+                  {{collection.exDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.recordDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.cashBack}}
+              </td>
+              <td>
+                  {{collection.paymentDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.ratio}}
+              </td>
+              <td>
+                  {{collection.minPrice}}
+              </td>
+              <td>
+                  {{collection.maxPrice}}
+              </td>
+              <td>
+                  {{collection.countryCode}}
+              </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="30">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/security-reclassification']">Security Reclassification</a>
+        <p-table #dt25 [value]="securityReclassification" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="securityReclassificationLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <span class="p-input-icon-left mr-auto">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" (input)="dt25.filterGlobal($event.target.value, 'contains')" placeholder="Search for symbol..." />
+              </span>
+              <p-dropdown #securityReclassificationRange
+                          [options]="ranges"
+                          optionLabel="label"
+                          optionValue="value"
+                          [(ngModel)]="selectedSecurityReclassificationRange"
+                          (onChange)="getSecurityReclassification(securityReclassificationRange.value, securityReclassificationCalendarOption.value, selectedSecurityReclassificationLast)"
+                          [virtualScroll]="true"
+                          [itemSize]="30">
+              </p-dropdown>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                Security Type
+              </th>
+              <th>
+                Figi
+              </th>
+              <th>
+                Last Updated
+              </th>
+              <th>
+                Country Code
+              </th>
+              <th>
+                Date
+              </th>
+              <th>
+                Updated
+              </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                  {{collection.symbol}}
+              </td>
+              <td>
+                  {{collection.securityType}}
+              </td>
+              <td>
+                  {{collection.figi}}
+              </td>
+              <td>
+                  {{collection.lastUpdated | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.countryCode}}
+              </td>
+              <td>
+                  {{collection.date | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.updated | date: 'MM/dd/yyyy'}}
+              </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="31">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+  </div>
+  <div class="col-md-6 mt-1 table-card">
+    <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+      <a [routerLink]="['/stocks-equities/security-swap']">Security Swap</a>
+      <p-table #dt26 [value]="securitySwap" dataKey="id"
+      [rows]="5" [showCurrentPageReport]="true" [loading]="securitySwapLoading"
+      [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+      [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+      <ng-template pTemplate="caption">
+          <div class="d-flex justify-content-between">
+            <span class="p-input-icon-left mr-auto">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt26.filterGlobal($event.target.value, 'contains')" placeholder="Search for symbol..." />
+            </span>
+            <p-dropdown #securitySwapRange
+                        [options]="ranges"
+                        optionLabel="label"
+                        optionValue="value"
+                        [(ngModel)]="selectedSecuritySwapRange"
+                        (onChange)="getSecuritySwap(securitySwapRange.value, securitySwapCalendarOption.value, selectedSecuritySwapLast)"
+                        [virtualScroll]="true"
+                        [itemSize]="30">
+            </p-dropdown>
+          </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+          <tr>
+            <th>
+              Symbol
+            </th>
+            <th>
+              Result Security Type
+            </th>
+            <th>
+              Security Type
+            </th>
+            <th>
+              Figi
+            </th>
+            <th>
+              Last Updated
+            </th>
+            <th>
+              Country Code
+            </th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-collection>
+          <tr>
+            <td>
+                {{collection.symbol}}
+            </td>
+            <td>
+                {{collection.resultSecurityType}}
+            </td>
+            <td>
+                {{collection.securityType}}
+            </td>
+            <td>
+                {{collection.figi}}
+            </td>
+            <td>
+                {{collection.lastUpdated | date: 'MM/dd/yyyy'}}
+            </td>
+            <td>
+                {{collection.countryCode}}
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="31">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/spinoff']">Spinoff</a>
+        <p-table #dt27 [value]="spinoff" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="spinoffLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <span class="p-input-icon-left mr-auto">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" (input)="dt27.filterGlobal($event.target.value, 'contains')" placeholder="Search for symbol..." />
+              </span>
+              <p-dropdown #spinoffRange
+                          [options]="ranges"
+                          optionLabel="label"
+                          optionValue="value"
+                          [(ngModel)]="selectedSpinoffRange"
+                          (onChange)="getSpinoff(spinoffRange.value, spinoffRangeCalendarOption.value, selectedSpinoffLast)"
+                          [virtualScroll]="true"
+                          [itemSize]="1">
+              </p-dropdown>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                Min Price
+              </th>
+              <th>
+                Max Price
+              </th>
+              <th>
+                Country Code
+              </th>
+              <th>
+                Date
+              </th>
+              <th>
+                Updated
+              </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                  {{collection.symbol}}
+              </td>
+              <td>
+                  {{collection.minPrice}}
+              </td>
+              <td>
+                  {{collection.maxPrice}}
+              </td>
+              <td>
+                  {{collection.countryCode}}
+              </td>
+              <td>
+                  {{collection.date | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.updated | date: 'MM/dd/yyyy'}}
+              </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="31">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/historical-prices']">Historical Prices</a>
+        <p-table #dt28 [value]="historicalPrices" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="historicalPricesLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+                <p-autoComplete #historicalPriceSymbol [(ngModel)]="selectedHistoricalPriceSymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                                [minLength]="1" (onSelect)="getHistoricalPrices(historicalPriceSymbol.value, fistoricalPriceRange.value)" placeholder="Search for symbol...">
+                </p-autoComplete>
+                <p-dropdown #fistoricalPriceRange [options]="chartRanges" optionLabel="label" optionValue="value" [(ngModel)]="selectedFundamentalsPeriod" (onChange)="getHistoricalPrices(historicalPriceSymbol.value, fistoricalPriceRange.value)"></p-dropdown>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                  Symbol
+                </th>
+                <th>
+                  Date
+                </th>
+                <th>
+                  Updated
+                </th>
+                <th>
+                  Change
+                </th>
+                <th>
+                  Change Percent
+                </th>
+                <th>
+                  Volume
+                </th>
+                <th>
+                  Change Over Time
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.date | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.updated | date: 'dd/MM/yyyy'}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.changePercent > 0, 'text-danger': collection.changePercent <= 0 }">
+                    {{collection.change}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.changePercent > 0, 'text-danger': collection.changePercent <= 0 }">
+                    {{collection.changePercent}}%
+                </td>
+                <td>
+                    {{collection.volume}}
+                </td>
+                <td>
+                    {{collection.changeOverTime}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="24">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/income-statement']">Income Statement</a>
+        <p-table #dt29 [value]="incomeStatements" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="incomeStatementsLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+                <p-autoComplete #incomeStatementSymbol [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                                [minLength]="1" (onSelect)="getIncomeStatements(incomeStatementSymbol.value, incomeStatementPeriod.value, selectedIncomeStatementLast)" placeholder="Search for symbol...">
+                </p-autoComplete>
+                <p-dropdown #incomeStatementPeriod [options]="periods" optionLabel="label" optionValue="value" [(ngModel)]="selectedFundamentalsPeriod" (onChange)="getIncomeStatements(incomeStatementSymbol.value, incomeStatementPeriod.value, selectedIncomeStatementLast)"></p-dropdown>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    Symbol
+                </th>
+                <th>
+                    Report Date
+                </th>
+                <th>
+                    Fiscal Date
+                </th>
+                <th>
+                    Fiscal Quarter
+                </th>
+                <th>
+                    Fiscal Year
+                </th>
+                <th>
+                    Currency
+                </th>
+                <th>
+                    Total Revenue
+                </th>
+                <th>
+                    Cost Of Revenue
+                </th>
+                <th>
+                    Gross Profit
+                </th>
+                <th>
+                  Research And Development
+                </th>
+                <th>
+                  Selling General And Admin
+                </th>
+                <th>
+                  Operating Expense
+                </th>
+                <th>
+                  Operating Income
+                </th>
+                <th>
+                  Other Income ExpenseNet
+                </th>
+                <th>
+                  Ebit
+                </th>
+                <th>
+                  Interest Income
+                </th>
+                <th>
+                  Pretax Income
+                </th>
+                <th>
+                  Income Tax
+                </th>
+                <th>
+                  Minority Interest
+                </th>
+                <th>
+                  Net Income
+                </th>
+                <th>
+                  Net Income Basic
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.reportDate | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.fiscalDate | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.fiscalQuarter}}
+                </td>
+                <td>
+                    {{collection.fiscalYear}}
+                </td>
+                <td>
+                    {{collection.currency}}
+                </td>
+                <td>
+                    {{collection.totalRevenue}}
+                </td>
+                <td>
+                    {{collection.costOfRevenue}}
+                </td>
+                <td>
+                    {{collection.grossProfit}}
+                </td>
+                <td>
+                    {{collection.researchAndDevelopment}}
+                </td>
+                <td>
+                    {{collection.sellingGeneralAndAdmin}}
+                </td>
+                <td>
+                    {{collection.operatingExpense}}
+                </td>
+                <td>
+                    {{collection.operatingIncome}}
+                </td>
+                <td>
+                    {{collection.otherIncomeExpenseNet}}
+                </td>
+                <td>
+                    {{collection.ebit}}
+                </td>
+                <td>
+                    {{collection.interestIncome}}
+                </td>
+                <td>
+                    {{collection.pretaxIncome}}
+                </td>
+                <td>
+                    {{collection.incomeTax}}
+                </td>
+                <td>
+                    {{collection.minorityInterest}}
+                </td>
+                <td>
+                    {{collection.netIncome}}
+                </td>
+                <td>
+                    {{collection.netIncomeBasic}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="21">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/upcoming-events']">Upcoming Earnings Market</a>
+        <p-table #dt33 [value]="upcomingEarningsMarket" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="upcomingEarningsMarketLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <span class="p-input-icon-left mr-auto">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" (input)="dt33.filterGlobal($event.target.value, 'contains')" placeholder="Search for symbol..." />
+              </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                  Symbol
+                </th>
+                <th>
+                  Report Date
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.reportDate | date: 'MM/dd/yyyy'}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="2">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/upcoming-events']">Upcoming Dividends Market</a>
+        <p-table #dt34 [value]="upcomingDividendsMarket" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="upcomingDividendsMarketLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <span class="p-input-icon-left mr-auto">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" (input)="dt34.filterGlobal($event.target.value, 'contains')" placeholder="Search for symbol..." />
+              </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                Ex Date
+              </th>
+              <th>
+                Record Date
+              </th>
+              <th>
+                Payment Date
+              </th>
+              <th>
+                Declared Date
+              </th>
+              <th>
+                Frequency
+              </th>
+              <th>
+                Flag
+              </th>
+              <th>
+                Amount
+              </th>
+              <th>
+                RefId
+              </th>
+              <th>
+                Id
+              </th>
+              <th>
+                Currency
+              </th>
+              <th>
+                Key
+              </th>
+              <th>
+                Subkey
+              </th>
+              <th>
+                Date
+              </th>
+              <th>
+                Updated
+              </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                  {{collection.symbol}}
+              </td>
+              <td>
+                  {{collection.exDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.recordDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.paymentDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.declaredDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.frequency}}
+              </td>
+              <td>
+                  {{collection.flag}}
+              </td>
+              <td>
+                  {{collection.amount}}
+              </td>
+              <td>
+                  {{collection.refid}}
+              </td>
+              <td>
+                  {{collection.id}}
+              </td>
+              <td>
+                  {{collection.currency}}
+              </td>
+              <td>
+                  {{collection.key}}
+              </td>
+              <td>
+                  {{collection.subkey}}
+              </td>
+              <td>
+                  {{collection.date | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.updated | date: 'MM/dd/yyyy'}}
+              </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="16">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/upcoming-events']">Upcoming Splits Market</a>
+        <p-table #dt35 [value]="upcomingSplitsMarket" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="upcomingSplitsMarketLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <span class="p-input-icon-left mr-auto">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" (input)="dt35.filterGlobal($event.target.value, 'contains')" placeholder="Search for symbol..." />
+              </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                Ex Date
+              </th>
+              <th>
+                Declared Date
+              </th>
+              <th>
+                From Factor
+              </th>
+              <th>
+                Ratio
+              </th>
+              <th>
+                To Factor
+              </th>
+              <th>
+                Ref Id
+              </th>
+              <th>
+                Id
+              </th>
+              <th>
+                Key
+              </th>
+              <th>
+                Subkey
+              </th>
+              <th>
+                Date
+              </th>
+              <th>
+                Updated
+              </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                  {{collection.symbol}}
+              </td>
+              <td>
+                  {{collection.exDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.declaredDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.fromFactor}}
+              </td>
+              <td>
+                  {{collection.ratio}}
+              </td>
+              <td>
+                  {{collection.toFactor}}
+              </td>
+              <td>
+                  {{collection.refid}}
+              </td>
+              <td>
+                  {{collection.id}}
+              </td>
+              <td>
+                  {{collection.key}}
+              </td>
+              <td>
+                  {{collection.subkey}}
+              </td>
+              <td>
+                  {{collection.date | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.updated | date: 'MM/dd/yyyy'}}
+              </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="12">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/splits']">Splits</a>
+        <p-table #dt43 [value]="splits" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="splitsLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt43.filterGlobal($event.target.value, 'contains')" placeholder="Search for symbol..." />
+                </span>
+                <p-dropdown #splitsRange [options]="ranges" optionLabel="label" optionValue="value" (onChange)="getSplits(splitsRange.value, selectedSplitsCalendarOption, selectedSplitsLast)" [virtualScroll]="true" [itemSize]="1"></p-dropdown>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                WithdrawalFromDate
+              </th>
+              <th>
+                WithdrawalToDate
+              </th>
+              <th>
+                ElectionDate
+              </th>
+              <th>
+                EffectiveDate
+              </th>
+              <th>
+                Min Price
+              </th>
+              <th>
+                Max Price
+              </th>
+              <th>
+                Result Security Type
+              </th>
+              <th>
+                HasWithDrawalRights
+              </th>
+              <th>
+                Currency
+              </th>
+              <th>
+                Ex Date
+              </th>
+              <th>
+                Record Date
+              </th>
+              <th>
+                Payment Date
+              </th>
+              <th>
+                From Factor
+              </th>
+              <th>
+                To Factor
+              </th>
+              <th>
+                Ratio
+              </th>
+              <th>
+                Description
+              </th>
+              <th>
+                Flag
+              </th>
+              <th>
+                Security Type
+              </th>
+              <th>
+                Figi
+              </th>
+              <th>
+                Last Updated
+              </th>
+              <th>
+                Country Code
+              </th>
+              <th>
+                Par Value
+              </th>
+              <th>
+                Par Value Currency
+              </th>
+              <th>
+                Ref Id
+              </th>
+              <th>
+                Created
+              </th>
+              <th>
+                Id
+              </th>
+              <th>
+                Source
+              </th>
+              <th>
+                Key
+              </th>
+              <th>
+                Subkey
+              </th>
+              <th>
+                Date
+              </th>
+              <th>
+                Updated
+              </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                  {{collection.symbol}}
+              </td>
+              <td>
+                  {{collection.withdrawalFromDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.withdrawalToDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.electionDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.effectiveDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.minPrice}}
+              </td>
+              <td>
+                  {{collection.maxPrice}}
+              </td>
+              <td>
+                  {{collection.resultSecurityType}}
+              </td>
+              <td>
+                  {{collection.hasWithdrawalRights}}
+              </td>
+              <td>
+                  {{collection.currency}}
+              </td>
+              <td>
+                  {{collection.exDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.recordDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.paymentDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.fromFactor}}
+              </td>
+              <td>
+                  {{collection.toFactor}}
+              </td>
+              <td>
+                  {{collection.ratio}}
+              </td>
+              <td>
+                  {{collection.description}}
+              </td>
+              <td>
+                  {{collection.flag}}
+              </td>
+              <td>
+                  {{collection.securityType}}
+              </td>
+              <td>
+                  {{collection.figi}}
+              </td>
+              <td>
+                  {{collection.lastUpdated | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.countryCode}}
+              </td>
+              <td>
+                  {{collection.parValue}}
+              </td>
+              <td>
+                  {{collection.parValueCurrency}}
+              </td>
+              <td>
+                  {{collection.refid}}
+              </td>
+              <td>
+                  {{collection.created | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.id}}
+              </td>
+              <td>
+                  {{collection.source}}
+              </td>
+              <td>
+                  {{collection.key}}
+              </td>
+              <td>
+                  {{collection.subkey}}
+              </td>
+              <td>
+                  {{collection.date | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.updated | date: 'MM/dd/yyyy'}}
+              </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="32">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/institutional-ownership']">Institutional Ownership</a>
+        <p-table #dt37 [value]="institutionalOwnership" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="institutionalOwnershipLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['adjMv','reportedTitle','symbol','id','key','subkey']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+                <p-autoComplete #institutionalOwnershipSymbol [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                                [minLength]="1" (onSelect)="getInstitutionalOwnership(institutionalOwnershipSymbol.value)" placeholder="Search for symbol...">
+                </p-autoComplete>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                  Symbol
+                </th>
+                <th>
+                  AdjHolding
+                </th>
+                <th>
+                  AdjMv
+                </th>
+                <th>
+                  Report Date
+                </th>
+                <th>
+                  Date
+                </th>
+                <th>
+                  Updated
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.adjHolding}}
+                </td>
+                <td>
+                    {{collection.adjMv}}
+                </td>
+                <td>
+                    {{collection.reportDate | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.date | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.updated | date: 'dd/MM/yyyy'}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="8">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/volume-by-venue']">Volume By Venue</a>
+        <p-table #dt38 [value]="volumeByVenue" dataKey="venue"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="volumeByVenueLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['venueName']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+                <p-autoComplete #volumeByVenueSymbol [ngModel]="selectedVolumeByVenueSymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                                [minLength]="1" (onSelect)="getVolumeByVenue(volumeByVenueSymbol.value)" placeholder="Search for symbol...">
+                </p-autoComplete>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                  Symbol
+                </th>
+                <th>
+                  Venue Name
+                </th>
+                <th>
+                  Volume
+                </th>
+                <th>
+                  Market Percent
+                </th>
+                <th>
+                  Avg Market Percent
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.venueName}}
+                </td>
+                <td>
+                    {{collection.volume}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.marketPercent > 0, 'text-danger': collection.marketPercent <= 0 }">
+                    {{collection.marketPercent}}%
+                </td>
+                <td [ngClass]="{ 'text-success': collection.avgMarketPercent > 0, 'text-danger': collection.avgMarketPercent <= 0 }">
+                    {{collection.avgMarketPercent}}%
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="6">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/fundamental-valuations-alpha']">Fundamental Valuations</a>
+        <p-table #dt36 [value]="fundamentalValuations" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="fundamentalValuationsLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['id','symbol','key','subkey']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+                <p-autoComplete #fundamentalValuationsSymbol [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                                [minLength]="1" (onSelect)="getFundamentalValuations(fundamentalValuationsSymbol.value, fundamentalsPeriod.value)" placeholder="Search for symbol...">
+                </p-autoComplete>
+                <p-dropdown #fundamentalValuationsPeriod [options]="timeSeriesPeriods" optionLabel="label" optionValue="value" [(ngModel)]="selectedFundamentalValuationsPeriod" (onChange)="getFundamentalValuations(fundamentalValuationsSymbol.value, fundamentalValuationsPeriod.value)"></p-dropdown>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                  Symbol
+                </th>
+                <th>
+                  Id
+                </th>
+                <th>
+                  Key
+                </th>
+                <th>
+                  Subkey
+                </th>
+                <th>
+                  Date
+                </th>
+                <th>
+                  Updated
+                </th>
+                <th>
+                AltmanZScore
+                </th>
+                <th>
+                  Accounts Payable Turnover
+                </th>
+                <th>
+                  Assets To Equity
+                </th>
+                <th>
+                  Accounts Receivable Turnover
+                </th>
+                <th>
+                  As Of Date
+                </th>
+                <th>
+                  BbgCompositeTicker
+                </th>
+                <th>
+                  Asset Turnover
+                </th>
+                <th>
+                  Book Value Per Share
+                </th>
+                <th>
+                  Cash Conversion Cycle
+                </th>
+                <th>
+                  Cik
+                </th>
+                <th>
+                  Company Name
+                </th>
+                <th>
+                  Company Status Current
+                </th>
+                <th>
+                  Current Ratio
+                </th>
+                <th>
+                  DataGeneration Date
+                </th>
+                <th>
+                  Data Type
+                </th>
+                <th>
+                  Days InAccounts Payable
+                </th>
+                <th>
+                  Days In Inventory
+                </th>
+                <th>
+                  Days In Revenue Deferred
+                </th>
+                <th>
+                  Days Revenue Outstanding
+                </th>
+                <th>
+                  Debt To Assets
+                </th>
+                <th>
+                  Debt To Capitalization
+                </th>
+                <th>
+                  Debt To Ebitda
+                </th>
+                <th>
+                  Debt To Equity
+                </th>
+                <th>
+                  Dividend Per Share
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.id}}
+                </td>
+                <td>
+                    {{collection.key}}
+                </td>
+                <td>
+                    {{collection.subkey}}
+                </td>
+                <td>
+                    {{collection.date | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.updated | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.altmanZScore}}
+                </td>
+                <td>
+                    {{collection.accountsPayableTurnover}}
+                </td>
+                <td>
+                    {{collection.assetsToEquity}}
+                </td>
+                <td>
+                    {{collection.accountsReceivableTurnover}}
+                </td>
+                <td>
+                    {{collection.asOfDate}}
+                </td>
+                <td>
+                    {{collection.bbgCompositeTicker}}
+                </td>
+                <td>
+                    {{collection.assetTurnover}}
+                </td>
+                <td>
+                    {{collection.bookValuePerShare}}
+                </td>
+                <td>
+                    {{collection.cashConversionCycle}}
+                </td>
+                <td>
+                    {{collection.cik}}
+                </td>
+                <td>
+                    {{collection.companyName}}
+                </td>
+                <td>
+                    {{collection.companyStatusCurrent}}
+                </td>
+                <td>
+                    {{collection.currentRatio}}
+                </td>
+                <td>
+                    {{collection.dataGenerationDate}}
+                </td>
+                <td>
+                    {{collection.dataType}}
+                </td>
+                <td>
+                    {{collection.daysInAccountsPayable}}
+                </td>
+                <td>
+                    {{collection.daysInInventory}}
+                </td>
+                <td>
+                    {{collection.daysInRevenueDeferred}}
+                </td>
+                <td>
+                    {{collection.daysRevenueOutstanding}}
+                </td>
+                <td>
+                    {{collection.debtToAssets}}
+                </td>
+                <td>
+                    {{collection.debtToCapitalization}}
+                </td>
+                <td>
+                    {{collection.debtToEbitda}}
+                </td>
+                <td>
+                    {{collection.debtToEquity}}
+                </td>
+                <td>
+                    {{collection.dividendPerShare}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="30">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/splits-basic']">Splits Basic</a>
+        <p-table #dt44 [value]="splitsBasics" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="splitsBasicLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['countryCode', 'parValueCurrency']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+                <p-autoComplete #splitsBasicSymbol [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                                [minLength]="1" (onSelect)="getSplitsBasic(splitsBasicSymbol.value, splitsBasicRange.value)" placeholder="Search for symbol...">
+                </p-autoComplete>
+                <p-dropdown #splitsBasicRange
+                            [options]="rangesBasic"
+                            optionLabel="label"
+                            optionValue="value"
+                            (onChange)="getSplitsBasic(splitsBasicSymbol.value, splitsBasicRange.value)"
+                            [virtualScroll]="true">
+                </p-dropdown>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                  Symbol
+                </th>
+                <th>
+                  Ex Date
+                </th>
+                <th>
+                  Declared Date
+                </th>
+                <th>
+                  From Factor
+                </th>
+                <th>
+                  Ratio
+                </th>
+                <th>
+                  To Factor
+                </th>
+                <th>
+                  Ref Id
+                </th>
+                <th>
+                  Id
+                </th>
+                <th>
+                  Key
+                </th>
+                <th>
+                  Subkey
+                </th>
+                <th>
+                  Date
+                </th>
+                <th>
+                  Updated
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.exDate | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{collection.declaredDate | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{collection.fromFactor}}
+                </td>
+                <td>
+                    {{collection.ratio}}
+                </td>
+                <td>
+                    {{collection.toFactor}}
+                </td>
+                <td>
+                    {{collection.refid}}
+                </td>
+                <td>
+                    {{collection.id}}
+                </td>
+                <td>
+                    {{collection.key}}
+                </td>
+                <td>
+                    {{collection.subkey}}
+                </td>
+                <td>
+                    {{collection.date | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{collection.updated | date: 'MM/dd/yyyy'}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="24">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/delayed-quote']">Delayed Quote</a>
+        <p-table  [value]="dQuote" 
+                  dataKey="symbol"
+                  [rows]="5" 
+                  [showCurrentPageReport]="true" 
+                  responsiveLayout="scroll" 
+                  [loading]="dQuoteloading"
+                  [globalFilterFields]="['symbol']" 
+                  responsiveLayout="scroll"
+                  >
+          <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <p-autoComplete #dQuoteSymbol 
+                              [(ngModel)]="selectedDQuoteSymbol" 
+                              [suggestions]="filteredSymbols" 
+                              (completeMethod)="filterSymbol($event)"
+                              [minLength]="1" 
+                              (onSelect)="getDelayedQuote(dQuoteSymbol.value)" 
+                              placeholder="Search for symbol...">
+              </p-autoComplete>
+            </div>
+          </ng-template>
+        <ng-template pTemplate="header">
+              <tr>
+                  <th>Symbol</th>
+                  <th>Delayed Price</th>
+                  <th>High</th>
+                  <th>Low</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-summary>
+              <tr>
+                  <td>{{summary.symbol}}</td>
+                  <td>{{summary.delayedPrice}}</td>
+                  <td>{{summary.high}}</td>
+                  <td>{{summary.low}}</td>
+                </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/dividends-basic']">Dividends Basic</a>
+        <p-table  #dt12 
+                  [value]="dividendsBasics" 
+                  dataKey="id"
+                  [rows]="5" 
+                  [showCurrentPageReport]="true" 
+                  [loading]="dividendsBasicLoading"
+                  [paginator]="true" 
+                  currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+                  [globalFilterFields]="['symbol']" 
+                  responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <p-autoComplete #dividendsBasicSymbol [(ngModel)]="selectedDividendsBasicSymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                              [minLength]="1" (onSelect)="getDividendsBasic(dividendsBasicSymbol.value, dividendsBasicPeriod.value)" placeholder="Search for symbol..."></p-autoComplete>
+              <p-dropdown #dividendsBasicPeriod [options]="rangesBasic" [(ngModel)]="selectedDividendsBasicPeriod" (onChange)="getDividendsBasic(dividendsBasicSymbol.value, dividendsBasicPeriod.value)" optionLabel="label" optionValue="value" [virtualScroll]="true"></p-dropdown>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                  Symbol
+                </th>
+                <th>
+                  Flag
+                </th>
+                <th>
+                  Amount
+                </th>
+                <th>
+                  Description
+                </th>
+                <th>
+                  Date
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                <td>
+                    {{collection.flag}}
+                </td>
+                <td>
+                    {{collection.amount}}
+                </td>
+                <td>
+                    {{collection.description}}
+                </td>
+                <td>
+                    {{collection.date | date: 'MM/dd/yyyy'}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="5">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/dividends-forecast-alpha']">Dividends Forecast</a>
+        <p-table #dt20 [value]="dividendsForecast" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="dividendsForecastLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['currency','diversementType','frequency','marker','name']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <p-autoComplete #dividendsForecastSymbol [(ngModel)]="selectedDividendsForecastSymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                              [minLength]="1" (onSelect)="getDividendsForecast(dividendsForecastSymbol.value)" placeholder="Search for symbol...">
+              </p-autoComplete>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                  Symbol
+                </th>
+                <th>
+                  Frequency
+                </th>
+                <th>
+                  Diversement Type
+                </th>
+                <th>
+                  Marker
+                </th>
+                <th>
+                  Name
+                </th>
+                <th>
+                  ExDate
+                </th>
+                <th>
+                  Adjusted Amount
+                </th>
+                <th>
+                  Shares Held
+                </th>
+                <th>
+                  Shares Received
+                </th>
+                <th>
+                  Status
+                </th>
+                <th>
+                  Record Date
+                </th>
+                <th>
+                  Record Updated
+                </th>
+                <th>
+                  Payment Date
+                </th>
+                <th>
+                  Declared Date
+                </th>
+                <th>
+                  Amount
+                </th>
+                <th>
+                  Disbursement Amount
+                </th>
+                <th>
+                  Disbursement Type
+                </th>
+                <th>
+                  Fiscal Year
+                </th>
+                <th>
+                  Fiscal Year End Date
+                </th>
+                <th>
+                  Fx Date
+                </th>
+                <th>
+                  Id
+                </th>
+                <th>
+                  Currency
+                </th>
+                <th>
+                  Key
+                </th>
+                <th>
+                  Non Taxed Amount
+                </th>
+                <th>
+                  Subkey
+                </th>
+                <th>
+                  Net Amount
+                </th>
+                <th>
+                  Position
+                </th>
+                <th>
+                  Period End Date
+                </th>
+                <th>
+                  Date
+                </th>
+                <th>
+                  Updated
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.frequency}}
+                </td>
+                <td>
+                    {{collection.diversementType}}
+                </td>
+                <td>
+                    {{collection.marker}}
+                </td>
+                <td>
+                    {{collection.name}}
+                </td>
+                <td>
+                    {{collection.exDate | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.adjustedAmount}}
+                </td>
+                <td>
+                    {{collection.sharesHeld}}
+                </td>
+                <td>
+                    {{collection.sharesReceived}}
+                </td>
+                <td>
+                    {{collection.status}}
+                </td>
+                <td>
+                    {{collection.recordDate | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{collection.recordUpdated | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{collection.paymentDate | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{collection.declaredDate | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{collection.amount}}
+                </td>
+                <td>
+                    {{collection.disbursementAmount}}
+                </td>
+                <td>
+                    {{collection.disbursementType}}
+                </td>
+                <td>
+                    {{collection.fiscalYear}}
+                </td>
+                <td>
+                    {{collection.fiscalYearEndDate}}
+                </td>
+                <td>
+                    {{collection.fxDate}}
+                </td>
+                <td>
+                    {{collection.id}}
+                </td>
+                <td>
+                    {{collection.currency}}
+                </td>
+                <td>
+                    {{collection.key}}
+                </td>
+                <td>
+                    {{collection.nonTaxedAmount}}
+                </td>
+                <td>
+                    {{collection.subkey}}
+                </td>
+                <td>
+                    {{collection.netAmount}}
+                </td>
+                <td>
+                    {{collection.position}}
+                </td>
+                <td>
+                    {{collection.periodEndDate | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{collection.date | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{collection.updated | date: 'MM/dd/yyyy'}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="29">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/fundamentals']">Fundamentals</a>
+        <p-table #dt15 [value]="fundamentals" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="fundamentalsLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+                <p-autoComplete #fundamentalsSymbol [ngModel]="selectedFundamentalsSymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                                [minLength]="1" (onSelect)="getFundamentals(fundamentalsSymbol.value, fundamentalsPeriod.value)" placeholder="Search for symbol...">
+                </p-autoComplete>
+                <p-dropdown #fundamentalsPeriod [options]="timeSeriesPeriods" [(ngModel)]="selectedFundamentalsPeriod" (onChange)="getFundamentals(fundamentalsSymbol.value, fundamentalsPeriod.value)"></p-dropdown>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    Symbol
+                </th>
+                <th>
+                    Id
+                </th>
+                <th>
+                    Key
+                </th>
+                <th>
+                    Subkey
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Updated
+                </th>
+                <th>
+                    Accounts Payable
+                </th>
+                <th>
+                    Accounts Payable Turnover
+                </th>
+                <th>
+                    Accounts Receivable
+                </th>
+                <th>
+                    Accounts Receivable Turnover
+                </th>
+                <th>
+                    As Of Date
+                </th>
+                <th>
+                    Assets Current Cash
+                </th>
+                <th>
+                    Assets Current Cash Restricted
+                </th>
+                <th>
+                    Assets Current Deferred Compensation
+                </th>
+                <th>
+                    Assets Current Deferred Tax
+                </th>
+                <th>
+                    Assets Current Discontinued Operations
+                </th>
+                <th>
+                    Assets Current Investments
+                </th>
+                <th>
+                    Assets Current Leases Operating
+                </th>
+                <th>
+                    Assets Current LoansNet
+                </th>
+                <th>
+                    Assets Current Other
+                </th>
+                <th>
+                    Assets Current Separate Accounts
+                </th>
+                <th>
+                    Assets Current Unadjusted
+                </th>
+                <th>
+                    Assets Fixed
+                </th>
+                <th>
+                    Assets Fixed Deferred Compensation
+                </th>
+                <th>
+                    Assets Fixed Deferred Tax
+                </th>
+                <th>
+                    Assets Fixed Discontinued Operations
+                </th>
+                <th>
+                    Assets Fixed Leases Operating
+                </th>
+                <th>
+                    Assets Fixed Operating Discontinued Operations
+                </th>
+                <th>
+                    Assets Fixed Operating Subsidiary Unconsolidated
+                </th>
+                <th>
+                    Assets Fixed Oreo
+                </th>
+                <th>
+                    Assets Fixed Other
+                </th>
+                <th>
+                    Assets Fixed Unconsolidated
+                </th>
+                <th>
+                    Assets Unadjusted
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.id}}
+                </td>
+                <td>
+                    {{collection.key}}
+                </td>
+                <td>
+                    {{collection.subkey}}
+                </td>
+                <td>
+                    {{collection.date | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.updated | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.accountsPayable}}
+                </td>
+                <td>
+                    {{collection.accountsPayableTurnover}}
+                </td>
+                <td>
+                    {{collection.accountsReceivable}}
+                </td>
+                <td>
+                    {{collection.accountsReceivableTurnover}}
+                </td>
+                <td>
+                    {{collection.asOfDate}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentCash}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentCashRestricted}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentDeferredCompensation}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentDeferredTax}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentDiscontinuedOperations}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentInvestments}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentLeasesOperating}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentLoansNet}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentOther}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentSeparateAccounts}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentUnadjusted}}
+                </td>
+                <td>
+                    {{collection.assetsFixed}}
+                </td>
+                <td>
+                    {{collection.assetsFixedDeferredCompensation}}
+                </td>
+                <td>
+                    {{collection.assetsFixedDeferredTax}}
+                </td>
+                <td>
+                    {{collection.assetsFixedDiscontinuedOperations}}
+                </td>
+                <td>
+                    {{collection.assetsFixedLeasesOperating}}
+                </td>
+                <td>
+                    {{collection.assetsFixedOperatingDiscontinuedOperations}}
+                </td>
+                <td>
+                    {{collection.assetsFixedOperatingSubsidiaryUnconsolidated}}
+                </td>
+                <td>
+                    {{collection.assetsFixedOreo}}
+                </td>
+                <td>
+                    {{collection.assetsFixedOther}}
+                </td>
+                <td>
+                    {{collection.assetsFixedUnconsolidated}}
+                </td>
+                <td>
+                    {{collection.assetsUnadjusted}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="54">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/stats']">Stats</a>
+        <p-table #dt39 [value]="advancedStats" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="advancedStatsLoading"
+        [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+                <p-autoComplete #advancedStatsSymbol [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                                [minLength]="1" (onSelect)="getAdvancedStats(advancedStatsSymbol.value)" placeholder="Search for symbol...">
+                </p-autoComplete>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                  Week 52 high Date
+              </th>
+              <th>
+                  Week 52 low Date
+              </th>
+                <th>
+                  Total Cash
+                </th>
+                <th>
+                  currentDebt
+                </th>
+                <th>
+                  Revenue
+                </th>
+                <th>
+                  Gross Profit
+                </th>
+                <th>
+                  Total Revenue
+                </th>
+                <th>
+                  Ebitda
+                </th>
+                <th>
+                  Revenue Per Share
+                </th>
+                <th>
+                  Revenue Per Employee
+                </th>
+                <th>
+                  Debt To Equity
+                </th>
+                <th>
+                  Profit Margin
+                </th>
+                <th>
+                  Enterprise Value
+                </th>
+                <th>
+                Enterprise Value to Revenue
+                </th>
+                <th>
+                  Price to Sales
+                </th>
+                <th>
+                  Price to Book
+                </th>
+                <th>
+                  Forward PE Ratio
+                </th>
+                <th>
+                  PegRatio
+                </th>
+                <th>
+                  PE High
+                </th>
+                <th>
+                  PE Low
+                </th>
+                <th>
+                  Pul Call Ratio
+                </th>
+                <th>
+                  Company Name
+                </th>
+                <th>
+                  Market Cap
+                </th>
+                <th>
+                  Income Tax
+                </th>
+                <th>
+                  Week 52 High
+                </th>
+                <th>
+                  Week 52 Low
+                </th>
+                <th>
+                  Week 52 change
+                </th>
+                <th>
+                  Shares outstanding
+                </th>
+                <th>
+                Avg 10 volume
+                </th>
+                <th>
+                Avg 30 volume
+                </th>
+                <th>
+                Day 200 moving avg
+                </th>
+                <th>
+                  Day 50 moving avg
+                </th>
+                <th>
+                  Employees
+                </th>
+                <th>
+                  Ttm Eps
+                </th>
+                <th>
+                  Ttm dividend date
+                </th>
+                <th>
+                  Dividend Yield
+                </th>
+                <th>
+                  Next dividend date
+                </th>
+                <th>
+                  Ex dividend date
+                </th>
+                <th>
+                  Pe ratio
+                </th>
+                <th>
+                  Beta
+                </th>
+                <th>
+                  Max change percent
+                </th>
+                <th>
+                  Year 5 change percent
+                </th>
+                <th>
+                  Year 2 change percent
+                </th>
+                <th>
+                  Year 1 change percent
+                </th>
+                <th>
+                  Ytd change percent
+                </th>
+                <th>
+                  Month 6 change percent
+                </th>
+                <th>
+                  Month 3 change percent
+                </th>
+                <th>
+                  Month 1 change percent
+                </th>
+                <th>
+                  Day 30 change percent
+                </th>
+                <th>
+                  Day 5 change percent
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                  {{collection.symbol}}
+              </td>
+              <td>
+                  {{collection.week52highDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.week52lowDate | date: 'MM/dd/yyyy'}}
+              </td>
+                <td>
+                    {{collection.totalCash}}
+                </td>
+                <td>
+                    {{collection.currentDebt}}
+                </td>
+                <td>
+                    {{collection.revenue}}
+                </td>
+                <td>
+                    {{collection.grossProfit}}
+                </td>
+                <td>
+                    {{collection.totalRevenue}}
+                </td>
+                <td>
+                    {{collection.ebitda}}
+                </td>
+                <td>
+                    {{collection.revenuePerShare}}
+                </td>
+                <td>
+                    {{collection.revenuePerEmployee}}
+                </td>
+                <td>
+                    {{collection.debtToEquity}}
+                </td>
+                <td>
+                    {{collection.profitMargin}}
+                </td>
+                <td>
+                    {{collection.enterpriseValueToRevenue}}
+                </td>
+                <td>
+                    {{collection.priceToSales}}
+                </td>
+                <td>
+                    {{collection.currentDebt}}
+                </td>
+                <td>
+                    {{collection.priceToBook}}
+                </td>
+                <td>
+                    {{collection.forwardPERatio}}
+                </td>
+                <td>
+                    {{collection.pegRatio}}
+                </td>
+                <td>
+                    {{collection.peHigh}}
+                </td>
+                <td>
+                    {{collection.peLow}}
+                </td>
+                <td>
+                    {{collection.putCallRatio | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.companyName}}
+                </td>
+                <td>
+                    {{collection.marketcap}}
+                </td>
+                <td>
+                    {{collection.incomeTax}}
+                </td>
+                <td>
+                    {{collection.week52high}}
+                </td>
+                <td>
+                    {{collection.week52low}}
+                </td>
+                <td>
+                    {{collection.week52change}}
+                </td>
+                <td>
+                    {{collection.sharesOutstanding}}
+                </td>
+                <td>
+                    {{collection.avg10Volume}}
+                </td>
+                <td>
+                    {{collection.avg30Volume}}
+                </td>
+                <td>
+                    {{collection.day200MovingAvg}}
+                </td>
+                <td>
+                    {{collection.day50MovingAvg}}
+                </td>
+                <td>
+                    {{collection.employees}}
+                </td>
+                <td>
+                    {{collection.ttmEPS}}
+                </td>
+                <td>
+                    {{collection.ttmDividendRate}}
+                </td>
+                <td>
+                    {{collection.dividendYield}}
+                </td>
+                <td>
+                    {{collection.nextDividendDate}}
+                </td>
+                <td>
+                    {{collection.exDividendDate}}
+                </td>
+                <td>
+                    {{collection.peRatio}}
+                </td>
+                <td>
+                    {{collection.beta}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.maxChangePercent > 0, 'text-danger': collection.maxChangePercent <= 0 }">
+                    {{collection.maxChangePercent}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.year5ChangePercent > 0, 'text-danger': collection.year5ChangePercent <= 0 }">
+                    {{collection.year5ChangePercent}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.year2ChangePercent > 0, 'text-danger': collection.year2ChangePercent <= 0 }">
+                    {{collection.year2ChangePercent}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.year1ChangePercent > 0, 'text-danger': collection.year1ChangePercent <= 0 }">
+                    {{collection.year1ChangePercent}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.ytdChangePercent > 0, 'text-danger': collection.ytdChangePercent <= 0 }">
+                    {{collection.ytdChangePercent}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.month6ChangePercent > 0, 'text-danger': collection.month6ChangePercent <= 0 }">
+                    {{collection.month6ChangePercent}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.month3ChangePercent > 0, 'text-danger': collection.month3ChangePercent <= 0 }">
+                    {{collection.month3ChangePercent}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.month1ChangePercent > 0, 'text-danger': collection.month1ChangePercent <= 0 }">
+                    {{collection.month1ChangePercent}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.day30ChangePercent > 0, 'text-danger': collection.day30ChangePercent <= 0 }">
+                    {{collection.day30ChangePercent}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.day5ChangePercent > 0, 'text-danger': collection.day5ChangePercent <= 0 }">
+                    {{collection.day5ChangePercent}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="24">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/stats-basic']">Stats(Basic)</a>
+        <p-table #dt40 [value]="keyStats" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="keyStatsLoading"
+        [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+                <p-autoComplete #keyStatSymbol [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                                [minLength]="1" (onSelect)="getKeyStats(keyStatSymbol.value)" placeholder="Search for symbol...">
+                </p-autoComplete>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                Company Name
+              </th>
+              <th>
+                Market Cap
+              </th>
+              <th>
+                Week 52 High
+              </th>
+              <th>
+                Week 52 Low
+              </th>
+              <th>
+                Week 52 change
+              </th>
+              <th>
+                Shares outstanding
+              </th>
+              <th>
+              Avg 10 volume
+              </th>
+              <th>
+              Avg 30 volume
+              </th>
+              <th>
+              Day 200 moving avg
+              </th>
+              <th>
+                Day 50 moving avg
+              </th>
+              <th>
+                Employees
+              </th>
+              <th>
+                Ttm Eps
+              </th>
+              <th>
+                Ttm dividend date
+              </th>
+              <th>
+                Dividend Yield
+              </th>
+              <th>
+                Next dividend date
+              </th>
+              <th>
+                Ex dividend date
+              </th>
+              <th>
+                Pe ratio
+              </th>
+              <th>
+                Beta
+              </th>
+              <th>
+                Max change percent
+              </th>
+              <th>
+                Year 5 change percent
+              </th>
+              <th>
+                Year 2 change percent
+              </th>
+              <th>
+                Year 1 change percent
+              </th>
+              <th>
+                Ytd change percent
+              </th>
+              <th>
+                Month 6 change percent
+              </th>
+              <th>
+                Month 3 change percent
+              </th>
+              <th>
+                Month 1 change percent
+              </th>
+              <th>
+                Day 30 change percent
+              </th>
+              <th>
+                Day 5 change percent
+              </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                  {{collection.symbol}}
+              </td>
+              <td>
+                  {{collection.companyName}}
+              </td>
+              <td>
+                  {{collection.marketcap}}
+              </td>
+              <td>
+                  {{collection.week52high}}
+              </td>
+              <td>
+                  {{collection.week52low}}
+              </td>
+              <td>
+                  {{collection.week52change}}
+              </td>
+              <td>
+                  {{collection.sharesOutstanding}}
+              </td>
+              <td>
+                  {{collection.avg10Volume}}
+              </td>
+              <td>
+                  {{collection.avg30Volume}}
+              </td>
+              <td>
+                  {{collection.day200MovingAvg}}
+              </td>
+              <td>
+                  {{collection.day50MovingAvg}}
+              </td>
+              <td>
+                  {{collection.employees}}
+              </td>
+              <td>
+                  {{collection.ttmEPS}}
+              </td>
+              <td>
+                  {{collection.ttmDividendRate}}
+              </td>
+              <td>
+                  {{collection.dividendYield}}
+              </td>
+              <td>
+                  {{collection.nextDividendDate | date: 'dd/MM/yyyy'}}
+              </td>
+              <td>
+                  {{collection.exDividendDate | date: 'dd/MM/yyyy'}}
+              </td>
+              <td>
+                  {{collection.peRatio}}
+              </td>
+              <td>
+                  {{collection.beta}}
+              </td>
+              <td [ngClass]="{ 'text-success': collection.maxChangePercent > 0, 'text-danger': collection.maxChangePercent <= 0 }">
+                  {{collection.maxChangePercent}}
+              </td>
+              <td [ngClass]="{ 'text-success': collection.year5ChangePercent > 0, 'text-danger': collection.year5ChangePercent <= 0 }">
+                  {{collection.year5ChangePercent}}
+              </td>
+              <td [ngClass]="{ 'text-success': collection.year2ChangePercent > 0, 'text-danger': collection.year2ChangePercent <= 0 }">
+                  {{collection.year2ChangePercent}}
+              </td>
+              <td [ngClass]="{ 'text-success': collection.year1ChangePercent > 0, 'text-danger': collection.year1ChangePercent <= 0 }">
+                  {{collection.year1ChangePercent}}
+              </td>
+              <td [ngClass]="{ 'text-success': collection.ytdChangePercent > 0, 'text-danger': collection.ytdChangePercent <= 0 }">
+                  {{collection.ytdChangePercent}}
+              </td>
+              <td [ngClass]="{ 'text-success': collection.month6ChangePercent > 0, 'text-danger': collection.month6ChangePercent <= 0 }">
+                  {{collection.month6ChangePercent}}
+              </td>
+              <td [ngClass]="{ 'text-success': collection.month3ChangePercent > 0, 'text-danger': collection.month3ChangePercent <= 0 }">
+                  {{collection.month3ChangePercent}}
+              </td>
+              <td [ngClass]="{ 'text-success': collection.month1ChangePercent > 0, 'text-danger': collection.month1ChangePercent <= 0 }">
+                  {{collection.month1ChangePercent}}
+              </td>
+              <td [ngClass]="{ 'text-success': collection.day30ChangePercent > 0, 'text-danger': collection.day30ChangePercent <= 0 }">
+                  {{collection.day30ChangePercent}}
+              </td>
+              <td [ngClass]="{ 'text-success': collection.day5ChangePercent > 0, 'text-danger': collection.day5ChangePercent <= 0 }">
+                  {{collection.day5ChangePercent}}
+              </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="24">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/markets']">Markets</a>
+        <p-table #dt45 [value]="markets" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="marketsLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['venueName']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <span class="p-input-icon-left mr-auto">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" (input)="dt45.filterGlobal($event.target.value, 'contains')" placeholder="Search for venue name..." />
+              </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    Mic
+                </th>
+                <th>
+                    Tape Id
+                </th>
+                <th>
+                    Venue Name
+                </th>
+                <th>
+                    Volume
+                </th>
+                <th>
+                    Tape A
+                </th>
+                <th>
+                    Tape B
+                </th>
+                <th>
+                    Tape C
+                </th>
+                <th>
+                    Market Percent
+                </th>
+                <th>
+                    Last Updated
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.mic}}
+                </td>
+                <td>
+                    {{collection.tapeId}}
+                </td>
+                <td>
+                    {{collection.venueName}}
+                </td>
+                <td>
+                    {{collection.volume}}
+                </td>
+                <td>
+                    {{collection.tapeA}}
+                </td>
+                <td>
+                    {{collection.tapeB}}
+                </td>
+                <td>
+                    {{collection.tapeC}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.marketPercent > 0, 'text-danger': collection.marketPercent <= 0 }">
+                    {{collection.marketPercent}}%
+                </td>
+                <td>
+                    {{collection.lastUpdated | date: 'dd/MM/yyyy'}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="9">No collections found.</td>
+            </tr>
+        </ng-template>
+      </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/company']">Company</a>
+        <p-table  [value]="companySummary"
+                  dataKey="symbol"
+                  [rows]="5" 
+                  [showCurrentPageReport]="true"
+                  [loading]="companyLoading"
+                  responsiveLayout="scroll">
+          <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <p-autoComplete #companySymbol [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                              [minLength]="1" (onSelect)="getCompany(companySymbol.value)" placeholder="Search for symbol...">
+              </p-autoComplete>
+            </div>
+          </ng-template>
+        <ng-template pTemplate="header">
+              <tr>
+                  <th>Symbol</th>
+                  <th>Company Name</th>
+                  <th>Exchange</th>
+                  <th>Industry</th>
+                  <th>Website</th>
+                  <th>CEO</th>
+                  <th>Issue Type</th>
+                  <th>Sector</th>
+                  <th>Primary Sec Code</th>
+                  <th>Employees</th>
+                  <th>Address</th>
+                  <th>Address2</th>
+                  <th>State</th>
+                  <th>City</th>
+                  <th>Zip</th>
+                  <th>Country</th>
+                  <th>Phone</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-summary>
+              <tr>
+                  <td>{{summary.symbol}}</td>
+                  <td>{{summary.companyName}}</td>
+                  <td>{{summary.exchange}}</td>
+                  <td>{{summary.industry}}%</td>
+                  <td>{{summary.website}}</td>
+                  <td>{{summary.ceo}}</td>
+                  <td>{{summary.issueType}}</td>
+                  <td>{{summary.sector}}</td>
+                  <td>{{summary.primarySicCode}}</td>
+                  <td>{{summary.employees}}</td>
+                  <td>{{summary.address}}</td>
+                  <td>{{summary.address2}}%</td>
+                  <td>{{summary.state}}</td>
+                  <td>{{summary.city}}</td>
+                  <td>{{summary.zip}}</td>
+                  <td>{{summary.country}}</td>
+                  <td>{{summary.phone}}</td>
+                </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/peer-groups']">Peer groups</a>
+        <p-table [value]="peerGroups" 
+          [rows]="5" [showCurrentPageReport]="true" [loading]="peerGroupsLoading"
+          [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+          responsiveLayout="scroll">
+          <ng-template pTemplate="caption">
+              <div class="d-flex justify-content-between">
+                <p-autoComplete #peerGroupsSymbol [ngModel]="selectedPeerGroupsSymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                                [minLength]="1" (onSelect)="getPeerGroups(peerGroupsSymbol.value)" placeholder="Search for symbol...">
+                </p-autoComplete>
+              </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+              <tr>
+                  <th>
+                      Symbol
+                  </th>
+                  <th>
+                      Group Name
+                  </th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-collection>
+              <tr>
+                  <td>
+                      {{collection.symbol}}
+                  </td>
+                  <td>
+                      {{collection.groupName}}
+                  </td>
+              </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/relevant-stocks']">Relevant Stocks</a>
+        <p-table [value]="relevantStocks" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="relevantStocksLoading"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['adjMv','reportedTitle','symbol','id','key','subkey','transactionCode']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+                <p-autoComplete #relevantStocksSymbol [ngModel]="selectedRelevantStocksSymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                                [minLength]="1" (onSelect)="getRelevantStocks(relevantStocksSymbol.value)" placeholder="Search for symbol...">
+                </p-autoComplete>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    Symbol
+                </th>
+                <th>
+                    Relevant Stock
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.relevantStock}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="2">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/previous-day-price']">Previous Day Price</a>
+        <p-table [value]="previousDayPrice" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="previousDayPriceLoading"
+        responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+                <p-autoComplete #previousDayPriceSymbol [ngModel]="selectedPreviousDayPriceSymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                                [minLength]="1" (onSelect)="getPreviousDayPrice(previousDayPriceSymbol.value)" placeholder="Search for symbol...">
+                </p-autoComplete>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Symbol
+              </th>
+              <th>
+                Open
+              </th>
+              <th>
+                Close
+              </th>
+              <th>
+                High
+              </th>
+              <th>
+                Low
+              </th>
+              <th>
+                Id
+              </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.open}}
+                </td>
+                <td>
+                    {{collection.close}}
+                </td>
+                <td>
+                    {{collection.high}}
+                </td>
+                <td>
+                    {{collection.low}}
+                </td>
+                <td>
+                    {{collection.id}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="5">No collections found.</td>
+            </tr>
+        </ng-template>
+      </p-table>
+      </p-card>
+    </div>
+    <div class="col-md-6 mt-1 table-card">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <a [routerLink]="['/stocks-equities/quote']">Quote</a>
+        <p-table #dt42 [value]="quotes" dataKey="symbol"
+        [rows]="5" [showCurrentPageReport]="true" [loading]="quotesLoading"
+        [globalFilterFields]="['companyName']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+                <p-autoComplete #quoteSymbol [ngModel]="selectedQuoteSymbol" [suggestions]="filteredSymbols" (completeMethod)="filterSymbol($event)"
+                                [minLength]="1" (onSelect)="getQuote(quoteSymbol.value)" placeholder="Search for symbol...">
+                </p-autoComplete>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                  Symbol
+                </th>
+                <th>
+                  Company Name
+                </th>
+                <th>
+                  Primary Exchange
+                </th>
+                <th>
+                  Calculation Price
+                </th>
+                <th>
+                  Open
+                </th>
+                <th>
+                  Open Time
+                </th>
+                <th>
+                  Open Source
+                </th>
+                <th>
+                  Close
+                </th>
+                <th>
+                  Close Time
+                </th>
+                <th>
+                  Close Source
+                </th>
+                <th>
+                  High
+                </th>
+                <th>
+                  High Time
+                </th>
+                <th>
+                  High Source
+                </th>
+                <th>
+                  Low
+                </th>
+                <th>
+                  Low Time
+                </th>
+                <th>
+                  Low Source
+                </th>
+                <th>
+                  Latest Price
+                </th>
+                <th>
+                  Latest Source
+                </th>
+                <th>
+                  Latest Time
+                </th>
+                <th>
+                  Latest Update
+                </th>
+                <th>
+                  Latest Volume
+                </th>
+                <th>
+                  IEX Real-time Price
+                </th>
+                <th>
+                  IEX Last Updated
+                </th>
+                <th>
+                  Delayed Price
+                </th>
+                <th>
+                  Delayed Price Time
+                </th>
+                <th>
+                  Odd Lot Delayed Price
+                </th>
+                <th>
+                  Odd Lot Delayed Price Time
+                </th>
+                <th>
+                  Extended Price
+                </th>
+                <th>
+                  Extended Change
+                </th>
+                <th>
+                  Extended Change Percent%
+                </th>
+                <th>
+                  Extended Price Time
+                </th>
+                <th>
+                  Previous Close
+                </th>
+                <th>
+                  Previous Volume
+                </th>
+                <th>
+                  Change
+                </th>
+                <th>
+                  Change Percent %
+                </th>
+                <th>
+                  Volume
+                </th>
+                <th>
+                  IEX Market Percent %
+                </th>
+                <th>
+                  IEX Volume
+                </th>
+                <th>
+                  Average Total Volume
+                </th>
+                <th>
+                  IEX Bid Price
+                </th>
+                <th>
+                  IEX Bid Size
+                </th>
+                <th>
+                  IEX Ask Price
+                </th>
+                <th>
+                  IEX Ask Size
+                </th>
+                <th>
+                  IEX Open
+                </th>
+                <th>
+                  IEX Open Time
+                </th>
+                <th>
+                  IEX Close
+                </th>
+                <th>
+                  IEX Close Time
+                </th>
+                <th>
+                  Market Cap
+                </th>
+                <th>
+                  Pe Ratio
+                </th>
+                <th>
+                  Week 52 High
+                </th>
+                <th>
+                  Week 52 Low
+                </th>
+                <th>
+                  Ttd Change
+                </th>
+                <th>
+                  Last Trade Time
+                </th>
+                <th>
+                  US Market Open
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.companyName}}
+                </td>
+                <td>
+                    {{collection.primaryExchange}}
+                </td>
+                <td>
+                    {{collection.calculationPrice}}
+                </td>
+                <td>
+                    {{collection.open}}
+                </td>
+                <td>
+                    {{collection.openTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.openSource}}
+                </td>
+                <td>
+                    {{collection.close}}
+                </td>
+                <td>
+                    {{collection.closeTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.closeSource}}
+                </td>
+                <td>
+                    {{collection.high}}
+                </td>
+                <td>
+                    {{collection.highTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.highSource}}
+                </td>
+                <td>
+                    {{collection.low}}
+                </td>
+                <td>
+                    {{collection.lowTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.lowSource}}
+                </td>
+                <td>
+                    {{collection.latestPrice}}
+                </td>
+                <td>
+                    {{collection.latestSource}}
+                </td>
+                <td>
+                    {{collection.latestTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.latestUpdate | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.latestVolume}}
+                </td>
+                <td>
+                    {{collection.iexRealtimePrice}}
+                </td>
+                <td>
+                    {{collection.iexLastUpdated}}
+                </td>
+                <td>
+                    {{collection.delayedPrice}}
+                </td>
+                <td>
+                    {{collection.delayedPriceTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.oddLotDelayedPrice}}
+                </td>
+                <td>
+                    {{collection.oddLotDelayedPriceTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.extendedPrice}}
+                </td>
+                <td>
+                    {{collection.extendedChange}}
+                </td>
+                <td>
+                    {{collection.extendedChangePercent !== null?collection.extendedChangePercent+'%': ''}}
+                </td>
+                <td>
+                    {{collection.extendedPriceTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.previousClose}}
+                </td>
+                <td>
+                    {{collection.previousVolume}}
+                </td>
+                <td>
+                    {{collection.change}}
+                </td>
+                <td>
+                    {{collection.changePercent !== null?collection.changePercent+'%': ''}}
+                </td>
+                <td>
+                    {{collection.volume}}
+                </td>
+                <td>
+                    {{collection.iexMarketPercent !== null?collection.iexMarketPercent+'%': ''}}
+                </td>
+                <td>
+                    {{collection.iexVolume}}
+                </td>
+                <td>
+                    {{collection.avgTotalVolume}}
+                </td>
+                <td>
+                    {{collection.iexBidPrice}}
+                </td>
+                <td>
+                    {{collection.iexBidSize}}
+                </td>
+                <td>
+                    {{collection.iexAskPrice}}
+                </td>
+                <td>
+                    {{collection.iexAskSize}}
+                </td>
+                <td>
+                    {{collection.iexOpen}}
+                </td>
+                <td>
+                    {{collection.iexOpenTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.iexClose}}
+                </td>
+                <td>
+                    {{collection.iexCloseTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.marketCap}}
+                </td>
+                <td>
+                    {{collection.peRatio}}
+                </td>
+                <td>
+                    {{collection.week52High}}
+                </td>
+                <td>
+                    {{collection.week52Low}}
+                </td>
+                <td>
+                    {{collection.ytdChange}}
+                </td>
+                <td>
+                    {{collection.lastTradeTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.isUSMarketOpen}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="54">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    <button (click)="scroll()"></button>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center">{{selectedLogoSymbol}} Logo</h1>
+        <p-table 
+          #dt1 
+          [value]="logos" 
+          dataKey="id"
+          [rows]="10" 
+          [showCurrentPageReport]="true" 
+          [loading]="logosLoading" 
+          styleClass="p-datatable-gridlines"
+          [paginator]="true" 
+          currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+          responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-center">
+                <p-autoComplete 
+                  #logoSymbol 
+                  [ngModel]="selectedLogoSymbol" 
+                  [suggestions]="filteredSymbols" 
+                  (completeMethod)="filterSymbol($event)"
+                  [minLength]="1" 
+                  (onSelect)="getLogo(logoSymbol.value)" 
+                  placeholder="Search symbol">
+                </p-autoComplete>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <div class="flex justify-content-center align-items-center text-center">
+                        Logo
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td class="text-center">
+                    <img src="{{collection.url}}">
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="1">No collections found.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    </div>
+  </div>
+</div>

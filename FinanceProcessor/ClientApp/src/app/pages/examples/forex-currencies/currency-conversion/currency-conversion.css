@@ -1,0 +1,11 @@
+.search-bar {
+    margin: 0px;
+}
+
+.search-btn {
+    background-color: #2a323d;
+    color: white;
+    border-color: #8dd0ff;
+    border-width: 0.1mm;
+    border-radius: 5px;
+}

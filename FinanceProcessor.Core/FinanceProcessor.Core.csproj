@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.7" />
+    <PackageReference Include="Microsoft.IdentityModel.Logging" Version="6.23.1" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.23.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.23.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Aggregates\Subscription\Models\" />
+    <Folder Include="Aggregates\Subscription\Services\" />
+    <Folder Include="Aggregates\Subscription\Repository\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FinanceProcessor.Core.Models\FinanceProcessor.Core.Models.csproj" />
+    <ProjectReference Include="..\FinanceProcessor.IEXSharp\FinanceProcessor.IEXSharp.csproj" />
+    <ProjectReference Include="..\FinanceProcessor.MongoDB.Contracts\FinanceProcessor.MongoDB.Contracts.csproj" />
+    <ProjectReference Include="..\FinanceProcessor.PayPalSubscriptions\FinanceProcessor.PayPalSubscriptions.csproj" />
+    <ProjectReference Include="..\FinanceProcessor.PayPal\FinanceProcessor.PayPal.csproj" />
+    <ProjectReference Include="..\FinanceProcessor.SharedKernel\FinanceProcessor.SharedKernel.csproj" />
+  </ItemGroup>
+
+</Project>

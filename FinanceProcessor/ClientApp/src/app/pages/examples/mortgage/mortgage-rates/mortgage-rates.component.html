@@ -1,0 +1,64 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12 p-5">
+      <h1 class="text-center pb-3">Mortgage Rates</h1>
+        <p-table 
+          #dt1
+          [value]="mortgageRates" 
+          dataKey="date"
+          [rows]="10"
+          [rowsPerPageOptions]="[5,10,25,50]" 
+          [loading]="mortgageRatesLoading" 
+          styleClass="p-datatable-gridlines"
+          [paginator]="true" 
+          responsiveLayout="scroll">
+            <ng-template pTemplate="caption">
+              <p-dropdown
+              #type
+              [options]="types"
+              optionLabel="label"
+              optionValue="value"
+              (onChange)="getMortgageRates(type.value)">
+              </p-dropdown>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Frequency
+                    </th>
+                    <th>
+                        Value
+                    </th>
+                    <th>
+                        Updated
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-collection>
+                <tr>
+                    <td>
+                        {{collection.date | date: 'dd/MM/yyyy'}}
+                    </td>
+                    <td>
+                        {{collection.frequency}}
+                    </td>
+                    <td>
+                        {{collection.value}}
+                    </td>
+                    <td>
+                        {{collection.updated | date: 'dd/MM/yyyy'}}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="4">No collections found.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+  </div>
+</div>

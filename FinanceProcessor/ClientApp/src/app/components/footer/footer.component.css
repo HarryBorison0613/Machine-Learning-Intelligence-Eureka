@@ -1,0 +1,36 @@
+i {
+    border-radius: 50%;
+    padding: 10px;
+    border-color: white;
+}
+
+i:hover {
+    cursor: pointer;
+}
+
+.description p {
+    color: white;
+    font-size: 1rem;
+}
+
+strong {
+    font-weight: normal;
+    padding: 10px;
+    font-size: 1.2rem;
+}
+
+.contact ul li a {
+    color: white;
+}
+
+.copyright a {
+    color: #ba54f5;
+}
+
+.download span {
+    display: block;
+}
+
+.download strong {
+    font-size: 20px;
+}

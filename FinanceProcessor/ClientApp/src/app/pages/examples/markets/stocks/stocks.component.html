@@ -1,0 +1,201 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12 mr-auto">
+      <h1>Stock Market Summary</h1>
+    </div>
+    <div class=" col-md-12 ml-auto">
+      <div class=" card card-chart">
+        <div class=" card-header">
+          <h4 class=" card-title">
+            <i class=" tim-icons icon-shape-star text-primary"> </i><strong>Intra day price for most popular symbols</strong>
+          </h4>
+          <h5 class=" card-category">Intra price chart for SPY</h5>
+        </div>
+        <div class=" card-body">
+          <div class=" chart-area" style="height: 200px">
+            <canvas id="spyIntradayPriceForMostPopularSymbol"> </canvas>
+          </div>
+        </div>
+        <div class=" card-header">
+          <h5 class=" card-category">Intra price chart for QQQ</h5>
+        </div>
+        <div class=" card-body">
+          <div class=" chart-area" style="height: 200px">
+            <canvas id="qqqIntradayPriceForMostPopularSymbol"> </canvas>
+          </div>
+        </div>
+        <div class=" card-header">
+          <h5 class=" card-category">Intra price chart for IWM</h5>
+        </div>
+        <div class=" card-body">
+          <div class=" chart-area" style="height: 200px"><canvas id="iwmIntradayPriceForMostPopularSymbol"> </canvas></div>
+        </div>
+      </div>
+    </div>
+    <div class=" col-md-6">
+      <div class=" card">
+        <div class="card-header">
+          <h3 class="mb-0">Upcoming Earnings Markets</h3>
+        </div>
+        <div class=" card-body">
+          <div class=" toolbar"></div>
+          <div class="dataTables_wrapper py-4">
+            <div class="row">
+              <div class="col-sm-12 col-md-6">
+                <div class="dataTables_length" id="datatable_length">
+                  <label>
+                    Show
+                    <select name="datatable_length"
+                            aria-controls="datatable"
+                            class="form-control form-control-sm"
+                            (change)="entriesChange($event)">
+                      <option value="5" [selected]="entries == 5">5</option>
+                      <option value="10" [selected]="entries == 10">10</option>
+                      <option value="25" [selected]="entries == 25">25</option>
+                      <option value="50" [selected]="entries == 50">50</option>
+                      <option value="-1" [selected]="entries == -1">All</option>
+                    </select>
+                    entries
+                  </label>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <div id="datatable_filter" class="dataTables_filter">
+                  <label>
+                    <input type="search"
+                           class="form-control form-control-sm"
+                           placeholder="Search records"
+                           aria-controls="datatable"
+                           (keyup)="filterTable($event)" />
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <ngx-datatable class="bootstrap selection-cell"
+                           [columnMode]="'force'"
+                           [headerHeight]="50"
+                           [footerHeight]="50"
+                           [rowHeight]="'auto'"
+                           [limit]="entries != -1 ? entries : undefined"
+                           [rows]="temp"
+                           (activate)="onActivate($event)">
+              <ngx-datatable-column name="Symbol"></ngx-datatable-column>
+              <ngx-datatable-column name="ReportDate"></ngx-datatable-column>
+            </ngx-datatable>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class=" col-md-6">
+      <div class=" card">
+        <div class="card-header">
+          <h3 class="mb-0">Upcoming Split Markets</h3>
+        </div>
+        <div class=" card-body">
+          <div class=" toolbar"></div>
+          <div class="dataTables_wrapper py-4">
+            <div class="row">
+              <div class="col-sm-12 col-md-6">
+                <div class="dataTables_length" id="datatable_length">
+                  <label>
+                    Show
+                    <select name="datatable_length"
+                            aria-controls="datatable"
+                            class="form-control form-control-sm">
+                      <option value="5" [selected]="entries == 5">5</option>
+                    </select>
+                    entries
+                  </label>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <div id="datatable_filter" class="dataTables_filter">
+                  <label>
+                    <input type="search"
+                           class="form-control form-control-sm"
+                           placeholder="Search records"
+                           aria-controls="datatable"
+                           (keyup)="filterSplitsTable($event)" />
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <ngx-datatable class="bootstrap selection-cell"
+                           [columnMode]="'force'"
+                           [headerHeight]="50"
+                           [footerHeight]="50"
+                           [rowHeight]="'auto'"
+                           [limit]="entries != -1 ? entries : undefined"
+                           [rows]="splitstemp"
+                           (activate)="onSplitsActivate($event)">
+              <ngx-datatable-column name="Symbol"></ngx-datatable-column>
+              <ngx-datatable-column name="Date"></ngx-datatable-column>
+              <ngx-datatable-column name="Key"></ngx-datatable-column>
+              <ngx-datatable-column name="Subkey"></ngx-datatable-column>
+              <ngx-datatable-column name="Updated"></ngx-datatable-column>
+            </ngx-datatable>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class=" col-md-6">
+      <div class=" card">
+        <div class="card-header">
+          <h3 class="mb-0">Upcoming Dividends Markets</h3>
+        </div>
+        <div class=" card-body">
+          <div class=" toolbar"></div>
+          <div class="dataTables_wrapper py-3">
+            <div class="row">
+              <div class="col-sm-12 col-md-6 ml-auto">
+                <div class="dataTables_filter">
+                  <label>
+                    <input type="search"
+                           class="form-control form-control-sm"
+                           placeholder="Search records"
+                           aria-controls="datatable"
+                           (keyup.enter)="getUpcomingDividendsInfo($event)" />
+                  </label>
+                </div>
+              </div>
+            </div>
+            <table id="dividendsTable">
+              Please input stock symbol to get data.
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class=" col-md-6">
+      <div class=" card">
+        <div class="card-header">
+          <h3 class="mb-0">Upcoming Ipos Markets</h3>
+        </div>
+        <div class=" card-body">
+          <div class=" toolbar"></div>
+          <div class="dataTables_wrapper py-3">
+            <table id="iposTable">
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class=" col-md-12">
+      <div class=" card card-chart">
+        <div class=" card-header">
+          <h2 class=" card-title">Intra price chart for Symbol</h2>
+          <input type="text" #stocksSearch (keyup.enter)="searchIntradayPriceForSymbol(stocksSearch.value);" class="lg-text-input" id="inputForSymbol" placeholder="ex: SPY" />
+          <button class="btn-light" (click)="searchIntradayPriceForSymbol(stocksSearch.value)"><i class="tim-icons icon-send text-primary"></i></button>
+        </div>
+        <div class=" card-body">
+          <div class=" chart-area" style="height: 50px" id="intradayPriceForOneSymbolContent">
+            <h6 id="noData"></h6>
+            <canvas id="intradayPriceForOneSymbol"> </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

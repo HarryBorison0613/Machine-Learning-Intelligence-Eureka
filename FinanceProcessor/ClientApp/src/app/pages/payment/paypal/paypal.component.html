@@ -1,0 +1,97 @@
+<div class="content">
+  <div class="container pb-4">
+    <div class="col-lg-4 col-md-6 ml-auto mr-auto">
+      <h1>Buy Membership through Paypal</h1>
+    </div>
+
+    <div class="mt-2" *ngIf="showSuccess">
+      <div class="alert alert-success mt-2">
+        Yeah! Your <em>sandbox</em> transaction was successful.
+      </div>
+    </div>
+
+    <div class="mt-2" *ngIf="showError">
+      <div class="alert alert-danger mt-2">
+        Oh no! Your <em>sandbox</em> transaction failed.
+      </div>
+    </div>
+
+    <div class="mt-2" *ngIf="showCancel">
+      <div class="alert alert-info mt-2">Your transaction was cancelled.</div>
+    </div>
+
+    <div class="col-sm-12 col-md-6">
+      <div *ngIf="createOrderShow">
+        <div class="period" *ngIf="customFlag">
+          Period:
+          <p-dropdown
+            #selectPeriod
+            [options]="periodOptions"
+            optionLabel="label"
+            optionValue="value"
+            [(ngModel)]="selectedPeriodOption"
+            (onChange)="getBonusIssues(selectedPeriodOption)"
+          >
+          </p-dropdown>
+        </div>
+        <h2 *ngIf="!customFlag">
+          Please input your custom price you are able to do!
+        </h2>
+        <div class="mt-3" *ngIf="createOrderShow">
+          Price:
+          <input
+            class="form-control"
+            [value]="defaultPrice"
+            type="text"
+            #priceElem
+            [readonly]="customFlag"
+          />
+        </div>
+      </div>
+
+      <h2>
+        <a
+          (click)="CreateOrder()"
+          class="btn btn-info btn-lg btn-block mt-3"
+          *ngIf="createOrderShow"
+          href="javascript:void(0)"
+        >
+          Create Order
+        </a>
+
+        <a
+          (click)="PayTheOrder()"
+          class="btn btn-danger btn-lg btn-block mt-3"
+          *ngIf="payTheOrderShow"
+          href="javascript:void(0)"
+        >
+          Pay The Order
+        </a>
+      </h2>
+      <div>
+        <div class="pull-left">
+          <h6 class="custom-price" *ngIf="customFlag">
+            <a (click)="customPrice()" class="link footer-link">
+              We can give you a favor!
+            </a>
+          </h6>
+        </div>
+        <div class="pull-right">
+          <h6>
+            <a class="link footer-link" href="./#/membership">
+              Choose another plan
+            </a>
+          </h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-fall"
+>
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>

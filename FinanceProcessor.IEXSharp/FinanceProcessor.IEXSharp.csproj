@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<VersionPrefix>2.9.3</VersionPrefix>
+		<Authors>Victor Lee</Authors>
+		<Company />
+		<Description>IEX Cloud API for C# and other .net languages. Supports SSE streaming</Description>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/vslee/IEXSharp</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/vslee/IEXSharp</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<!--for SourceLink--><PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<!--for SourceLink--><EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<PackageTags>IEX Cloud Stock API Rest SSE dotnet finance-api market-data</PackageTags>
+		<PackageReleaseNotes>https://github.com/vslee/IEXSharp/releases</PackageReleaseNotes>
+		<Configurations>Debug;Release;PreRelease</Configurations>
+		<PackageId>VSLee.IEXSharp</PackageId>
+		<Product>VSLee.IEXSharp</Product>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<Copyright>2019 Victor Lee</Copyright>
+	</PropertyGroup>
+
+	<!--when prereleasing, embed symbols PDB in main nupkg bc GH Pakages doesn't have its own symbol server-->
+	<PropertyGroup Condition="'$(Configuration)'=='PreRelease'">
+		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
+
+	<!--when releasing to NuGet, create a separate snupkg-->
+	<PropertyGroup Condition="'$(Configuration)'=='Release'">
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="LaunchDarkly.EventSource" Version="4.2.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="Polly" Version="7.2.3" />
+		<PackageReference Include="System.Text.Json" Version="6.0.4" />
+
+		<!--development dependency, which means it is only used during build, the final NuGet package does not have a dependency on SourceLink-->
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+	</ItemGroup>
+
+</Project>

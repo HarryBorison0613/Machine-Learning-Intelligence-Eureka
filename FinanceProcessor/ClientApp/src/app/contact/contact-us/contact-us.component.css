@@ -1,0 +1,56 @@
+label {
+    font-size: 13px;
+}
+
+.content {
+    font-size: 1.2rem;
+}
+
+.title {
+    margin-top: 20px;
+    font-size: 24px;
+    text-align: center;
+    color: #000000;
+}
+
+.description p {
+    color: rgba(255,255,255,0.5);
+    font-size: 15px;
+    font-family: Latos;
+}
+
+.contact-us-form {
+    margin-top: 120px;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.contact-us-form input, textarea {
+    color: #000000;
+}
+
+.contact-us-form textarea:focus {
+    color: #000000;
+}
+
+.info-area p {
+    margin-top: 20px;
+}
+
+.info-title {
+    margin-top: 22px;
+}
+
+.info-horizontal {
+    margin-top: 160px;
+}
+
+.contact-us-form p {
+    font-family: sans-serif;
+    font-size: 0.9rem;
+}
+
+.welcome p {
+    color: rgba(0, 0, 0, .8);
+}

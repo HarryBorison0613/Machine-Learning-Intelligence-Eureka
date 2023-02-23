@@ -1,0 +1,531 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center">Collections</h1>
+        <p-table #dt1 [value]="collections" dataKey="symbol"
+        [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,25,50]" [loading]="loading" styleClass="p-datatable-gridlines"
+        [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+                <p-dropdown [options]="collectionTypes" [(ngModel)]="selectedCollectionType" (onChange)="getCollections(selectedCollectionType, selectedCollectionName)"></p-dropdown>
+                <p-dropdown [options]="collectionNames" [(ngModel)]="selectedCollectionName" (onChange)="getCollections(selectedCollectionType, selectedCollectionName)"></p-dropdown>
+                <span class="p-input-icon-left ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search symbol" />
+                </span>
+            </div>
+            <h6 class="mt-4">Please use <i class="pi pi-filter"></i> for advanced search</h6>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Symbol
+                        <p-columnFilter type="text" field="symbol" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Company Name
+                        <p-columnFilter type="text" field="companyName" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Primary Exchange
+                        <p-columnFilter type="text" field="primaryExchange" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Calculation Price
+                        <p-columnFilter field="calculationPrice" matchMode="equals" display="menu">
+                            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" placeholder="Any">
+                                    <ng-template let-option pTemplate="item">
+                                        <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
+                                    </ng-template>
+                                </p-dropdown>
+                            </ng-template>
+                        </p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Open
+                        <p-columnFilter type="numeric" field="open" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Open Time
+                        <p-columnFilter type="date" field="openTime" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Open Source
+                        <p-columnFilter type="text" field="openSource" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Close
+                        <p-columnFilter type="numeric" field="close" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Close Time
+                        <p-columnFilter type="date" field="closeTime" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Close Source
+                        <p-columnFilter type="text" field="closeSource" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        High
+                        <p-columnFilter type="numeric" field="high" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        High Time
+                        <p-columnFilter type="date" field="highTime" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        High Source
+                        <p-columnFilter type="text" field="highSource" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Low
+                        <p-columnFilter type="numeric" field="low" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Low Time
+                        <p-columnFilter type="date" field="lowTime" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Low Source
+                        <p-columnFilter type="text" field="lowSource" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Latest Price
+                        <p-columnFilter type="numeric" field="latestPrice" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Latest Source
+                        <p-columnFilter type="text" field="latestSource" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Latest Time
+                        <p-columnFilter type="date" field="latestTime" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Latest Update
+                        <p-columnFilter type="date" field="latestUpdate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Latest Volume
+                        <p-columnFilter type="numeric" field="latestVolume" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        IEX Real-time Price
+                        <p-columnFilter type="numeric" field="iexRealtimePrice" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        IEX Last Updated
+                        <p-columnFilter type="numeric" field="iexLastUpdated" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Delayed Price
+                        <p-columnFilter type="numeric" field="delayedPrice" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Delayed Price Time
+                        <p-columnFilter type="date" field="delayedPriceTime" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Odd Lot Delayed Price
+                        <p-columnFilter type="numeric" field="oddLotDelayedPrice" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Odd Lot Delayed Price Time
+                        <p-columnFilter type="date" field="oddLotDelayedPriceTime" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Extended Price
+                        <p-columnFilter type="numeric" field="extendedPrice" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Extended Change
+                        <p-columnFilter type="numeric" field="extendedChange" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Extended Change Percent%
+                        <p-columnFilter type="numeric" field="extendedChangePercent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Extended Price Time
+                        <p-columnFilter type="date" field="extendedPriceTime" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Previous Close
+                        <p-columnFilter type="numeric" field="prviousClose" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Previous Volume
+                        <p-columnFilter type="numeric" field="prviousVolume" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Change
+                        <p-columnFilter type="numeric" field="change" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Change Percent %
+                        <p-columnFilter type="numeric" field="changePercent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Volume
+                        <p-columnFilter type="numeric" field="volume" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        IEX Market Percent %
+                        <p-columnFilter type="numeric" field="iexMarketPercent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        IEX Volume
+                        <p-columnFilter type="numeric" field="iexVolume" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Average Total Volume
+                        <p-columnFilter type="numeric" field="avgTotalVolume" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        IEX Bid Price
+                        <p-columnFilter type="numeric" field="iexBidPrice" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        IEX Bid Size
+                        <p-columnFilter type="numeric" field="iexBidSize" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        IEX Ask Price
+                        <p-columnFilter type="numeric" field="iexAskPrice" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        IEX Ask Size
+                        <p-columnFilter type="numeric" field="iexAskSize" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        IEX Open
+                        <p-columnFilter type="numeric" field="iexOpen" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        IEX Open Time
+                        <p-columnFilter type="date" field="iexOpenTime" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        IEX Close
+                        <p-columnFilter type="numeric" field="iexClose" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        IEX Close Time
+                        <p-columnFilter type="date" field="iexCloseTime" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Market Cap
+                        <p-columnFilter type="numeric" field="marketCap" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Pe Ratio
+                        <p-columnFilter type="numeric" field="peRatio" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Week 52 High
+                        <p-columnFilter type="numeric" field="week52High" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Week 52 Low
+                        <p-columnFilter type="numeric" field="week52Low" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Ttd Change
+                        <p-columnFilter type="numeric" field="ytdChange" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Last Trade Time
+                        <p-columnFilter type="date" field="lastTradeTime" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        US Market Open
+                        <p-columnFilter type="boolean" field="isUSMarketOpen" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.companyName}}
+                </td>
+                <td>
+                    {{collection.primaryExchange}}
+                </td>
+                <td>
+                    {{collection.calculationPrice}}
+                </td>
+                <td>
+                    {{collection.open}}
+                </td>
+                <td>
+                    {{collection.openTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.openSource}}
+                </td>
+                <td>
+                    {{collection.close}}
+                </td>
+                <td>
+                    {{collection.closeTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.closeSource}}
+                </td>
+                <td>
+                    {{collection.high}}
+                </td>
+                <td>
+                    {{collection.highTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.highSource}}
+                </td>
+                <td>
+                    {{collection.low}}
+                </td>
+                <td>
+                    {{collection.lowTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.lowSource}}
+                </td>
+                <td>
+                    {{collection.latestPrice}}
+                </td>
+                <td>
+                    {{collection.latestSource}}
+                </td>
+                <td>
+                    {{collection.latestTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.latestUpdate | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.latestVolume}}
+                </td>
+                <td>
+                    {{collection.iexRealtimePrice}}
+                </td>
+                <td>
+                    {{collection.iexLastUpdated}}
+                </td>
+                <td>
+                    {{collection.delayedPrice}}
+                </td>
+                <td>
+                    {{collection.delayedPriceTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.oddLotDelayedPrice}}
+                </td>
+                <td>
+                    {{collection.oddLotDelayedPriceTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.extendedPrice}}
+                </td>
+                <td>
+                    {{collection.extendedChange}}
+                </td>
+                <td>
+                    {{collection.extendedChangePercent !== null?collection.extendedChangePercent+'%': ''}}
+                </td>
+                <td>
+                    {{collection.extendedPriceTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.previousClose}}
+                </td>
+                <td>
+                    {{collection.previousVolume}}
+                </td>
+                <td>
+                    {{collection.change}}
+                </td>
+                <td>
+                    {{collection.changePercent !== null?collection.changePercent+'%': ''}}
+                </td>
+                <td>
+                    {{collection.volume}}
+                </td>
+                <td>
+                    {{collection.iexMarketPercent !== null?collection.iexMarketPercent+'%': ''}}
+                </td>
+                <td>
+                    {{collection.iexVolume}}
+                </td>
+                <td>
+                    {{collection.avgTotalVolume}}
+                </td>
+                <td>
+                    {{collection.iexBidPrice}}
+                </td>
+                <td>
+                    {{collection.iexBidSize}}
+                </td>
+                <td>
+                    {{collection.iexAskPrice}}
+                </td>
+                <td>
+                    {{collection.iexAskSize}}
+                </td>
+                <td>
+                    {{collection.iexOpen}}
+                </td>
+                <td>
+                    {{collection.iexOpenTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.iexClose}}
+                </td>
+                <td>
+                    {{collection.iexCloseTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.marketCap}}
+                </td>
+                <td>
+                    {{collection.peRatio}}
+                </td>
+                <td>
+                    {{collection.week52High}}
+                </td>
+                <td>
+                    {{collection.week52Low}}
+                </td>
+                <td>
+                    {{collection.ytdChange}}
+                </td>
+                <td>
+                    {{collection.lastTradeTime | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.isUSMarketOpen}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="54">No collections found.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    </div>
+  </div>
+</div>

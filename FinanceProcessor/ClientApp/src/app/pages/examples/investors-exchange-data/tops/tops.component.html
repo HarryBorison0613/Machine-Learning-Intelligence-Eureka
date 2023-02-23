@@ -1,0 +1,125 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center pb-3">Tops</h1>
+        <p-table 
+          #dt1
+          [value]="data" 
+          dataKey="tradeId"
+          [rows]="5"
+          [rowsPerPageOptions]="[5,10,25,50]" 
+          [loading]="loading" 
+          styleClass="p-datatable-gridlines"
+          [paginator]="true" 
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+          responsiveLayout="scroll">
+          <ng-template pTemplate="caption">
+              <div class="d-flex justify-content-end">
+                  <p-autoComplete 
+                    #searchSymbol 
+                    [(ngModel)]="selectedSymbol" 
+                    [suggestions]="filteredSymbols" 
+                    (completeMethod)="filterSymbol($event)"
+                    [minLength]="1" 
+                    (onSelect)="getTopTrade(searchSymbol.value)" 
+                    placeholder="Search for symbol...">
+                  </p-autoComplete>
+                  <button 
+                    pButton 
+                    type="button" 
+                    icon="pi pi-times" 
+                    class="p-button-outlined"
+                    (click)="cancel()">
+                  </button>
+              </div>
+          </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>
+                        Symbol
+                    </th>
+                    <th>
+                        BidSize
+                    </th>
+                    <th>
+                        BidPrice
+                    </th>
+                    <th>
+                        AskSize
+                    </th>
+                    <th>
+                        AskPrice
+                    </th>
+                    <th>
+                        Volume
+                    </th>
+                    <th>
+                        LastSalePrice
+                    </th>
+                    <th>
+                        LastSaleSize
+                    </th>
+                    <th>
+                        LastSaleTime
+                    </th>
+                    <th>
+                        LastUpdated
+                    </th>
+                    <th>
+                        Sector
+                    </th>
+                    <th>
+                        SecurityType
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-collection>
+                <tr>
+                    <td>
+                        {{collection.symbol}}
+                    </td>
+                    <td>
+                        {{collection.bidSize}}
+                    </td>
+                    <td>
+                        {{collection.bidPrice}}
+                    </td>
+                    <td>
+                        {{collection.askSize}}
+                    </td>
+                    <td>
+                        {{collection.askPrice}}
+                    </td>
+                    <td>
+                        {{collection.volume}}
+                    </td>
+                    <td>
+                        {{collection.lastSalePrice}}
+                    </td>
+                    <td>
+                        {{collection.lastSaleSize}}
+                    </td>
+                    <td>
+                        {{collection.lastSaleTime}}
+                    </td>
+                    <td>
+                        {{collection.lastUpdated}}
+                    </td>
+                    <td>
+                        {{collection.sector}}
+                    </td>
+                    <td>
+                        {{collection.securityType}}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="12">No collections found.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+  </div>
+</div>

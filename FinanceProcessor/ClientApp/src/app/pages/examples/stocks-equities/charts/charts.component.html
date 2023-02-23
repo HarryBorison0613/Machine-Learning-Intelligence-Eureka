@@ -1,0 +1,37 @@
+<div class=" content">
+  <div class=" row">
+    <div class=" col-12">
+      <p-card [style]="{'width': '100%', 'margin-bottom': '2em', 'font-size': '12px'}">
+        <div class=" card-body">
+          <div class=" row">
+            <div class=" col-sm-6 text-left">
+              <h2 class=" card-title">Charts Overview</h2>
+            </div>
+            <div class=" col-sm-6">
+              <div
+                class="float-right"
+              >
+              <p-autoComplete 
+                #companySymbol 
+                [suggestions]="filteredSymbols" 
+                [(ngModel)]="selectedSymbol" 
+                (completeMethod)="filterSymbol($event)"
+                [minLength]="1" (onSelect)="getIntradayPrices(companySymbol.value)" 
+                placeholder="Search for symbol...">
+              </p-autoComplete>
+              <button 
+                pButton 
+                type="button" 
+                icon="pi pi-times" 
+                class="p-button-outlined"
+                (click)="cancel()">
+              </button>
+              </div>
+            </div>
+          </div>
+          <div class=" chart-area" style="height: 250px;"><canvas id="chartBig1"> </canvas></div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div>

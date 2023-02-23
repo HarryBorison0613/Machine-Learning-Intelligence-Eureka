@@ -1,0 +1,267 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center">{{selectedSymbol}} Intraday Prices</h1>
+        <p-table 
+          #dt1 
+          [value]="intradayPrices" 
+          dataKey="id"
+          [rows]="10" 
+          [showCurrentPageReport]="true" 
+          [rowsPerPageOptions]="[10,25,50]" 
+          [loading]="intradayPricesLoading" 
+          styleClass="p-datatable-gridlines"
+          [paginator]="true" 
+          currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+          [globalFilterFields]="['symbol','label']" 
+          responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <div>
+                <button 
+                  pButton 
+                  label="Clear" 
+                  class="p-button-outlined" 
+                  icon="pi pi-filter-slash" 
+                  (click)="clear(dt1)">
+                </button>
+              </div>
+              <div>
+                <p-autoComplete 
+                  #intradayPricesSymbol 
+                  [(ngModel)]="selectedSymbol" 
+                  [suggestions]="filteredSymbols" 
+                  (completeMethod)="filterSymbol($event)"
+                  [minLength]="1" 
+                  (onSelect)="getIntradayPrices(intradayPricesSymbol.value)" 
+                  placeholder="Search symbol">
+                </p-autoComplete>
+                <button 
+                  pButton 
+                  type="button" 
+                  icon="pi pi-times" 
+                  class="p-button-outlined"
+                  (click)="cancel()">
+                </button>
+              </div>
+            </div>
+          <h6 class="mt-4">Please use <i class="pi pi-filter"></i> for advanced search</h6>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Symbol
+                        <p-columnFilter type="text" field="symbol" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Date
+                        <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Minute
+                        <p-columnFilter type="text" field="minute" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Label
+                        <p-columnFilter type="text" field="label" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        High
+                        <p-columnFilter type="numeric" field="high" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Low
+                        <p-columnFilter type="numeric" field="low" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Open
+                        <p-columnFilter type="numeric" field="open" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Close
+                        <p-columnFilter type="numeric" field="close" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Average
+                        <p-columnFilter type="numeric" field="average" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Volume
+                        <p-columnFilter type="numeric" field="volume" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Notional
+                        <p-columnFilter type="numeric" field="notional" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        NumberOfTrades
+                        <p-columnFilter type="numeric" field="numberOfTrades" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        ChangeOverTime
+                        <p-columnFilter type="numeric" field="changeOverTime" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        MarketOpen
+                        <p-columnFilter type="numeric" field="marketOpen" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        MarketClose
+                        <p-columnFilter type="numeric" field="marketClose" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        MarketHigh
+                        <p-columnFilter type="numeric" field="marketHigh" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        MarketLow
+                        <p-columnFilter type="numeric" field="marketLow" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        MarketAverage
+                        <p-columnFilter type="numeric" field="marketAverage" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        MarketVolume
+                        <p-columnFilter type="numeric" field="marketVolume" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        MarketNotional
+                        <p-columnFilter type="numeric" field="marketNotional" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        MarketNumberOfTrades
+                        <p-columnFilter type="numeric" field="marketNumberOfTrades" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        MarketChangeOverTime
+                        <p-columnFilter type="numeric" field="marketChangeOverTime" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.date | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.minute}}
+                </td>
+                <td>
+                    {{collection.label}}
+                </td>
+                <td>
+                    {{collection.high}}
+                </td>
+                <td>
+                    {{collection.low}}
+                </td>
+                <td>
+                    {{collection.open}}
+                </td>
+                <td>
+                    {{collection.close}}
+                </td>
+                <td>
+                    {{collection.average}}
+                </td>
+                <td>
+                    {{collection.volume}}
+                </td>
+                <td>
+                    {{collection.volume}}
+                </td>
+                <td>
+                    {{collection.notional}}
+                </td>
+                <td>
+                    {{collection.numberOfTrades}}
+                </td>
+                <td>
+                    {{collection.changeOverTime}}
+                </td>
+                <td>
+                    {{collection.marketOpen}}
+                </td>
+                <td>
+                    {{collection.marketClose}}
+                </td>
+                <td>
+                    {{collection.marketHigh}}
+                </td>
+                <td>
+                    {{collection.marketLow}}
+                </td>
+                <td>
+                    {{collection.marketAverage}}
+                </td>
+                <td>
+                    {{collection.marketVolume}}
+                </td>
+                <td>
+                    {{collection.marketNotional}}
+                </td>
+                <td>
+                    {{collection.marketNumberOfTrades}}
+                </td>
+                <td>
+                    {{collection.marketChangeOverTime}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="22">No collections found.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    </div>
+  </div>
+</div>

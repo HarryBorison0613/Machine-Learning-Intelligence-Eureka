@@ -1,0 +1,1154 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center">{{selectedSymbol}} Fundamental Valuations</h1>
+        <p-table #dt1 [value]="fundamentalValuations" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="fundamentalValuationsLoading" styleClass="p-datatable-gridlines"
+        [paginator]="true" currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['id','symbol','key','subkey']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <div>
+                <button 
+                  pButton 
+                  label="Clear" 
+                  class="p-button-outlined" 
+                  icon="pi pi-filter-slash" 
+                  (click)="clear(dt1)">
+                </button>
+                <p-dropdown 
+                  #fundamentalValuationsPeriod 
+                  [options]="timeSeriesPeriods" 
+                  optionLabel="label" 
+                  optionValue="value" 
+                  [(ngModel)]="selectedFundamentalValuationsPeriod" 
+                  (onChange)="getFundamentalValuations(fundamentalValuationsSymbol.value, fundamentalValuationsPeriod.value)">
+                </p-dropdown>
+              </div>
+              <div>
+                <p-autoComplete 
+                  #fundamentalValuationsSymbol 
+                  [(ngModel)]="selectedSymbol" 
+                  [suggestions]="filteredSymbols" 
+                  (completeMethod)="filterSymbol($event)"
+                  [minLength]="1" 
+                  (onSelect)="getFundamentalValuations(fundamentalValuationsSymbol.value, fundamentalValuationsPeriod.value)" 
+                  placeholder="Search symbol">
+                </p-autoComplete>
+                <button 
+                  pButton 
+                  type="button" 
+                  icon="pi pi-times" 
+                  class="p-button-outlined"
+                  (click)="cancel()">
+                </button>
+              </div>
+            </div>
+          <h6 class="mt-4">Please use <i class="pi pi-filter"></i> for advanced search</h6>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Symbol
+                        <p-columnFilter type="text" field="symbol" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Id
+                        <p-columnFilter type="text" field="id" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Key
+                        <p-columnFilter type="text" field="key" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Subkey
+                        <p-columnFilter type="text" field="subkey" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Date
+                        <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Updated
+                        <p-columnFilter type="date" field="updated" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      altmanZScore
+                        <p-columnFilter type="numeric" field="altmanZScore" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        AccountsPayableTurnover
+                        <p-columnFilter type="numeric" field="accountsPayableTurnover" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        assetsToEquity
+                        <p-columnFilter type="numeric" field="assetsToEquity" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        AccountsReceivableTurnover
+                        <p-columnFilter type="numeric" field="accountsReceivableTurnover" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        AsOfDate
+                        <p-columnFilter type="date" field="asOfDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        bbgCompositeTicker
+                        <p-columnFilter type="numeric" field="bbgCompositeTicker" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        assetTurnover
+                        <p-columnFilter type="numeric" field="assetTurnover" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        bookValuePerShare
+                        <p-columnFilter type="numeric" field="bookValuePerShare" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        cashConversionCycle
+                        <p-columnFilter type="numeric" field="cashConversionCycle" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        cik
+                        <p-columnFilter type="numeric" field="cik" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        companyName
+                        <p-columnFilter type="numeric" field="companyName" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        companyStatusCurrent
+                        <p-columnFilter type="numeric" field="companyStatusCurrent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        currentRatio
+                        <p-columnFilter type="numeric" field="currentRatio" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        dataGenerationDate
+                        <p-columnFilter type="numeric" field="dataGenerationDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        dataType
+                        <p-columnFilter type="numeric" field="dataType" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        daysInAccountsPayable
+                        <p-columnFilter type="numeric" field="daysInAccountsPayable" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        daysInInventory
+                        <p-columnFilter type="numeric" field="daysInInventory" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        daysInRevenueDeferred
+                        <p-columnFilter type="numeric" field="daysInRevenueDeferred" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        daysRevenueOutstanding
+                        <p-columnFilter type="numeric" field="daysRevenueOutstanding" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        debtToAssets
+                        <p-columnFilter type="numeric" field="debtToAssets" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        debtToCapitalization
+                        <p-columnFilter type="numeric" field="debtToCapitalization" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        debtToEbitda
+                        <p-columnFilter type="numeric" field="debtToEbitda" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        debtToEquity
+                        <p-columnFilter type="numeric" field="debtToEquity" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        dividendPerShare
+                        <p-columnFilter type="numeric" field="dividendPerShare" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        dividendYield
+                        <p-columnFilter type="numeric" field="dividendYield" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        earningsYield
+                        <p-columnFilter type="numeric" field="earningsYield" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        ebitdaGrowth
+                        <p-columnFilter type="numeric" field="ebitdaGrowth" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        ebitdaMargin
+                        <p-columnFilter type="numeric" field="ebitdaMargin" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        ebitdaReported
+                        <p-columnFilter type="numeric" field="ebitdaReported" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        ebitGrowth
+                        <p-columnFilter type="numeric" field="ebitGrowth" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        ebitReported
+                        <p-columnFilter type="numeric" field="ebitReported" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        ebitToInterestExpense
+                        <p-columnFilter type="numeric" field="ebitToInterestExpense" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        ebitToRevenue
+                        <p-columnFilter type="numeric" field="ebitToRevenue" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        enterpriseValue
+                        <p-columnFilter type="numeric" field="enterpriseValue" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        evToEbit
+                        <p-columnFilter type="numeric" field="evToEbit" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        evToEbitda
+                        <p-columnFilter type="numeric" field="evToEbitda" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        evToFcf
+                        <p-columnFilter type="numeric" field="evToFcf" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        evToInvestedCapital
+                        <p-columnFilter type="numeric" field="evToInvestedCapital" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        evToNopat
+                        <p-columnFilter type="numeric" field="evToNopat" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        evToOcf
+                        <p-columnFilter type="numeric" field="evToOcf" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        evToSales
+                        <p-columnFilter type="numeric" field="evToSales" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        expenseOperating
+                        <p-columnFilter type="numeric" field="expenseOperating" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        fcfYield
+                        <p-columnFilter type="numeric" field="fcfYield" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        figi
+                        <p-columnFilter type="numeric" field="figi" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        filingDate
+                        <p-columnFilter type="numeric" field="filingDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        filingType
+                        <p-columnFilter type="numeric" field="filingType" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        fiscalYear
+                        <p-columnFilter type="numeric" field="fiscalYear" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        fixedAssetTurnover
+                        <p-columnFilter type="numeric" field="fixedAssetTurnover" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        freeCashFlow
+                        <p-columnFilter type="numeric" field="freeCashFlow" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        freeCashFlowGrowth
+                        <p-columnFilter type="numeric" field="freeCashFlowGrowth" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        freeCashFlowToRevenue
+                        <p-columnFilter type="numeric" field="freeCashFlowToRevenue" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        goodwillTotal
+                        <p-columnFilter type="numeric" field="goodwillTotal" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        incomeNetPerWabso
+                        <p-columnFilter type="numeric" field="incomeNetPerWabso" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        incomeNetPerWabsoSplitAdjusted
+                        <p-columnFilter type="numeric" field="incomeNetPerWabsoSplitAdjusted" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        incomeNetPerWabsoSplitAdjustedYoyDeltaPercent
+                        <p-columnFilter type="numeric" field="incomeNetPerWabsoSplitAdjustedYoyDeltaPercent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        incomeNetPerWadso
+                        <p-columnFilter type="numeric" field="incomeNetPerWadso" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        incomeNetPerWadsoSplitAdjusted
+                        <p-columnFilter type="numeric" field="incomeNetPerWadsoSplitAdjusted" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        incomeNetPerWadsoSplitAdjustedYoyDeltaPercent
+                        <p-columnFilter type="numeric" field="incomeNetPerWadsoSplitAdjustedYoyDeltaPercent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        incomeNetPreTax
+                        <p-columnFilter type="numeric" field="incomeNetPreTax" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        interestBurden
+                        <p-columnFilter type="numeric" field="interestBurden" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        interestMinority
+                        <p-columnFilter type="numeric" field="interestMinority" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        inventoryTurnover
+                        <p-columnFilter type="numeric" field="inventoryTurnover" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        investedCapital
+                        <p-columnFilter type="numeric" field="investedCapital" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        investedCapitalGrowth
+                        <p-columnFilter type="numeric" field="investedCapitalGrowth" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        investedCapitalTurnover
+                        <p-columnFilter type="numeric" field="investedCapitalTurnover" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        leverage
+                        <p-columnFilter type="numeric" field="leverage" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        marketCapPeriodEnd
+                        <p-columnFilter type="numeric" field="marketCapPeriodEnd" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        netDebt
+                        <p-columnFilter type="numeric" field="netDebt" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        netDebtToEbitda
+                        <p-columnFilter type="numeric" field="netDebtToEbitda" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        netIncomeGrowth
+                        <p-columnFilter type="numeric" field="netIncomeGrowth" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        netIncomeToRevenue
+                        <p-columnFilter type="numeric" field="netIncomeToRevenue" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        netWorkingCapital
+                        <p-columnFilter type="numeric" field="netWorkingCapital" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        netWorkingCapitalGrowth
+                        <p-columnFilter type="numeric" field="netWorkingCapitalGrowth" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        nibclRevenueDeferredTurnover
+                        <p-columnFilter type="numeric" field="nibclRevenueDeferredTurnover" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        nopat
+                        <p-columnFilter type="numeric" field="nopat" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        nopatGrowth
+                        <p-columnFilter type="numeric" field="nopatGrowth" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        nopatMargin
+                        <p-columnFilter type="numeric" field="nopatMargin" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        operatingCashFlowGrowth
+                        <p-columnFilter type="numeric" field="operatingCashFlowGrowth" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        operatingCashFlowInterestCoverage
+                        <p-columnFilter type="numeric" field="operatingCashFlowInterestCoverage" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        operatingCfToRevenue
+                        <p-columnFilter type="numeric" field="operatingCfToRevenue" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        operatingIncome
+                        <p-columnFilter type="numeric" field="operatingIncome" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        operatingIncomeToRevenue
+                        <p-columnFilter type="numeric" field="operatingIncomeToRevenue" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        operatingReturnOnAssets
+                        <p-columnFilter type="numeric" field="operatingReturnOnAssets" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        periodEndDate
+                        <p-columnFilter type="numeric" field="periodEndDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        ppAndENet
+                        <p-columnFilter type="numeric" field="ppAndENet" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        preferredEquityToCapital
+                        <p-columnFilter type="numeric" field="preferredEquityToCapital" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        pretaxIncomeMargin
+                        <p-columnFilter type="numeric" field="pretaxIncomeMargin" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        priceAccountingPeriodEnd
+                        <p-columnFilter type="numeric" field="priceAccountingPeriodEnd" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        priceDateAccountingPeriodEnd
+                        <p-columnFilter type="numeric" field="priceDateAccountingPeriodEnd" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        priceToRevenue
+                        <p-columnFilter type="numeric" field="priceToRevenue" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        profitGrossToRevenue
+                        <p-columnFilter type="numeric" field="profitGrossToRevenue" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        pToBv
+                        <p-columnFilter type="numeric" field="pToBv" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        pToE
+                        <p-columnFilter type="numeric" field="pToE" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        quickRatio
+                        <p-columnFilter type="numeric" field="quickRatio" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        researchDevelopmentToRevenue
+                        <p-columnFilter type="numeric" field="researchDevelopmentToRevenue" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        returnOnAssets
+                        <p-columnFilter type="numeric" field="returnOnAssets" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        returnOnEquity
+                        <p-columnFilter type="numeric" field="returnOnEquity" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        revenueGrowth
+                        <p-columnFilter type="numeric" field="revenueGrowth" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        roce
+                        <p-columnFilter type="numeric" field="roce" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        roic
+                        <p-columnFilter type="numeric" field="roic" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        scexhid
+                        <p-columnFilter type="numeric" field="scexhid" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        secid
+                        <p-columnFilter type="numeric" field="secid" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        sgaToRevenue
+                        <p-columnFilter type="numeric" field="sgaToRevenue" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        stockExchange
+                        <p-columnFilter type="numeric" field="stockExchange" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        symbol
+                        <p-columnFilter type="numeric" field="symbol" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        taxBurden
+                        <p-columnFilter type="numeric" field="taxBurden" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        ticker
+                        <p-columnFilter type="numeric" field="ticker" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        totalCapital
+                        <p-columnFilter type="numeric" field="totalCapital" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        totalDebt
+                        <p-columnFilter type="numeric" field="totalDebt" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        updateReason
+                        <p-columnFilter type="numeric" field="updateReason" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        wabso
+                        <p-columnFilter type="numeric" field="wabso" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        wabsoSplitAdjusted
+                        <p-columnFilter type="numeric" field="wabsoSplitAdjusted" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        wadso
+                        <p-columnFilter type="numeric" field="wadso" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        wadsoSplitAdjusted
+                        <p-columnFilter type="numeric" field="wadsoSplitAdjusted" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        workingCapitalTurnover
+                        <p-columnFilter type="numeric" field="workingCapitalTurnover" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.id}}
+                </td>
+                <td>
+                    {{collection.key}}
+                </td>
+                <td>
+                    {{collection.subkey}}
+                </td>
+                <td>
+                    {{collection.date | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.updated | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.altmanZScore}}
+                </td>
+                <td>
+                    {{collection.accountsPayableTurnover}}
+                </td>
+                <td>
+                    {{collection.assetsToEquity}}
+                </td>
+                <td>
+                    {{collection.accountsReceivableTurnover}}
+                </td>
+                <td>
+                    {{collection.asOfDate}}
+                </td>
+                <td>
+                    {{collection.bbgCompositeTicker}}
+                </td>
+                <td>
+                    {{collection.assetTurnover}}
+                </td>
+                <td>
+                    {{collection.bookValuePerShare}}
+                </td>
+                <td>
+                    {{collection.cashConversionCycle}}
+                </td>
+                <td>
+                    {{collection.cik}}
+                </td>
+                <td>
+                    {{collection.companyName}}
+                </td>
+                <td>
+                    {{collection.companyStatusCurrent}}
+                </td>
+                <td>
+                    {{collection.currentRatio}}
+                </td>
+                <td>
+                    {{collection.dataGenerationDate}}
+                </td>
+                <td>
+                    {{collection.dataType}}
+                </td>
+                <td>
+                    {{collection.daysInAccountsPayable}}
+                </td>
+                <td>
+                    {{collection.daysInInventory}}
+                </td>
+                <td>
+                    {{collection.daysInRevenueDeferred}}
+                </td>
+                <td>
+                    {{collection.daysRevenueOutstanding}}
+                </td>
+                <td>
+                    {{collection.debtToAssets}}
+                </td>
+                <td>
+                    {{collection.debtToCapitalization}}
+                </td>
+                <td>
+                    {{collection.debtToEbitda}}
+                </td>
+                <td>
+                    {{collection.debtToEquity}}
+                </td>
+                <td>
+                    {{collection.dividendPerShare}}
+                </td>
+                <td>
+                    {{collection.dividendYield}}
+                </td>
+                <td>
+                    {{collection.earningsYield}}
+                </td>
+                <td>
+                    {{collection.ebitdaGrowth}}
+                </td>
+                <td>
+                    {{collection.ebitdaMargin}}
+                </td>
+                <td>
+                    {{collection.ebitdaReported}}
+                </td>
+                <td>
+                    {{collection.ebitGrowth}}
+                </td>
+                <td>
+                    {{collection.ebitReported}}
+                </td>
+                <td>
+                    {{collection.ebitToInterestExpense}}
+                </td>
+                <td>
+                    {{collection.ebitToRevenue}}
+                </td>
+                <td>
+                    {{collection.enterpriseValue}}
+                </td>
+                <td>
+                    {{collection.evToEbit}}
+                </td>
+                <td>
+                    {{collection.evToEbitda}}
+                </td>
+                <td>
+                    {{collection.evToFcf}}
+                </td>
+                <td>
+                    {{collection.evToInvestedCapital}}
+                </td>
+                <td>
+                    {{collection.evToNopat}}
+                </td>
+                <td>
+                    {{collection.evToOcf}}
+                </td>
+                <td>
+                    {{collection.evToSales}}
+                </td>
+                <td>
+                    {{collection.expenseOperating}}
+                </td>
+                <td>
+                    {{collection.fcfYield}}
+                </td>
+                <td>
+                    {{collection.figi}}
+                </td>
+                <td>
+                    {{collection.filingDate}}
+                </td>
+                <td>
+                    {{collection.filingType}}
+                </td>
+                <td>
+                    {{collection.fiscalYear}}
+                </td>
+                <td>
+                    {{collection.fixedAssetTurnover}}
+                </td>
+                <td>
+                    {{collection.freeCashFlow}}
+                </td>
+                <td>
+                    {{collection.freeCashFlowGrowth}}
+                </td>
+                <td>
+                    {{collection.freeCashFlowToRevenue}}
+                </td>
+                <td>
+                    {{collection.goodwillTotal}}
+                </td>
+                <td>
+                    {{collection.incomeNetPerWabso}}
+                </td>
+                <td>
+                    {{collection.incomeNetPerWabsoSplitAdjusted}}
+                </td>
+                <td>
+                    {{collection.incomeNetPerWabsoSplitAdjustedYoyDeltaPercent}}
+                </td>
+                <td>
+                    {{collection.incomeNetPerWadso}}
+                </td>
+                <td>
+                    {{collection.incomeNetPerWadsoSplitAdjusted}}
+                </td>
+                <td>
+                    {{collection.incomeNetPerWadsoSplitAdjustedYoyDeltaPercent}}
+                </td>
+                <td>
+                    {{collection.incomeNetPreTax}}
+                </td>
+                <td>
+                    {{collection.interestBurden}}
+                </td>
+                <td>
+                    {{collection.interestMinority}}
+                </td>
+                <td>
+                    {{collection.inventoryTurnover}}
+                </td>
+                <td>
+                    {{collection.investedCapital}}
+                </td>
+                <td>
+                    {{collection.investedCapitalGrowth}}
+                </td>
+                <td>
+                    {{collection.investedCapitalTurnover}}
+                </td>
+                <td>
+                    {{collection.leverage}}
+                </td>
+                <td>
+                    {{collection.marketCapPeriodEnd}}
+                </td>
+                <td>
+                    {{collection.netDebt}}
+                </td>
+                <td>
+                    {{collection.netDebtToEbitda}}
+                </td>
+                <td>
+                    {{collection.netIncomeGrowth}}
+                </td>
+                <td>
+                    {{collection.netIncomeToRevenue}}
+                </td>
+                <td>
+                    {{collection.netWorkingCapital}}
+                </td>
+                <td>
+                    {{collection.netWorkingCapitalGrowth}}
+                </td>
+                <td>
+                    {{collection.nibclRevenueDeferredTurnover}}
+                </td>
+                <td>
+                    {{collection.nopat}}
+                </td>
+                <td>
+                    {{collection.nopatGrowth}}
+                </td>
+                <td>
+                    {{collection.nopatMargin}}
+                </td>
+                <td>
+                    {{collection.operatingCashFlowGrowth}}
+                </td>
+                <td>
+                    {{collection.operatingCashFlowInterestCoverage}}
+                </td>
+                <td>
+                    {{collection.operatingCfToRevenue}}
+                </td>
+                <td>
+                    {{collection.operatingIncome}}
+                </td>
+                <td>
+                    {{collection.operatingIncomeToRevenue}}
+                </td>
+                <td>
+                    {{collection.operatingReturnOnAssets}}
+                </td>
+                <td>
+                    {{collection.periodEndDate}}
+                </td>
+                <td>
+                    {{collection.ppAndENet}}
+                </td>
+                <td>
+                    {{collection.preferredEquityToCapital}}
+                </td>
+                <td>
+                    {{collection.pretaxIncomeMargin}}
+                </td>
+                <td>
+                    {{collection.priceAccountingPeriodEnd}}
+                </td>
+                <td>
+                    {{collection.priceDateAccountingPeriodEnd}}
+                </td>
+                <td>
+                    {{collection.priceToRevenue}}
+                </td>
+                <td>
+                    {{collection.profitGrossToRevenue}}
+                </td>
+                <td>
+                    {{collection.pToBv}}
+                </td>
+                <td>
+                    {{collection.pToE}}
+                </td>
+                <td>
+                    {{collection.quickRatio}}
+                </td>
+                <td>
+                    {{collection.researchDevelopmentToRevenue}}
+                </td>
+                <td>
+                    {{collection.returnOnAssets}}
+                </td>
+                <td>
+                    {{collection.returnOnEquity}}
+                </td>
+                <td>
+                    {{collection.revenueGrowth}}
+                </td>
+                <td>
+                    {{collection.roce}}
+                </td>
+                <td>
+                    {{collection.roic}}
+                </td>
+                <td>
+                    {{collection.scexhid}}
+                </td>
+                <td>
+                    {{collection.secid}}
+                </td>
+                <td>
+                    {{collection.sgaToRevenue}}
+                </td>
+                <td>
+                    {{collection.stockExchange}}
+                </td>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.taxBurden}}
+                </td>
+                <td>
+                    {{collection.ticker}}
+                </td>
+                <td>
+                    {{collection.totalCapital}}
+                </td>
+                <td>
+                    {{collection.totalDebt}}
+                </td>
+                <td>
+                    {{collection.updateReason}}
+                </td>
+                <td>
+                    {{collection.wabso}}
+                </td>
+                <td>
+                    {{collection.wabsoSplitAdjusted}}
+                </td>
+                <td>
+                    {{collection.wadso}}
+                </td>
+                <td>
+                    {{collection.wadsoSplitAdjusted}}
+                </td>
+                <td>
+                    {{collection.workingCapitalTurnover}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="121">No collections found.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    </div>
+  </div>
+</div>

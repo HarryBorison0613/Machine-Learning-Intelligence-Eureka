@@ -1,0 +1,89 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center">U.S. Holidays and Trading Dates</h1>
+        <p-table 
+          #dt1 [value]="holidays" 
+          dataKey="id"
+          [rows]="10" 
+          [showCurrentPageReport]="true" 
+          [loading]="loading" 
+          styleClass="p-datatable-gridlines"
+          [paginator]="true" 
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          responsiveLayout="scroll">
+            <ng-template pTemplate="caption">
+                <div class="d-flex justify-content-between">
+                    <button 
+                      pButton 
+                      label="Clear" 
+                      class="p-button-outlined" 
+                      icon="pi pi-filter-slash" 
+                      (click)="clear(dt1)">
+                    </button>
+                    <label for="historicalDailySymbol">Type:</label>
+                    <p-dropdown #type
+                      [options]="types"
+                    >
+                    </p-dropdown>
+                    <label for="from">Direction:</label>
+                    <p-dropdown #direction
+                      [options]="directions"
+                    >
+                    </p-dropdown>
+                    <label for="to">Start Date:</label>
+                    <p-calendar
+                      #startDate
+                      name="to"
+                      placeholder="Search for date..."
+                      virtualScroll="false"
+                      ></p-calendar>
+                    <label for="last">Last:</label>
+                    <p-inputNumber
+                      #last
+                      name="last"
+                      [(ngModel)]="selectedHistoricalDailyLast"
+                      [showButtons]="true"
+                      placeholder="Search for last..."
+                    ></p-inputNumber>
+                    <button class="search-btn" (click)="getHolidaysAndTradingDatesUs(type.value, direction.value, last.value, startDate.value)">
+                      <i class=" tim-icons icon-zoom-split"> </i>Search
+                    </button>
+                </div>
+              <h6 class="mt-4">Please use <i class="pi pi-filter"></i> for advanced search</h6>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>    
+                    <th>
+                        <div class="flex justify-content-center align-items-center">
+                          Date time
+                          <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-center align-items-center">
+                          Settlement Date
+                          <p-columnFilter type="text" field="settlementDate" display="menu"></p-columnFilter>
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-collection>
+                <tr>
+                    <td>
+                        {{collection.date | date: 'dd/MM/yyyy'}}
+                    </td>
+                    <td>
+                        {{collection.settlementDate}}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="2">No collections found.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+  </div>
+</div>

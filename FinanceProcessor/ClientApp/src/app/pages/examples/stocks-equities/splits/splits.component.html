@@ -1,0 +1,334 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center">Splits</h1>
+        <p-table #dt1 [value]="splits" dataKey="id"
+        [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="splitsLoading" styleClass="p-datatable-gridlines"
+        [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+                <p-dropdown #splitsRange [options]="ranges" optionLabel="label" optionValue="value" (onChange)="getSplits(splitsRange.value, splitsCalendarOption.value, selectedSplitsLast)" [virtualScroll]="true" [itemSize]="1"></p-dropdown>
+                <p-dropdown #splitsCalendarOption [options]="calendarOptions" optionLabel="label" optionValue="value" (onChange)="getSplits(splitsRange.value, splitsCalendarOption.value, selectedSplitsLast)"></p-dropdown>
+                <span class="p-input-icon-left ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search symbol" />
+                </span>
+            </div>
+          <h6 class="mt-4">Please use <i class="pi pi-filter"></i> for advanced search</h6>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Symbol
+                      <p-columnFilter type="text" field="symbol" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      WithdrawalFromDate
+                      <p-columnFilter type="date" field="withdrawalFromDate" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      WithdrawalToDate
+                      <p-columnFilter type="date" field="withdrawalToDate" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      ElectionDate
+                      <p-columnFilter type="date" field="electionDate" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      EffectiveDate
+                      <p-columnFilter type="date" field="effectiveDate" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Min Price
+                      <p-columnFilter type="numeric" field="minPrice" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Max Price
+                      <p-columnFilter type="numeric" field="maxPrice" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Result Security Type
+                      <p-columnFilter type="text" field="resultSecurityType" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      HasWithDrawalRights
+                      <p-columnFilter type="numeric" field="hasWithdrawalRights" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Currency
+                      <p-columnFilter type="text" field="currency" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Ex Date
+                      <p-columnFilter type="date" field="exDate" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Record Date
+                      <p-columnFilter type="date" field="recordDate" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Payment Date
+                      <p-columnFilter type="date" field="paymentDate" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      From Factor
+                      <p-columnFilter type="numeric" field="fromFactor" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      To Factor
+                      <p-columnFilter type="numeric" field="toFactor" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Ratio
+                      <p-columnFilter type="numeric" field="ratio" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Description
+                      <p-columnFilter type="text" field="description" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Flag
+                      <p-columnFilter type="text" field="flag" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Security Type
+                      <p-columnFilter type="text" field="securityType" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Figi
+                      <p-columnFilter type="text" field="figi" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Last Updated
+                      <p-columnFilter type="date" field="lastUpdated" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Country Code
+                      <p-columnFilter type="text" field="countryCode" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Par Value
+                      <p-columnFilter type="numeric" field="parValue" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Par Value Currency
+                      <p-columnFilter type="text" field="parValueCurrency" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Ref Id
+                      <p-columnFilter type="numeric" field="refid" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Created
+                      <p-columnFilter type="date" field="created" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Id
+                      <p-columnFilter type="text" field="id" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Source
+                      <p-columnFilter type="text" field="source" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Key
+                      <p-columnFilter type="text" field="key" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <!-- <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Notes
+                      <p-columnFilter type="text" field="notes" display="menu"></p-columnFilter>
+                  </div>
+              </th> -->
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Subkey
+                      <p-columnFilter type="text" field="subkey" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Date
+                      <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Updated
+                      <p-columnFilter type="date" field="updated" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                  {{collection.symbol}}
+              </td>
+              <td>
+                  {{collection.withdrawalFromDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.withdrawalToDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.electionDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.effectiveDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.minPrice}}
+              </td>
+              <td>
+                  {{collection.maxPrice}}
+              </td>
+              <td>
+                  {{collection.resultSecurityType}}
+              </td>
+              <td>
+                  {{collection.hasWithdrawalRights}}
+              </td>
+              <td>
+                  {{collection.currency}}
+              </td>
+              <td>
+                  {{collection.exDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.recordDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.paymentDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.fromFactor}}
+              </td>
+              <td>
+                  {{collection.toFactor}}
+              </td>
+              <td>
+                  {{collection.ratio}}
+              </td>
+              <td>
+                  {{collection.description}}
+              </td>
+              <td>
+                  {{collection.flag}}
+              </td>
+              <td>
+                  {{collection.securityType}}
+              </td>
+              <td>
+                  {{collection.figi}}
+              </td>
+              <td>
+                  {{collection.lastUpdated | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.countryCode}}
+              </td>
+              <td>
+                  {{collection.parValue}}
+              </td>
+              <td>
+                  {{collection.parValueCurrency}}
+              </td>
+              <td>
+                  {{collection.refid}}
+              </td>
+              <td>
+                  {{collection.created | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.id}}
+              </td>
+              <td>
+                  {{collection.source}}
+              </td>
+              <td>
+                  {{collection.key}}
+              </td>
+              <td>
+                  {{collection.subkey}}
+              </td>
+              <!-- <td>
+                  {{collection.notes}}
+              </td> -->
+              <td>
+                  {{collection.date | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.updated | date: 'MM/dd/yyyy'}}
+              </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="32">No collections found.</td>
+            </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

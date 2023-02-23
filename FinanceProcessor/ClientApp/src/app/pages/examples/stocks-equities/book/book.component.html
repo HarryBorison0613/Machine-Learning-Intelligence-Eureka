@@ -1,0 +1,379 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center">{{selectedSymbol}} Book Summary</h1>
+      <p-table 
+        #dt1 
+        [value]="summary" 
+        responsiveLayout="scroll" 
+        styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="caption">
+          <div class="d-flex justify-content-between">
+            <div>
+                <button pButton 
+                  label="Clear" 
+                  class="p-button-outlined" 
+                  icon="pi pi-filter-slash" 
+                  (click)="clear(dt1)">
+                </button>
+              </div>
+            <div>
+                <p-autoComplete 
+                  #booksSymbol 
+                  [(ngModel)]="selectedSymbol" 
+                  [suggestions]="filteredSymbols" 
+                  (completeMethod)="filterSymbol($event)"
+                  [minLength]="1" 
+                  (onSelect)="getStockBooks(booksSymbol.value)" 
+                  placeholder="Search symbol">
+                </p-autoComplete>
+                <button 
+                  pButton 
+                  type="button" 
+                  icon="pi pi-times" 
+                  class="p-button-outlined"
+                  (click)="cancel()">
+                </button>
+            </div>
+          </div>
+        </ng-template>
+      <ng-template pTemplate="header">
+            <tr>
+                <th>Symbol</th>
+                <th>Average Total Volume</th>
+                <th>Change</th>
+                <th>Change Percent</th>
+                <th>Close</th>
+                <th>Close Source</th>
+                <th>Close Time</th>
+                <th>Company Name</th>
+                <th>Delayed Price</th>
+                <th>Delayed Price Time</th>
+                <th>Extended Change</th>
+                <th>Extended Change Percent</th>
+                <th>Extended Price</th>
+                <th>Extended Price Time</th>
+                <th>High</th>
+                <th>High Source</th>
+                <th>High Time</th>
+                <th>IEX Ask Price</th>
+                <th>IEX Bid Price</th>
+                <th>IEX Bid Size</th>
+                <th>IEX Close</th>
+                <th>IEX Close Time</th>
+                <th>IEX Last Updated</th>
+                <th>IEX Market Percent</th>
+                <th>IEX Open</th>
+                <th>IEX Open Time</th>
+                <th>IEX Real Time Price</th>
+                <th>IEX Real Time Size</th>
+                <th>IEX Volume</th>
+                <th>IEX US Market Open</th>
+                <th>Last Trade Time</th>
+                <th>Latest Price</th>
+                <th>Latest Source</th>
+                <th>Latest Time</th>
+                <th>Latest Update</th>
+                <th>Latest Volume</th>
+                <th>Low</th>
+                <th>Low Source</th>
+                <th>Low Time</th>
+                <th>Market Cap</th>
+                <th>Odd Lot Delayed Price</th>
+                <th>Odd Lot Delayed Price Time</th>
+                <th>Open</th>
+                <th>Open Source</th>
+                <th>Open Time</th>
+                <th>PeRatio</th>
+                <th>Previous Close</th>
+                <th>Previous Volume</th>
+                <th>Primary Exchange</th>
+                <th>Sector</th>
+                <th>System Event</th>
+                <th>Time stamp</th>
+                <th>Volume</th>
+                <th>Week 52 High</th>
+                <th>Week 52 Low</th>
+                <th>Week 52 LowYtd Change</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-summary>
+            <tr>
+                <td>{{summary.symbol}}</td>
+                <td>{{summary.avgTotalVolume}}</td>
+                <td>{{summary.change}}</td>
+                <td>{{summary.changePercent}}%</td>
+                <td>{{summary.close}}</td>
+                <td>{{summary.closeSource}}</td>
+                <td>{{summary.closeTime}}</td>
+                <td>{{summary.companyName}}</td>
+                <td>{{summary.delayedPrice}}</td>
+                <td>{{summary.delayedPriceTime | date: 'dd/MM/yyyy'}}</td>
+                <td>{{summary.extendedChange}}</td>
+                <td>{{summary.extendedChangePercent}}%</td>
+                <td>{{summary.extendedPriceTime}}</td>
+                <td>{{summary.high}}</td>
+                <td>{{summary.highSource}}</td>
+                <td>{{summary.highTime}}</td>
+                <td>{{summary.iexAskPrice}}</td>
+                <td>{{summary.iexBidPrice}}</td>
+                <td>{{summary.iexBidSize}}</td>
+                <td>{{summary.iexClose}}</td>
+                <td>{{summary.iexCloseTime | date: 'dd/MM/yyyy'}}</td>
+                <td>{{summary.iexLastUpdated | date: 'dd/MM/yyyy'}}</td>
+                <td>{{summary.iexLastUpdated | date: 'dd/MM/yyyy'}}</td>
+                <td>{{summary.iexMarketPercent}}%</td>
+                <td>{{summary.iexOpen}}</td>
+                <td>{{summary.iexOpenTime | date: 'dd/MM/dddd'}}</td>
+                <td>{{summary.iexRealTimePrice}}</td>
+                <td>{{summary.iexRealTimeSize}}</td>
+                <td>{{summary.iexVolume}}</td>
+                <td>{{summary.isUSMarketOpen}}</td>
+                <td>{{summary.lastTradeTime | date: 'dd/MM/dddd'}}</td>
+                <td>{{summary.latestPrice}}</td>
+                <td>{{summary.latestSource}}</td>
+                <td>{{summary.lastestTime | date: 'dd/MM/dddd'}}</td>
+                <td>{{summary.lastestUpdate | date: 'dd/MM/dddd'}}</td>
+                <td>{{summary.latestVolume}}</td>
+                <td>{{summary.low}}</td>
+                <td>{{summary.lowSource}}</td>
+                <td>{{summary.lowTime}}</td>
+                <td>{{summary.marketCap}}</td>
+                <td>{{summary.oddLotDelayedPrice}}</td>
+                <td>{{summary.oddLotDelayedPriceTime}}</td>
+                <td>{{summary.open}}</td>
+                <td>{{summary.openSource}}</td>
+                <td>{{summary.openTime}}</td>
+                <td>{{summary.peRatio}}</td>
+                <td>{{summary.previousClose}}</td>
+                <td>{{summary.previousVolume}}</td>
+                <td>{{summary.primaryExchange}}</td>
+                <td>{{summary.sector}}</td>
+                <td>{{summary.systemEvent}}</td>
+                <td>{{summary.timestamp | date: 'dd/MM/yyyy'}}</td>
+                <td>{{summary.volume}}</td>
+                <td>{{summary.week52High}}</td>
+                <td>{{summary.week52Low}}</td>
+                <td>{{summary.ytdChange}}</td>
+              </tr>
+        </ng-template>
+      </p-table>
+    </div>
+    <div class="col-md-12 mt-5">
+      <h1 class="text-center">Trades</h1>
+      <p-table #dt1 [value]="trades" dataKey="id"
+        [rows]="5" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" [loading]="tradesloading" styleClass="p-datatable-gridlines"
+        [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+            </div>
+          <h6 class="mt-4">Please use <i class="pi pi-filter"></i> for advanced search</h6>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Price
+                        <p-columnFilter type="numeric" field="price" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Size
+                        <p-columnFilter type="numeric" field="size" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Trade Id
+                        <p-columnFilter type="numeric" field="tradeId" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Is ISO
+                        <p-columnFilter type="boolean" field="isISO" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Is Odd Lot
+                        <p-columnFilter type="boolean" field="isOddLot" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Is Outside Regular hours
+                        <p-columnFilter type="boolean" field="isOutsideRegularHours" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Is Single Price Cross
+                        <p-columnFilter type="boolean" field="isSinglePriceCross" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Is Trade Through Exempt
+                        <p-columnFilter type="boolean" field="isTradeThroughExempt" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Timestamp
+                        <p-columnFilter type="date" field="timestamp" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.price}}
+                </td>
+                <td>
+                    {{collection.size}}
+                </td>
+                <td>
+                    {{collection.tradeId}}
+                </td>
+                <td>
+                    {{collection.isISO}}
+                </td>
+                <td>
+                    {{collection.isOddLot}}
+                </td>
+                <td>
+                    {{collection.isOutsideRegularHours}}
+                </td>
+                <td>
+                    {{collection.isSinglePriceCross}}
+                </td>
+                <td>
+                    {{collection.isTradeThroughExempt}}
+                </td>
+                <td>
+                    {{collection.timestamp | date: 'dd/MM/yyyy'}}
+                </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+              <tr>
+                  <td colspan="9">No collections found.</td>
+              </tr>
+          </ng-template>
+      </p-table>
+    </div>
+    <div class="col-md-12 mt-5">
+      <h1 class="text-center">Asks</h1>
+      <p-table #dt2 [value]="asks" dataKey="size"
+        [rows]="5" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" [loading]="asksloading" styleClass="p-datatable-gridlines"
+        [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt2)"></button>
+            </div>
+          <h6 class="mt-4">Please use <i class="pi pi-filter"></i> for advanced search</h6>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Price
+                        <p-columnFilter type="numeric" field="price" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Size
+                        <p-columnFilter type="numeric" field="size" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Timestamp
+                        <p-columnFilter type="date" field="timestamp" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.price}}
+                </td>
+                <td>
+                    {{collection.size}}
+                </td>
+                <td>
+                    {{collection.timestamp | date: 'dd/MM/yyyy'}}
+                </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+              <tr>
+                  <td colspan="3">No collections found.</td>
+              </tr>
+          </ng-template>
+      </p-table>
+    </div>
+    <div class="col-md-12 mt-5">
+      <h1 class="text-center">Bids</h1>
+      <p-table #dt3 [value]="bids" dataKey="size"
+        [rows]="5" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]" [loading]="bidsloading" styleClass="p-datatable-gridlines"
+        [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt3)"></button>
+            </div>
+          <h6 class="mt-4">Please use <i class="pi pi-filter"></i> for advanced search</h6>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Price
+                        <p-columnFilter type="numeric" field="price" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Size
+                        <p-columnFilter type="numeric" field="size" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Timestamp
+                        <p-columnFilter type="date" field="timestamp" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.price}}
+                </td>
+                <td>
+                    {{collection.size}}
+                </td>
+                <td>
+                    {{collection.timestamp | date: 'dd/MM/yyyy'}}
+                </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+              <tr>
+                  <td colspan="3">No collections found.</td>
+              </tr>
+          </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

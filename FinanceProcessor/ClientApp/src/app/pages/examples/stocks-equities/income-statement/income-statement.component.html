@@ -1,0 +1,263 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center">{{selectedSymbol}} Income Statements</h1>
+        <p-table 
+          #dt1 
+          [value]="incomeStatements" 
+          dataKey="id"
+          [rows]="10" 
+          [showCurrentPageReport]="true" 
+          [rowsPerPageOptions]="[10,25,50]" 
+          [loading]="incomeStatementsLoading" 
+          styleClass="p-datatable-gridlines"
+          [paginator]="true" 
+          currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+          [globalFilterFields]="['symbol']" 
+          responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <div>
+                <button 
+                  pButton 
+                  label="Clear" 
+                  class="p-button-outlined" 
+                  icon="pi pi-filter-slash" 
+                  (click)="clear(dt1)">
+                </button>
+                <p-dropdown 
+                  #incomeStatementPeriod 
+                  [options]="periods" 
+                  optionLabel="label" 
+                  optionValue="value" 
+                  [(ngModel)]="selectedFundamentalsPeriod" 
+                  (onChange)="getIncomeStatements(incomeStatementSymbol.value, incomeStatementPeriod.value, selectedIncomeStatementLast)">
+                </p-dropdown>
+              </div>
+              <div>
+                <p-autoComplete 
+                  #incomeStatementSymbol 
+                  [(ngModel)]="selectedSymbol" 
+                  [suggestions]="filteredSymbols" 
+                  (completeMethod)="filterSymbol($event)"
+                  [minLength]="1" 
+                  (onSelect)="getIncomeStatements(incomeStatementSymbol.value, incomeStatementPeriod.value, selectedIncomeStatementLast)" 
+                  placeholder="Search symbol">
+                </p-autoComplete>
+                <button 
+                  pButton 
+                  type="button" 
+                  icon="pi pi-times" 
+                  class="p-button-outlined"
+                  (click)="cancel()">
+                </button>
+              </div>
+            </div>
+          <h6 class="mt-4">Please use <i class="pi pi-filter"></i> for advanced search</h6>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Symbol
+                        <p-columnFilter type="text" field="symbol" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Report Date
+                        <p-columnFilter type="date" field="reportDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Fiscal Date
+                        <p-columnFilter type="date" field="fiscalDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        FiscalQuarter
+                        <p-columnFilter type="numeric" field="fiscalQuarter" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Fiscal Year
+                        <p-columnFilter type="numeric" field="fiscalYear" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        currency
+                        <p-columnFilter type="text" field="currency" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        totalRevenue
+                        <p-columnFilter type="numeric" field="totalRevenue" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        costOfRevenue
+                        <p-columnFilter type="numeric" field="costOfRevenue" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        grossProfit
+                        <p-columnFilter type="numeric" field="grossProfit" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      researchAndDevelopment
+                        <p-columnFilter type="numeric" field="researchAndDevelopment" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      sellingGeneralAndAdmin
+                        <p-columnFilter type="numeric" field="sellingGeneralAndAdmin" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Operating Expense
+                        <p-columnFilter type="numeric" field="operatingExpense" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Operating Income
+                        <p-columnFilter type="numeric" field="operatingIncome" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      otherIncomeExpenseNet
+                        <p-columnFilter type="numeric" field="otherIncomeExpenseNet" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Ebit
+                        <p-columnFilter type="numeric" field="ebit" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        interestIncome
+                        <p-columnFilter type="numeric" field="interestIncome" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      pretaxIncome
+                        <p-columnFilter type="numeric" field="pretaxIncome" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      incomeTax
+                        <p-columnFilter type="numeric" field="incomeTax" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      minorityInterest
+                        <p-columnFilter type="numeric" field="minorityInterest" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      netIncome
+                        <p-columnFilter type="numeric" field="netIncome" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      netIncomeBasic
+                        <p-columnFilter type="numeric" field="netIncomeBasic" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.reportDate | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.fiscalDate | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.fiscalQuarter}}
+                </td>
+                <td>
+                    {{collection.fiscalYear}}
+                </td>
+                <td>
+                    {{collection.currency}}
+                </td>
+                <td>
+                    {{collection.totalRevenue}}
+                </td>
+                <td>
+                    {{collection.costOfRevenue}}
+                </td>
+                <td>
+                    {{collection.grossProfit}}
+                </td>
+                <td>
+                    {{collection.researchAndDevelopment}}
+                </td>
+                <td>
+                    {{collection.sellingGeneralAndAdmin}}
+                </td>
+                <td>
+                    {{collection.operatingExpense}}
+                </td>
+                <td>
+                    {{collection.operatingIncome}}
+                </td>
+                <td>
+                    {{collection.otherIncomeExpenseNet}}
+                </td>
+                <td>
+                    {{collection.ebit}}
+                </td>
+                <td>
+                    {{collection.interestIncome}}
+                </td>
+                <td>
+                    {{collection.pretaxIncome}}
+                </td>
+                <td>
+                    {{collection.incomeTax}}
+                </td>
+                <td>
+                    {{collection.minorityInterest}}
+                </td>
+                <td>
+                    {{collection.netIncome}}
+                </td>
+                <td>
+                    {{collection.netIncomeBasic}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="21">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+    </div>
+  </div>
+</div>

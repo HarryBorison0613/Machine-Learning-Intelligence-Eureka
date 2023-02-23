@@ -1,0 +1,13 @@
+.content {
+    font-size: 1.2rem;
+}
+
+.content p::first-letter {
+    font-size: 3rem;
+    font-style: italic;
+    color: brown;
+}
+
+.title h1 {
+    color: brown;
+}

@@ -1,0 +1,134 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center">{{selectedSymbol}} Technical Indicator</h1>
+        <p-table 
+          #dt1 
+          [value]="technicalIndicators" 
+          dataKey="id"
+          [rows]="10" 
+          [showCurrentPageReport]="true" 
+          [rowsPerPageOptions]="[10,25,50]" 
+          [loading]="technicalIndicatorsLoading" 
+          styleClass="p-datatable-gridlines"
+          [paginator]="true" 
+          currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+          [globalFilterFields]="['adjMv','reportedTitle','symbol','id','key','subkey','transactionCode']" 
+          responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <div>
+                <button 
+                  pButton 
+                  label="Clear" 
+                  class="p-button-outlined" 
+                  icon="pi pi-filter-slash" 
+                  (click)="clear(dt1)">
+                </button>
+                <p-dropdown 
+                  #technicalIndicatorName 
+                  [options]="indicatorNames" 
+                  [(ngModel)]="selectedTechnicalIndicatorName" 
+                  (onChange)="getTechnicalIndicators(technicalIndicatorSymbol.value, technicalIndicatorName.value, technicalIndicatorRange.value, selectedTechnicalIndicatorLastIndicator, selectedTechnicalIndicatorOnly)" 
+                  [virtualScroll]="true" 
+                  [itemSize]="1">
+                </p-dropdown>
+                <p-dropdown 
+                  #technicalIndicatorRange 
+                  [options]="ranges" 
+                  [(ngModel)]="selectedTechnicalIndicatorRange" 
+                  (onChange)="getTechnicalIndicators(technicalIndicatorSymbol.value, technicalIndicatorName.value, technicalIndicatorRange.value, selectedTechnicalIndicatorLastIndicator, selectedTechnicalIndicatorOnly)" 
+                  [virtualScroll]="true" 
+                  [itemSize]="1">
+                </p-dropdown>
+              </div>
+              <div>
+                <p-autoComplete 
+                  #technicalIndicatorSymbol 
+                  [(ngModel)]="selectedSymbol" 
+                  [suggestions]="filteredSymbols" 
+                  (completeMethod)="filterSymbol($event)"
+                  [minLength]="1" 
+                  (onSelect)="getTechnicalIndicators(technicalIndicatorSymbol.value, technicalIndicatorName.value, technicalIndicatorRange.value, selectedTechnicalIndicatorLastIndicator, selectedTechnicalIndicatorOnly)" 
+                  placeholder="Search symbol">
+                </p-autoComplete>
+                <button 
+                  pButton 
+                  type="button" 
+                  icon="pi pi-times" 
+                  class="p-button-outlined"
+                  (click)="cancel()">
+                </button>
+              </div>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <div class="flex justify-content-center align-items-center text-center">
+                        Indicator
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td class="text-center">
+                    {{collection}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="1">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+    </div>
+    <div class="col-md-12 mt-5">
+      <h1 class="text-center">Chart</h1>
+        <p-table #dt1 [value]="charts" dataKey="id"
+        [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="technicalIndicatorsLoading" styleClass="p-datatable-gridlines"
+        [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <div class="flex justify-content-center align-items-center text-center">
+                        Additional Prop1
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center text-center">
+                        Additional Prop2
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center text-center">
+                        Additional Prop3
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td class="text-center">
+                    {{collection.additionalProp1}}
+                </td>
+                <td class="text-center">
+                    {{collection.additionalProp2}}
+                </td>
+                <td class="text-center">
+                    {{collection.additionalProp3}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="3">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+    </div>
+  </div>
+</div>

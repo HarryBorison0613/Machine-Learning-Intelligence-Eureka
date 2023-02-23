@@ -1,0 +1,359 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center">{{selectedSymbol}} Fundamentals</h1>
+        <p-table #dt1 [value]="fundamentals" dataKey="id"
+        [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="fundamentalsLoading" styleClass="p-datatable-gridlines"
+        [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['symbol']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <div>
+                <button 
+                  pButton 
+                  label="Clear" 
+                  class="p-button-outlined" 
+                  icon="pi pi-filter-slash" 
+                  (click)="clear(dt1)">
+                </button>
+                <p-dropdown 
+                  #fundamentalsPeriod 
+                  [options]="timeSeriesPeriods" 
+                  [(ngModel)]="selectedFundamentalsPeriod" 
+                  (onChange)="getFundamentals(fundamentalsSymbol.value, fundamentalsPeriod.value)">
+                </p-dropdown>
+              </div>
+              <div>
+                <p-autoComplete 
+                  #fundamentalsSymbol 
+                  [ngModel]="selectedSymbol" 
+                  [suggestions]="filteredSymbols" 
+                  (completeMethod)="filterSymbol($event)"
+                  [minLength]="1" 
+                  (onSelect)="getFundamentals(fundamentalsSymbol.value, fundamentalsPeriod.value)" placeholder="Search symbol">
+                </p-autoComplete>
+                <button 
+                  pButton 
+                  type="button" 
+                  icon="pi pi-times" 
+                  class="p-button-outlined"
+                  (click)="cancel()">
+                </button>
+              </div>
+            </div>
+          <h6 class="mt-4">Please use <i class="pi pi-filter"></i> for advanced search</h6>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Symbol
+                        <p-columnFilter type="text" field="symbol" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Id
+                        <p-columnFilter type="text" field="id" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Key
+                        <p-columnFilter type="text" field="key" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Subkey
+                        <p-columnFilter type="text" field="subkey" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Date
+                        <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Updated
+                        <p-columnFilter type="date" field="updated" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Accounts Payable
+                        <p-columnFilter type="numeric" field="accountsPayable" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Accounts Payable Turnover
+                        <p-columnFilter type="numeric" field="accountsPayableTurnover" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Accounts Receivable
+                        <p-columnFilter type="numeric" field="accountsReceivable" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Accounts Receivable Turnover
+                        <p-columnFilter type="numeric" field="accountsReceivableTurnover" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        As Of Date
+                        <p-columnFilter type="date" field="asOfDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Current Cash
+                        <p-columnFilter type="numeric" field="assetsCurrentCash" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Current Cash Restricted
+                        <p-columnFilter type="numeric" field="assetsCurrentCashRestricted" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Current Deferred Compensation
+                        <p-columnFilter type="numeric" field="assetsCurrentDeferredCompensation" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Current Deferred Tax
+                        <p-columnFilter type="numeric" field="assetsCurrentDeferredTax" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Current Discontinued Operations
+                        <p-columnFilter type="numeric" field="assetsCurrentDiscontinuedOperations" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Current Investments
+                        <p-columnFilter type="numeric" field="assetsCurrentInvestments" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Current Leases Operating
+                        <p-columnFilter type="numeric" field="assetsCurrentLeasesOperating" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Current LoansNet
+                        <p-columnFilter type="numeric" field="assetsCurrentLoansNet" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Current Other
+                        <p-columnFilter type="numeric" field="assetsCurrentOther" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Current Separate Accounts
+                        <p-columnFilter type="numeric" field="assetsCurrentSeparateAccounts" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Current Unadjusted
+                        <p-columnFilter type="numeric" field="assetsCurrentUnadjusted" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Fixed
+                        <p-columnFilter type="numeric" field="assetsFixed" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Fixed Deferred Compensation
+                        <p-columnFilter type="numeric" field="assetsFixedDeferredCompensation" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Fixed Deferred Tax
+                        <p-columnFilter type="numeric" field="assetsFixedDeferredTax" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Fixed Discontinued Operations
+                        <p-columnFilter type="numeric" field="assetsFixedDiscontinuedOperations" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Fixed Leases Operating
+                        <p-columnFilter type="numeric" field="assetsFixedLeasesOperating" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Fixed Operating Discontinued Operations
+                        <p-columnFilter type="numeric" field="assetsFixedOperatingDiscontinuedOperations" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Fixed Operating Subsidiary Unconsolidated
+                        <p-columnFilter type="numeric" field="assetsFixedOperatingSubsidiaryUnconsolidated" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Fixed Oreo
+                        <p-columnFilter type="numeric" field="assetsFixedOreo" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Fixed Other
+                        <p-columnFilter type="numeric" field="assetsFixedOther" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Fixed Unconsolidated
+                        <p-columnFilter type="numeric" field="assetsFixedUnconsolidated" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Assets Unadjusted
+                        <p-columnFilter type="numeric" field="assetsUnadjusted" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.id}}
+                </td>
+                <td>
+                    {{collection.key}}
+                </td>
+                <td>
+                    {{collection.subkey}}
+                </td>
+                <td>
+                    {{collection.date | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.updated | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.accountsPayable}}
+                </td>
+                <td>
+                    {{collection.accountsPayableTurnover}}
+                </td>
+                <td>
+                    {{collection.accountsReceivable}}
+                </td>
+                <td>
+                    {{collection.accountsReceivableTurnover}}
+                </td>
+                <td>
+                    {{collection.asOfDate}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentCash}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentCashRestricted}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentDeferredCompensation}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentDeferredTax}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentDiscontinuedOperations}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentInvestments}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentLeasesOperating}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentLoansNet}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentOther}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentSeparateAccounts}}
+                </td>
+                <td>
+                    {{collection.assetsCurrentUnadjusted}}
+                </td>
+                <td>
+                    {{collection.assetsFixed}}
+                </td>
+                <td>
+                    {{collection.assetsFixedDeferredCompensation}}
+                </td>
+                <td>
+                    {{collection.assetsFixedDeferredTax}}
+                </td>
+                <td>
+                    {{collection.assetsFixedDiscontinuedOperations}}
+                </td>
+                <td>
+                    {{collection.assetsFixedLeasesOperating}}
+                </td>
+                <td>
+                    {{collection.assetsFixedOperatingDiscontinuedOperations}}
+                </td>
+                <td>
+                    {{collection.assetsFixedOperatingSubsidiaryUnconsolidated}}
+                </td>
+                <td>
+                    {{collection.assetsFixedOreo}}
+                </td>
+                <td>
+                    {{collection.assetsFixedOther}}
+                </td>
+                <td>
+                    {{collection.assetsFixedUnconsolidated}}
+                </td>
+                <td>
+                    {{collection.assetsUnadjusted}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="54">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+    </div>
+  </div>
+</div>

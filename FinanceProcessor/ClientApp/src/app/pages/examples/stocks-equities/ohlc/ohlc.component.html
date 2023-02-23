@@ -1,0 +1,109 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center">{{selectedSymbol}} OHLC</h1>
+        <p-table 
+          #dt1 
+          [value]="openClosePrice" 
+          dataKey="id"
+          [rows]="5" 
+          [showCurrentPageReport]="true" 
+          [rowsPerPageOptions]="[10,25,50]" 
+          [loading]="openClosePriceLoading" 
+          styleClass="p-datatable-gridlines"
+          responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <div>
+                <button pButton 
+                  label="Clear" 
+                  class="p-button-outlined" 
+                  icon="pi pi-filter-slash" 
+                  (click)="clear(dt1)">
+                </button>
+              </div>
+              <div>
+                <p-autoComplete 
+                  #openClosePriceSymbol 
+                  [(ngModel)]="selectedSymbol" 
+                  [suggestions]="filteredSymbols" 
+                  (completeMethod)="filterSymbol($event)"
+                  [minLength]="1" 
+                  (onSelect)="getOpenClosePrice(openClosePriceSymbol.value)" 
+                  placeholder="Search symbol">
+                  </p-autoComplete>
+                  <button 
+                    pButton 
+                    type="button" 
+                    icon="pi pi-times" 
+                    class="p-button-outlined"
+                    (click)="cancel()">
+                  </button>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Symbol
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Open
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Close
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      High
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Low
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center align-items-center">
+                      Volume
+                  </div>
+              </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.open}}
+                </td>
+                <td>
+                    {{collection.close}}
+                </td>
+                <td>
+                    {{collection.high}}
+                </td>
+                <td>
+                    {{collection.low}}
+                </td>
+                <td>
+                    {{collection.volume}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="5">No collections found.</td>
+            </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

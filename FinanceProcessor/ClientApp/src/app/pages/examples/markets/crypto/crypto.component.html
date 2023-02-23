@@ -1,0 +1,100 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12 mr-auto">
+      <h1>Crypto Market Summary</h1>
+    </div>
+    <div class=" col-12">
+      <div class=" card card-chart">
+        <div class=" card-header">
+          <div class=" row">
+            <div class=" col-sm-6 text-left">
+              <h5 class=" card-category">Last News for SPY, QQQ and IWM.</h5>
+              <h2 class=" card-title">Last News for Most Popular Symbols</h2>
+            </div>
+            <div class=" col-sm-6">
+              <div class=" btn-group btn-group-toggle float-right"
+                   data-toggle="buttons">
+                <label class=" btn btn-sm btn-danger btn-simple"
+                       (click)="
+                  data = datasets.SPY;
+                  updateOptions();
+                  clicked = true;
+                  clicked1 = false;
+                  clicked2 = false
+                "
+                       [ngClass]="{ active: clicked === true }">
+                  <input checked="checked" name="options" type="radio" />
+
+                  <span class=" d-none d-sm-block d-md-block d-lg-block d-xl-block">
+                    SPY
+                  </span>
+                  <span class=" d-block d-sm-none">
+                    <i class=" tim-icons icon-single-02"> </i>
+                  </span>
+                </label>
+                <label class=" btn btn-sm btn-danger btn-simple"
+                       (click)="
+                  data = datasets.QQQ;
+                  updateOptions();
+                  clicked = false;
+                  clicked1 = true;
+                  clicked2 = false
+                "
+                       [ngClass]="{ active: clicked1 === true }">
+                  <input class=" d-none d-sm-none"
+                         name="options"
+                         type="radio" />
+
+                  <span class=" d-none d-sm-block d-md-block d-lg-block d-xl-block">
+                    QQQ
+                  </span>
+                  <span class=" d-block d-sm-none">
+                    <i class=" tim-icons icon-gift-2"> </i>
+                  </span>
+                </label>
+                <label class=" btn btn-sm btn-danger btn-simple"
+                       (click)="
+                  data = datasets.IWM;
+                  updateOptions();
+                  clicked = false;
+                  clicked1 = false;
+                  clicked2 = true
+                "
+                       [ngClass]="{ active: clicked2 === true }">
+                  <input class=" d-none" name="options" type="radio" />
+
+                  <span class=" d-none d-sm-block d-md-block d-lg-block d-xl-block">
+                    IWM
+                  </span>
+                  <span class=" d-block d-sm-none">
+                    <i class=" tim-icons icon-tap-02"> </i>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class=" card-body">
+          <div><table class="table table-bordered " id="tableForMostPopularSymbols"> </table></div>
+        </div>
+      </div>
+    </div>
+    <div class=" col-12">
+      <div class=" card card-chart">
+        <div class=" card-header">
+          <div class=" row">
+            <div class=" col-sm-6 text-left">
+              <h5 class=" card-category">Last News for symbol</h5>
+              <h2 class=" card-title">Last News for Symbol</h2>
+              <input type="text" #searchItem (keyup.enter)="searchForSymbol(searchItem.value);" class="lg-text-input" id="inputForSymbol" placeholder="ex: SPY" />
+              <button class="btn-light" (click)="searchForSymbol(searchItem.value)"><i class="tim-icons icon-send text-primary"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class=" card-body">
+          <div><table class="table table-bordered " id="tableForLastNews"><thead><tr><th>Symbol</th><th>Headline</th><th>DateTime</th></tr></thead></table></div>
+        </div>
+      </div>
+    </div>
+  </div>
+ </div>

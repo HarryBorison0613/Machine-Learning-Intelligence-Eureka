@@ -1,0 +1,391 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center">{{selectedSymbol}} Balance Sheet</h1>
+        <p-table #dt1 [value]="balancesheets" dataKey="id"
+        [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading" styleClass="p-datatable-gridlines"
+        [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['symbol','companyName']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <div>
+                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+                <p-dropdown 
+                  #balanceSheetPeriod 
+                  [options]="periods" 
+                  [(ngModel)]="selectedPeriod" 
+                  (onChange)="getBalanceSheets(balanceSheetSymbol.value, balanceSheetPeriod.value)" optionLabel="label" 
+                  optionValue="value">
+                </p-dropdown>
+              </div>
+              <div>
+                <p-autoComplete 
+                  #balanceSheetSymbol 
+                  [(ngModel)]="selectedSymbol" 
+                  [suggestions]="filteredSymbols" 
+                  (completeMethod)="filterSymbol($event)"
+                  [minLength]="1" 
+                  (onSelect)="getBalanceSheets(balanceSheetSymbol.value, balanceSheetPeriod.value)" 
+                  placeholder="Search symbol">
+                </p-autoComplete>
+                <button 
+                  pButton 
+                  type="button" 
+                  icon="pi pi-times" 
+                  class="p-button-outlined"
+                  (click)="cancel($event)">
+                </button>
+              </div>
+            </div>
+          <h6 class="mt-4">Please use <i class="pi pi-filter"></i> for advanced search</h6>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Symbol
+                        <p-columnFilter type="text" field="symbol" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Report Date
+                        <p-columnFilter type="date" field="reportDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Fiscal Date
+                        <p-columnFilter type="date" field="fiscalDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Fiscal Quarter
+                        <p-columnFilter type="numeric" field="fiscalQuarter" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Fiscal Year
+                        <p-columnFilter type="numeric" field="fiscalYear" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Currency
+                        <p-columnFilter type="text" field="currency" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Currenct Cash
+                        <p-columnFilter type="numeric" field="currentCash" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Short Term Investments
+                        <p-columnFilter type="numeric" field="shortTermInvestments" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Receivables
+                        <p-columnFilter type="numeric" field="receivables" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Inventory
+                        <p-columnFilter type="numeric" field="inventory" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Other Current Assets
+                        <p-columnFilter type="numeric" field="otherCurrentAssets" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Current Assets
+                        <p-columnFilter type="numeric" field="currentAssets" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Long Term Investments
+                        <p-columnFilter type="numeric" field="longTermInvestments" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Property Plant Equipment
+                        <p-columnFilter type="numeric" field="propertyPlantEquipment" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Good Will
+                        <p-columnFilter type="numeric" field="goodwill" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Intangible Assets
+                        <p-columnFilter type="numeric" field="intangibleAssets" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Other Assets
+                        <p-columnFilter type="numeric" field="otherAssets" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Total Assets
+                        <p-columnFilter type="numeric" field="totalAssets" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Accounts Payable
+                        <p-columnFilter type="numeric" field="accountsPayable" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Current Long Term Debt
+                        <p-columnFilter type="numeric" field="currentLongTermDebt" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Other Current Liabilities
+                        <p-columnFilter type="numeric" field="otherCurrentLiabilities" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Total Current Liabilities
+                        <p-columnFilter type="numeric" field="totalCurrentLiabilities" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Long Term Debt
+                        <p-columnFilter type="numeric" field="longTermDebt" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Other Liabilities
+                        <p-columnFilter type="numeric" field="otherLiabilities" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Minority Interest
+                        <p-columnFilter type="numeric" field="minorityInterest" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Total Liabilities
+                        <p-columnFilter type="numeric" field="totalLiabilities" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Common Stock
+                        <p-columnFilter type="numeric" field="commonStock" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Retained Earnings
+                        <p-columnFilter type="numeric" field="retainedEarnings" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Treasury Stock
+                        <p-columnFilter type="numeric" field="treasuryStock" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Capital Surplus
+                        <p-columnFilter type="numeric" field="capitalSurplus" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Shareholder Equity
+                        <p-columnFilter type="numeric" field="shareholderEquity" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Net Tangible Assets
+                        <p-columnFilter type="numeric" field="netTangibleAssets" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Id
+                        <p-columnFilter type="text" field="id" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Key
+                        <p-columnFilter type="text" field="key" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Subkey
+                        <p-columnFilter type="text" field="subkey" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Date
+                        <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Updated
+                        <p-columnFilter type="date" field="updated" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.reportDate | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{collection.fiscalDate | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{collection.fiscalQuarter}}
+                </td>
+                <td>
+                    {{collection.fiscalYear}}
+                </td>
+                <td>
+                    {{collection.currency}}
+                </td>
+                <td>
+                    {{collection.currenctCash}}
+                </td>
+                <td>
+                    {{collection.shortTermInvestments}}
+                </td>
+                <td>
+                    {{collection.receivables}}
+                </td>
+                <td>
+                    {{collection.inventory}}
+                </td>
+                <td>
+                    {{collection.otherCurrentAssets}}
+                </td>
+                <td>
+                    {{collection.currentAssets}}
+                </td>
+                <td>
+                    {{collection.longTermInvestments}}
+                </td>
+                <td>
+                    {{collection.propertyPlantEquipment}}
+                </td>
+                <td>
+                    {{collection.goodwill}}
+                </td>
+                <td>
+                    {{collection.intangibleAssets}}
+                </td>
+                <td>
+                    {{collection.otherAssets}}
+                </td>
+                <td>
+                    {{collection.totalAssets}}
+                </td>
+                <td>
+                    {{collection.accountsPayable}}
+                </td>
+                <td>
+                    {{collection.currentLongTermDebt}}
+                </td>
+                <td>
+                    {{collection.otherCurrentLiabilities}}
+                </td>
+                <td>
+                    {{collection.totalCurrentLiabilities}}
+                </td>
+                <td>
+                    {{collection.longTermDebt}}
+                </td>
+                <td>
+                    {{collection.otherLiabilities}}
+                </td>
+                <td>
+                    {{collection.minorityInterest}}
+                </td>
+                <td>
+                    {{collection.totalLiabilities}}
+                </td>
+                <td>
+                    {{collection.commonStock}}
+                </td>
+                <td>
+                    {{collection.retainedEarnings}}
+                </td>
+                <td>
+                    {{collection.treasuryStock}}
+                </td>
+                <td>
+                    {{collection.capitalSurplus}}
+                </td>
+                <td>
+                    {{collection.shareholderEquity}}
+                </td>
+                <td>
+                    {{collection.netTangibleAssets}}
+                </td>
+                <td>
+                    {{collection.id}}
+                </td>
+                <td>
+                    {{collection.key}}
+                </td>
+                <td>
+                    {{collection.subkey}}
+                </td>
+                <td>
+                    {{collection.date | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.updated | date: 'dd/MM/yyyy'}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="54">No collections found.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    </div>
+  </div>
+</div>

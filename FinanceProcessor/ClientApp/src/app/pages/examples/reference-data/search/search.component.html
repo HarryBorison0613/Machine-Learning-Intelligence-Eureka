@@ -1,0 +1,83 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center pb-3">Search</h1>
+        <p-table 
+          #dt1
+          [value]="searchResult" 
+          dataKey="date"
+          [rows]="10"
+          [rowsPerPageOptions]="[5,10,25,50]" 
+          [loading]="searchLoading" 
+          styleClass="p-datatable-gridlines"
+          [paginator]="true" 
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+          responsiveLayout="scroll">
+          <ng-template pTemplate="caption">
+              <div class="d-flex justify-content-end">
+                <p-autoComplete 
+                  #searchSymbol 
+                  [(ngModel)]="selectedSymbol" 
+                  [suggestions]="filteredSymbols" 
+                  (completeMethod)="filterSymbol($event)"
+                  [minLength]="1" 
+                  (onSelect)="getSearch(searchSymbol.value)" 
+                  placeholder="Search for symbol...">
+                </p-autoComplete>
+                <button 
+                  pButton 
+                  type="button" 
+                  icon="pi pi-times" 
+                  class="p-button-outlined"
+                  (click)="cancel()">
+                </button>
+              </div>
+          </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>
+                        Symbol
+                    </th>
+                    <th>
+                        Security Name
+                    </th>
+                    <th>
+                        Security Type
+                    </th>
+                    <th>
+                        Region
+                    </th>
+                    <th>
+                        Exchange
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-collection>
+                <tr>
+                    <td>
+                        {{collection.symbol}}
+                    </td>
+                    <td>
+                        {{collection.securityName}}
+                    </td>
+                    <td>
+                        {{collection.securityType}}
+                    </td>
+                    <td>
+                        {{collection.region}}
+                    </td>
+                    <td>
+                        {{collection.exchange}}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="5">No collections found.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+  </div>
+</div>

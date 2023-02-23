@@ -1,0 +1,59 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12 mr-auto">
+      <h1>Stock Market Summary</h1>
+    </div>
+    <div class=" col-md-12 ml-auto">
+      <div class=" card card-chart">
+        <div class=" card-header">
+          <h4 class=" card-title">
+            <i class=" tim-icons icon-shape-star text-primary"> </i><strong>Intra day price for most popular symbols</strong>
+          </h4>
+          <h5 class=" card-category">Intra price chart for SPY</h5>
+        </div>
+        <div class=" card-body">
+          <div class=" chart-area" style="height: 200px">
+            <canvas id="spyIntradayPriceForMostPopularSymbol"> </canvas>
+          </div>
+        </div>
+        <div class=" card-header">
+          <h5 class=" card-category">Intra price chart for QQQ</h5>
+        </div>
+        <div class=" card-body">
+          <div class=" chart-area" style="height: 200px">
+            <canvas id="qqqIntradayPriceForMostPopularSymbol"> </canvas>
+          </div>
+        </div>
+        <div class=" card-header">
+          <h5 class=" card-category">Intra price chart for IWM</h5>
+        </div>
+        <div class=" card-body">
+          <div class=" chart-area" style="height: 200px"><canvas id="iwmIntradayPriceForMostPopularSymbol"> </canvas></div>
+        </div>
+      </div>
+    </div>
+    <div class=" col-md-12">
+      <div class=" card card-chart">
+        <div class=" card-header">
+          <h2 class=" card-title">Intra price chart for Symbol</h2>
+          <input type="text" #stocksSearch (keyup.enter)="searchIntradayPriceForSymbol(stocksSearch.value);" class="lg-text-input" id="inputForSymbol" placeholder="ex: SPY" />
+          <button class="btn-light" (click)="searchIntradayPriceForSymbol(stocksSearch.value)"><i class="tim-icons icon-send text-primary"></i></button>
+        </div>
+        <div class=" card-body">
+          <div class=" chart-area" style="height: 200px" id="intradayPriceForOneSymbolContent">
+            <canvas id="intradayPriceForOneSymbol"> </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class=" col-md-12">
+      <div class=" card card-chart">
+        <div class=" card-header">
+          <h2 class=" card-title">Upcoming Earnings Market</h2>
+        </div>
+        <div class=" card-body">
+          <div><table class="table text-center " id="tableForUpcomingEarningsMarket"><thead><tr><th>Symbol</th><th>DateTime</th></tr></thead></table></div>
+        </div>
+      </div>
+    </div>
+  </div>

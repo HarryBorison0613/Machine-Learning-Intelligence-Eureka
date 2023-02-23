@@ -1,0 +1,327 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center">{{selectedSymbol}} Dividends Forecast</h1>
+        <p-table #dt1 [value]="dividendsForecast" dataKey="id"
+        [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="dividendsForecastLoading" styleClass="p-datatable-gridlines"
+        [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['currency','diversementType','frequency','marker','name']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <div>
+                <button 
+                  pButton 
+                  label="Clear" 
+                  class="p-button-outlined" 
+                  icon="pi pi-filter-slash" 
+                  (click)="clear(dt1)">
+                </button>
+              </div>
+              <div>
+                <p-autoComplete 
+                  #dividendsForecastSymbol 
+                  [(ngModel)]="selectedSymbol" 
+                  [suggestions]="filteredSymbols" 
+                  (completeMethod)="filterSymbol($event)"
+                  [minLength]="1" 
+                  (onSelect)="getDividendsForecast(dividendsForecastSymbol.value)" 
+                  placeholder="Search symbol">
+                </p-autoComplete>
+                <button 
+                  pButton 
+                  type="button" 
+                  icon="pi pi-times" 
+                  class="p-button-outlined"
+                  (click)="cancel()">
+                </button>
+              </div>
+            </div>
+          <h6 class="mt-4">Please use <i class="pi pi-filter"></i> for advanced search</h6>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Symbol
+                        <p-columnFilter type="text" field="symbol" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Frequency
+                        <p-columnFilter type="text" field="frequency" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Diversement Type
+                        <p-columnFilter type="text" field="diversementType" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Marker
+                        <p-columnFilter type="text" field="marker" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Name
+                        <p-columnFilter type="text" field="name" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Ex Date
+                        <p-columnFilter type="date" field="exDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Adjusted Amount
+                        <p-columnFilter type="numeric" field="adjustedAmount" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Shares Held
+                        <p-columnFilter type="numeric" field="sharesHeld" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Shares Received
+                        <p-columnFilter type="numeric" field="sharesReceived" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Status
+                        <p-columnFilter type="text" field="status" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Record Date
+                        <p-columnFilter type="date" field="recordDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Record Updated
+                        <p-columnFilter type="date" field="recordUpdated" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Payment Date
+                        <p-columnFilter type="date" field="paymentDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Declared Date
+                        <p-columnFilter type="date" field="declaredDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Amount
+                        <p-columnFilter type="numeric" field="amount" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Disbursement Amount
+                        <p-columnFilter type="numeric" field="disbursementAmount" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Disbursement Type
+                        <p-columnFilter type="text" field="disbursementType" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Fiscal Year
+                        <p-columnFilter type="text" field="fiscalYear" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Fiscal Year End Date
+                        <p-columnFilter type="date" field="fiscalYearEndDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Fx Date
+                        <p-columnFilter type="date" field="fxDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Id
+                        <p-columnFilter type="text" field="id" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Currency
+                        <p-columnFilter type="text" field="currency" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Key
+                        <p-columnFilter type="text" field="key" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Non Taxed Amount
+                        <p-columnFilter type="text" field="nonTaxedAmount" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Subkey
+                        <p-columnFilter type="text" field="subkey" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Net Amount
+                        <p-columnFilter type="numeric" field="netAmount" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Position
+                        <p-columnFilter type="numeric" field="position" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Period End Date
+                        <p-columnFilter type="date" field="periodEndDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Date
+                        <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Updated
+                        <p-columnFilter type="date" field="updated" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.frequency}}
+                </td>
+                <td>
+                    {{collection.diversementType}}
+                </td>
+                <td>
+                    {{collection.marker}}
+                </td>
+                <td>
+                    {{collection.name}}
+                </td>
+                <td>
+                    {{collection.exDate | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.adjustedAmount}}
+                </td>
+                <td>
+                    {{collection.sharesHeld}}
+                </td>
+                <td>
+                    {{collection.sharesReceived}}
+                </td>
+                <td>
+                    {{collection.status}}
+                </td>
+                <td>
+                    {{collection.recordDate | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{collection.recordUpdated | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{collection.paymentDate | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{collection.declaredDate | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{collection.amount}}
+                </td>
+                <td>
+                    {{collection.disbursementAmount}}
+                </td>
+                <td>
+                    {{collection.disbursementType}}
+                </td>
+                <td>
+                    {{collection.fiscalYear}}
+                </td>
+                <td>
+                    {{collection.fiscalYearEndDate}}
+                </td>
+                <td>
+                    {{collection.fxDate}}
+                </td>
+                <td>
+                    {{collection.id}}
+                </td>
+                <td>
+                    {{collection.currency}}
+                </td>
+                <td>
+                    {{collection.key}}
+                </td>
+                <td>
+                    {{collection.nonTaxedAmount}}
+                </td>
+                <td>
+                    {{collection.subkey}}
+                </td>
+                <td>
+                    {{collection.netAmount}}
+                </td>
+                <td>
+                    {{collection.position}}
+                </td>
+                <td>
+                    {{collection.periodEndDate | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{collection.date | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{collection.updated | date: 'MM/dd/yyyy'}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="29">No collections found.</td>
+            </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

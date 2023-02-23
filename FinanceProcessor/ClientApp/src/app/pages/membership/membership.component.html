@@ -1,0 +1,101 @@
+<div class="full-page">
+  <div class="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 ml-auto mr-auto text-center">
+          <h1 class="title">Please choose the best plan for you!</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 col-md-6 p-1">
+          <div class="card card-pricing card-success card-white rounded-8">
+            <div class="card-body">
+              <h1 class="card-title basic-title">basic</h1>
+              <ul class="list-group">
+                <li class="list-group-item">All Data</li>
+                <li class="list-group-item">Search Feature</li>
+                <li class="list-group-item">Order Feature</li>
+                <li class="list-group-item">Discount Feature</li>
+                <li class="list-group-item">Trial - 7 days</li>
+                <li class="list-group-item">Support</li>
+              </ul>
+              <div class="card-prices">
+                <h3 class="text-on-front"><span> $ </span>30</h3>
+                <h5 class="text-on-back">324</h5>
+              </div>
+            </div>
+            <div class="card-footer text-center mb-3 mt-3">
+              <button
+                (click)="startBasic()"
+                class="btn btn-round btn-just-icon btn-danger"
+              >
+                Get started
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 p-1">
+          <div class="card card-pricing card-success card-white rounded-8">
+            <div class="card-body">
+              <h1 class="card-title pro-title">pro</h1>
+              <ul class="list-group">
+                <li class="list-group-item">All Data</li>
+                <li class="list-group-item">Search Feature</li>
+                <li class="list-group-item">Order Feature</li>
+                <li class="list-group-item">Discount Feature</li>
+                <li class="list-group-item">Trial - 7 days</li>
+                <li class="list-group-item">Support</li>
+              </ul>
+              <div class="card-prices">
+                <h3 class="text-on-front"><span> $ </span>60</h3>
+                <h5 class="text-on-back">648</h5>
+              </div>
+            </div>
+            <div class="card-footer text-center mb-3 mt-3">
+              <button
+                (click)="startPro()"
+                class="btn btn-round btn-just-icon btn-success"
+              >
+                Get started
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 p-1">
+          <div class="card card-pricing card-danger card-white rounded-8">
+            <div class="card-body">
+              <h1 class="card-title expert-title">expert</h1>
+              <ul class="list-group">
+                <li class="list-group-item">All Data</li>
+                <li class="list-group-item">Search Feature</li>
+                <li class="list-group-item">Order Feature</li>
+                <li class="list-group-item">Own Workspace</li>
+                <li class="list-group-item">Trial - 7 days</li>
+                <li class="list-group-item">24/7 Support</li>
+              </ul>
+              <div class="card-prices">
+                <h3 class="text-on-front"><span> $ </span>90</h3>
+                <h5 class="text-on-back">972</h5>
+              </div>
+            </div>
+            <div class="card-footer text-center mb-3 mt-3">
+              <button
+                (click)="startExpert()"
+                class="btn btn-round btn-just-icon btn-primary"
+              >
+                Get started
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-fall"
+>
+</ngx-spinner>

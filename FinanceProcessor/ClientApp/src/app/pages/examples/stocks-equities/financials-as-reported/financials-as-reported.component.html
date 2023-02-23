@@ -1,0 +1,389 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center">{{selectedSymbol}} Financials As Reported</h1>
+        <p-table #dt1 [value]="reportedFinancials" dataKey="id"
+        [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="reportedFinancialsLoading" styleClass="p-datatable-gridlines"
+        [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['id','source','key','subkey']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <div>
+                <button 
+                  pButton 
+                  label="Clear" 
+                  class="p-button-outlined" 
+                  icon="pi pi-filter-slash" 
+                  (click)="clear(dt1)">
+                </button>
+                <p-dropdown 
+                  #reportedFinancialsPeriod 
+                  [options]="periods" 
+                  optionLabel="label" 
+                  optionValue="value" 
+                  [(ngModel)]="selectedReportedFinancialsPeriod" 
+                  (onChange)="getReportedFinancials(reportedFinancialsSymbol.value, reportedFinancialsPeriod.value)">
+                </p-dropdown>
+              </div>
+              <div>
+                <p-autoComplete 
+                  #reportedFinancialsSymbol 
+                  [(ngModel)]="selectedSymbol" 
+                  [suggestions]="filteredSymbols" 
+                  (completeMethod)="filterSymbol($event)"
+                  [minLength]="1" 
+                  (onSelect)="getReportedFinancials(reportedFinancialsSymbol.value, reportedFinancialsPeriod.value)" 
+                  placeholder="Search symbol">
+                </p-autoComplete>
+                <button 
+                  pButton 
+                  type="button" 
+                  icon="pi pi-times" 
+                  class="p-button-outlined"
+                  (click)="cancel()">
+                </button>
+              </div>
+            </div>
+          <h6 class="mt-4">Please use <i class="pi pi-filter"></i> for advanced search</h6>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Id
+                        <p-columnFilter type="text" field="id" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Source
+                        <p-columnFilter type="text" field="source" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Key
+                        <p-columnFilter type="text" field="key" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Subkey
+                        <p-columnFilter type="text" field="subkey" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Date
+                        <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Updated
+                        <p-columnFilter type="date" field="updated" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Decrease In Unrecognized Tax Benefits Is Reasonably Possible
+                        <p-columnFilter type="numeric" field="decreaseInUnrecognizedTaxBenefitsIsReasonablyPossible" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Form Fiscal Year
+                        <p-columnFilter type="numeric" field="formFiscalYear" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Version
+                        <p-columnFilter type="numeric" field="version" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Period Start
+                        <p-columnFilter type="numeric" field="periodStart" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Period End
+                        <p-columnFilter type="numeric" field="periodEnd" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Date Filed
+                        <p-columnFilter type="numeric" field="dateFiled" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Form Fiscal Quarter
+                        <p-columnFilter type="numeric" field="formFiscalQuarter" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Report Link
+                        <p-columnFilter type="numeric" field="reportLink" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Other Accrued Liabilities Current
+                        <p-columnFilter type="numeric" field="otherAccruedLiabilitiesCurrent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Other Assets Current
+                        <p-columnFilter type="numeric" field="otherAssetsCurrent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Deferred Federal State And Local Tax Expense Benefit
+                        <p-columnFilter type="numeric" field="deferredFederalStateAndLocalTaxExpenseBenefit" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Other Assets Noncurrent
+                        <p-columnFilter type="numeric" field="otherAssetsNoncurrent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Deferred Foreign Income Tax Expense Benefit
+                        <p-columnFilter type="numeric" field="deferredForeignIncomeTaxExpenseBenefit" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Deferred Income Tax Assets Net
+                        <p-columnFilter type="numeric" field="deferredIncomeTaxAssetsNet" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Deferred Income Taxes And Tax Credits
+                        <p-columnFilter type="numeric" field="deferredIncomeTaxesAndTaxCredits" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Deferred Income Tax Expense Benefit
+                        <p-columnFilter type="numeric" field="deferredIncomeTaxExpenseBenefit" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Deferred Income Tax Liabilities
+                        <p-columnFilter type="numeric" field="deferredIncomeTaxLiabilities" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Deferred Income Tax Liabilities Net
+                        <p-columnFilter type="numeric" field="deferredIncomeTaxLiabilitiesNet" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Other Comprehensive Income Loss Available For Sale Securities Adjustment Net Of Tax
+                        <p-columnFilter type="numeric" field="otherComprehensiveIncomeLossAvailableForSaleSecuritiesAdjustmentNetOfTax" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Other Comprehensive Income Loss Available For Sale Securities Tax
+                        <p-columnFilter type="numeric" field="otherComprehensiveIncomeLossAvailableForSaleSecuritiesTax" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Other Comprehensive Income Loss CashFlow Hedge Gain Loss After Reclassification And Tax
+                        <p-columnFilter type="numeric" field="otherComprehensiveIncomeLossCashFlowHedgeGainLossAfterReclassificationAndTax" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Other Comprehensive Income Loss CashFlow Hedge Gain Loss After Reclassification Tax
+                        <p-columnFilter type="numeric" field="otherComprehensiveIncomeLossCashFlowHedgeGainLossAfterReclassificationTax" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Other Comprehensive Income Loss CashFlow Hedge Gain Loss Before Reclassification After Tax
+                        <p-columnFilter type="numeric" field="otherComprehensiveIncomeLossCashFlowHedgeGainLossBeforeReclassificationAfterTax" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Other Comprehensive Income Loss CashFlow Hedge Gain Loss Reclassification After Tax
+                        <p-columnFilter type="numeric" field="otherComprehensiveIncomeLossCashFlowHedgeGainLossReclassificationAfterTax" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Deferred Tax Assets Gross
+                        <p-columnFilter type="numeric" field="deferredTaxAssetsGross" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Deferred Tax Assets Liabilities Net
+                        <p-columnFilter type="numeric" field="deferredTaxAssetsLiabilitiesNet" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Deferred Tax Assets Liabilities Net
+                        <p-columnFilter type="numeric" field="deferredTaxAssetsLiabilitiesNet" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Deferred Tax Assets Net
+                        <p-columnFilter type="numeric" field="deferredTaxAssetsNet" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Deferred Tax Assets Operating Loss Carry forwards
+                        <p-columnFilter type="numeric" field="deferredTaxAssetsOperatingLossCarryforwards" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Deferred Tax Assets Other
+                        <p-columnFilter type="numeric" field="deferredTaxAssetsOther" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.id}}
+                </td>
+                <td>
+                    {{collection.source}}
+                </td>
+                <td>
+                    {{collection.key}}
+                </td>
+                <td>
+                    {{collection.subkey}}
+                </td>
+                <td>
+                    {{collection.date | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.updated | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.decreaseInUnrecognizedTaxBenefitsIsReasonablyPossible}}
+                </td>
+                <td>
+                    {{collection.formFiscalYear}}
+                </td>
+                <td>
+                    {{collection.version}}
+                </td>
+                <td>
+                    {{collection.periodStart}}
+                </td>
+                <td>
+                    {{collection.periodEnd}}
+                </td>
+                <td>
+                    {{collection.dateFiled}}
+                </td>
+                <td>
+                    {{collection.formFiscalQuarter}}
+                </td>
+                <td>
+                    {{collection.reportLink}}
+                </td>
+                <td>
+                    {{collection.otherAccruedLiabilitiesCurrent}}
+                </td>
+                <td>
+                    {{collection.otherAssetsCurrent}}
+                </td>
+                <td>
+                    {{collection.deferredFederalStateAndLocalTaxExpenseBenefit}}
+                </td>
+                <td>
+                    {{collection.otherAssetsNoncurrent}}
+                </td>
+                <td>
+                    {{collection.deferredForeignIncomeTaxExpenseBenefit}}
+                </td>
+                <td>
+                    {{collection.deferredIncomeTaxAssetsNet}}
+                </td>
+                <td>
+                    {{collection.deferredIncomeTaxesAndTaxCredits}}
+                </td>
+                <td>
+                    {{collection.deferredIncomeTaxExpenseBenefit}}
+                </td>
+                <td>
+                    {{collection.deferredIncomeTaxLiabilities}}
+                </td>
+                <td>
+                    {{collection.deferredIncomeTaxLiabilitiesNet}}
+                </td>
+                <td>
+                    {{collection.otherComprehensiveIncomeLossAvailableForSaleSecuritiesAdjustmentNetOfTax}}
+                </td>
+                <td>
+                    {{collection.otherComprehensiveIncomeLossAvailableForSaleSecuritiesTax}}
+                </td>
+                <td>
+                    {{collection.otherComprehensiveIncomeLossCashFlowHedgeGainLossAfterReclassificationAndTax}}
+                </td>
+                <td>
+                    {{collection.otherComprehensiveIncomeLossCashFlowHedgeGainLossAfterReclassificationTax}}
+                </td>
+                <td>
+                    {{collection.otherComprehensiveIncomeLossCashFlowHedgeGainLossBeforeReclassificationAfterTax}}
+                </td>
+                <td>
+                    {{collection.otherComprehensiveIncomeLossCashFlowHedgeGainLossReclassificationAfterTax}}
+                </td>
+                <td>
+                    {{collection.deferredTaxAssetsGross}}
+                </td>
+                <td>
+                    {{collection.deferredTaxAssetsLiabilitiesNet}}
+                </td>
+                <td>
+                    {{collection.deferredTaxAssetsLiabilitiesNet}}
+                </td>
+                <td>
+                    {{collection.deferredTaxAssetsNet}}
+                </td>
+                <td>
+                    {{collection.deferredTaxAssetsOperatingLossCarryforwards}}
+                </td>
+                <td>
+                    {{collection.deferredTaxAssetsOther}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="54">No collections found.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    </div>
+  </div>
+</div>

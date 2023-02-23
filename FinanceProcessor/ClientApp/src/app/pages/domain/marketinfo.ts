@@ -1,0 +1,71 @@
+export interface List {
+    symbol: string;
+    companyName: string;
+    primaryExchange: string;
+    calculationPrice: string;
+    open: number;
+    openTime: string | Date;
+    openSource: string;
+    close: number;
+    closeTime: string | Date;
+    closeSource: string;
+    high: number;
+    highTime: string | Date;
+    highSource: string;
+    low: number;
+    lowTime: string | Date;
+    lowSource: string;
+    latestPrice: number;
+    latestSource: string;
+    latestTime: string | Date;
+    latestUpdate: string | Date;
+    latestVolume: number;
+    iexRealtimePrice: number;
+    iexRealtimeSize: number;
+    iexLastUpdated: number;
+    delayedPrice: number;
+    delayedPriceTime: string | Date;
+    oddLotDelayedPrice: number;
+    oddLotDelayedPriceTime: string | Date;
+    extendedPrice: number;
+    extendedChange: number;
+    extendedChangePercent: number;
+    extendedPriceTime: string | Date;
+    previousClose: number;
+    previousVolume: number;
+    change: number;
+    changePercent: number;
+    volume: number;
+    iexMarketPercent: number;
+    iexVolume: number;
+    avgTotalVolume: number;
+    iexBidPrice: number;
+    iexBidSize: number;
+    iexAskPrice: number;
+    iexAskSize: number;
+    iexOpen: number;
+    iexOpenTime: string | Date;
+    iexClose: number;
+    iexCloseTime: string | Date;
+    marketCap: number;
+    peRatio: number;
+    week52High: number;
+    week52Low: number;
+    ytdChange: number;
+    lastTradeTime: string | Date;
+    isUSMarketOpen: boolean;
+    sector: string;
+  }
+
+export interface MarketVolume {
+  mic?: string;
+  tapeId?: string;
+  venueName?: string;
+  volume?: number;
+  tapeA?: number;
+  tapeB?: number;
+  tapeC?: number;
+  marketPercent?: number;
+  lastUpdated?: string | Date;
+}
+  

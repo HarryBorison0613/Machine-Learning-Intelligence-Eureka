@@ -1,0 +1,525 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center">{{selectedSymbol}} Stats</h1>
+        <p-table 
+          #dt1 
+          [value]="advancedStats" 
+          dataKey="id"
+          [rows]="5" 
+          [showCurrentPageReport]="true" 
+          [rowsPerPageOptions]="[5,10,20]" 
+          [loading]="advancedStatsLoading" 
+          styleClass="p-datatable-gridlines"
+          [paginator]="true" 
+          currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+          [globalFilterFields]="['symbol']" 
+          responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <div>
+                <button 
+                  pButton 
+                  label="Clear" 
+                  class="p-button-outlined" 
+                  icon="pi pi-filter-slash" 
+                  (click)="clear(dt1)">
+                </button>
+              </div>
+              <div>
+                <p-autoComplete 
+                  #advancedStatsSymbol 
+                  [(ngModel)]="selectedSymbol" 
+                  [suggestions]="filteredSymbols" 
+                  (completeMethod)="filterSymbol($event)"
+                  [minLength]="1" 
+                  (onSelect)="getAdvancedStats(advancedStatsSymbol.value)" 
+                  placeholder="Search symbol">
+                </p-autoComplete>
+                <button 
+                  pButton 
+                  type="button" 
+                  icon="pi pi-times" 
+                  class="p-button-outlined"
+                  (click)="cancel()">
+                </button>
+              </div>
+            </div>
+          <h6 class="mt-4">Please use <i class="pi pi-filter"></i> for advanced search</h6>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+              <th>
+                  <div class="flex justify-content-center">
+                      Symbol
+                      <p-columnFilter type="text" field="symbol" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center">
+                        Week 52 high Date
+                      <p-columnFilter type="date" field="week52highDate" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+              <th>
+                  <div class="flex justify-content-center">
+                        Week 52 low Date
+                      <p-columnFilter type="date" field="week52lowDate" display="menu"></p-columnFilter>
+                  </div>
+              </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Total Cash
+                        <p-columnFilter type="number" field="totalCash" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        currentDebt
+                        <p-columnFilter type="number" field="currentDebt" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Revenue
+                        <p-columnFilter type="number" field="revenue" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Gross Profit
+                        <p-columnFilter type="number" field="grossProfit" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Total Revenue
+                        <p-columnFilter type="number" field="totalRevenue" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Ebitda
+                        <p-columnFilter type="number" field="ebitda" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Revenue Per Share
+                        <p-columnFilter type="number" field="revenuePerShare" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Revenue Per Employee
+                        <p-columnFilter type="number" field="revenuePerEmployee" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Debt To Equity
+                        <p-columnFilter type="numeric" field="debtToEquity" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Profit Margin
+                        <p-columnFilter type="numeric" field="profitMargin" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Enterprise Value
+                        <p-columnFilter type="text" field="enterpriseValue" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Enterprise Value to Revenue
+                        <p-columnFilter type="numeric" field="enterpriseValueToRevenue" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Price to Sales
+                        <p-columnFilter type="numeric" field="priceToSales" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Price to Book
+                        <p-columnFilter type="numeric" field="priceToBook" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Forward PE Ratio
+                        <p-columnFilter type="numeric" field="forwardPERatio" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        PegRatio
+                        <p-columnFilter type="numeric" field="pegRatio" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        PE High
+                        <p-columnFilter type="numeric" field="peHigh" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        PE Low
+                        <p-columnFilter type="numeric" field="peLow" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Pul Call Ratio
+                        <p-columnFilter type="numeric" field="putCallRatio" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Company Name
+                        <p-columnFilter type="numeric" field="companyName" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Market Cap
+                        <p-columnFilter type="numeric" field="marketcap" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Income Tax
+                        <p-columnFilter type="numeric" field="incomeTax" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Week 52 High
+                        <p-columnFilter type="numeric" field="week52high" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Week 52 Low
+                        <p-columnFilter type="numeric" field="week52low" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Week 52 change
+                        <p-columnFilter type="numeric" field="week52change" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Shares outstanding
+                        <p-columnFilter type="numeric" field="sharesOutstanding" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Avg 10 volume
+                        <p-columnFilter type="numeric" field="avg10Volume" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Avg 30 volume
+                        <p-columnFilter type="numeric" field="avg30Volume" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                      Day 200 moving avg
+                        <p-columnFilter type="numeric" field="day200MovingAvg" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Day 50 moving avg
+                        <p-columnFilter type="numeric" field="day50MovingAvg" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Employees
+                        <p-columnFilter type="numeric" field="employees" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Ttm Eps
+                        <p-columnFilter type="numeric" field="ttmEPS" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Ttm dividend date
+                        <p-columnFilter type="numeric" field="ttmDividendRate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Dividend Yield
+                        <p-columnFilter type="numeric" field="dividendYield" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Next dividend date
+                        <p-columnFilter type="numeric" field="nextDividendDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Ex dividend date
+                        <p-columnFilter type="numeric" field="exDividendDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Pe ratio
+                        <p-columnFilter type="numeric" field="peRatio" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Beta
+                        <p-columnFilter type="numeric" field="beta" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Max change percent
+                        <p-columnFilter type="numeric" field="maxChangePercent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Year 5 change percent
+                        <p-columnFilter type="numeric" field="year5ChangePercent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Year 2 change percent
+                        <p-columnFilter type="numeric" field="year2ChangePercent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Year 1 change percent
+                        <p-columnFilter type="numeric" field="year1ChangePercent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Ytd change percent
+                        <p-columnFilter type="numeric" field="ytdChangePercent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Month 6 change percent
+                        <p-columnFilter type="numeric" field="month6ChangePercent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Month 3 change percent
+                        <p-columnFilter type="numeric" field="month3ChangePercent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Month 1 change percent
+                        <p-columnFilter type="numeric" field="month1ChangePercent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Day 30 change percent
+                        <p-columnFilter type="numeric" field="day30ChangePercent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center">
+                        Day 5 change percent
+                        <p-columnFilter type="numeric" field="day5ChangePercent" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+              <td>
+                  {{collection.symbol}}
+              </td>
+              <td>
+                  {{collection.week52highDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                  {{collection.week52lowDate | date: 'MM/dd/yyyy'}}
+              </td>
+                <td>
+                    {{collection.totalCash}}
+                </td>
+                <td>
+                    {{collection.currentDebt}}
+                </td>
+                <td>
+                    {{collection.revenue}}
+                </td>
+                <td>
+                    {{collection.grossProfit}}
+                </td>
+                <td>
+                    {{collection.totalRevenue}}
+                </td>
+                <td>
+                    {{collection.ebitda}}
+                </td>
+                <td>
+                    {{collection.revenuePerShare}}
+                </td>
+                <td>
+                    {{collection.revenuePerEmployee}}
+                </td>
+                <td>
+                    {{collection.debtToEquity}}
+                </td>
+                <td>
+                    {{collection.profitMargin}}
+                </td>
+                <td>
+                    {{collection.enterpriseValueToRevenue}}
+                </td>
+                <td>
+                    {{collection.priceToSales}}
+                </td>
+                <td>
+                    {{collection.currentDebt}}
+                </td>
+                <td>
+                    {{collection.priceToBook}}
+                </td>
+                <td>
+                    {{collection.forwardPERatio}}
+                </td>
+                <td>
+                    {{collection.pegRatio}}
+                </td>
+                <td>
+                    {{collection.peHigh}}
+                </td>
+                <td>
+                    {{collection.peLow}}
+                </td>
+                <td>
+                    {{collection.putCallRatio | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.companyName}}
+                </td>
+                <td>
+                    {{collection.marketcap}}
+                </td>
+                <td>
+                    {{collection.incomeTax}}
+                </td>
+                <td>
+                    {{collection.week52high}}
+                </td>
+                <td>
+                    {{collection.week52low}}
+                </td>
+                <td>
+                    {{collection.week52change}}
+                </td>
+                <td>
+                    {{collection.sharesOutstanding}}
+                </td>
+                <td>
+                    {{collection.avg10Volume}}
+                </td>
+                <td>
+                    {{collection.avg30Volume}}
+                </td>
+                <td>
+                    {{collection.day200MovingAvg}}
+                </td>
+                <td>
+                    {{collection.day50MovingAvg}}
+                </td>
+                <td>
+                    {{collection.employees}}
+                </td>
+                <td>
+                    {{collection.ttmEPS}}
+                </td>
+                <td>
+                    {{collection.ttmDividendRate}}
+                </td>
+                <td>
+                    {{collection.dividendYield}}
+                </td>
+                <td>
+                    {{collection.nextDividendDate}}
+                </td>
+                <td>
+                    {{collection.exDividendDate}}
+                </td>
+                <td>
+                    {{collection.peRatio}}
+                </td>
+                <td>
+                    {{collection.beta}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.maxChangePercent > 0, 'text-danger': collection.maxChangePercent <= 0 }">
+                    {{collection.maxChangePercent}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.year5ChangePercent > 0, 'text-danger': collection.year5ChangePercent <= 0 }">
+                    {{collection.year5ChangePercent}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.year2ChangePercent > 0, 'text-danger': collection.year2ChangePercent <= 0 }">
+                    {{collection.year2ChangePercent}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.year1ChangePercent > 0, 'text-danger': collection.year1ChangePercent <= 0 }">
+                    {{collection.year1ChangePercent}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.ytdChangePercent > 0, 'text-danger': collection.ytdChangePercent <= 0 }">
+                    {{collection.ytdChangePercent}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.month6ChangePercent > 0, 'text-danger': collection.month6ChangePercent <= 0 }">
+                    {{collection.month6ChangePercent}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.month3ChangePercent > 0, 'text-danger': collection.month3ChangePercent <= 0 }">
+                    {{collection.month3ChangePercent}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.month1ChangePercent > 0, 'text-danger': collection.month1ChangePercent <= 0 }">
+                    {{collection.month1ChangePercent}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.day30ChangePercent > 0, 'text-danger': collection.day30ChangePercent <= 0 }">
+                    {{collection.day30ChangePercent}}
+                </td>
+                <td [ngClass]="{ 'text-success': collection.day5ChangePercent > 0, 'text-danger': collection.day5ChangePercent <= 0 }">
+                    {{collection.day5ChangePercent}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="24">No collections found.</td>
+            </tr>
+        </ng-template>
+        </p-table>
+    </div>
+  </div>
+</div>

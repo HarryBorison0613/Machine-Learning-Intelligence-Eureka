@@ -1,0 +1,73 @@
+﻿namespace FinanceProcessor.Core.Models
+{
+	public class FinancialModelDto
+	{
+        public long EBITDA { get; set; }
+        public long AccountsPayable { get; set; }
+        public long? CapitalSurplus { get; set; }
+        public long? CashChange { get; set; }
+        public long CashFlow { get; set; }
+        public long CashFlowFinancing { get; set; }
+        public long? ChangesInInventories { get; set; }
+        public long? ChangesInReceivables { get; set; }
+        public long CommonStock { get; set; }
+        public long CostOfRevenue { get; set; }
+        public string Currency { get; set; }
+        public long CurrentAssets { get; set; }
+        public long CurrentCash { get; set; }
+        public long CurrentDebt { get; set; }
+        public long? CurrentLongTermDebt { get; set; }
+        public long Depreciation { get; set; }
+        public long? DividendsPaid { get; set; }
+        public long Ebit { get; set; }
+        public long? ExchangeRateEffect { get; set; }
+        public DateTime FiscalDate { get; set; }
+        public long Goodwill { get; set; }
+        public long GrossProfit { get; set; }
+        public long IncomeTax { get; set; }
+        public long IntangibleAssets { get; set; }
+        public long InterestIncome { get; set; }
+        public long Inventory { get; set; }
+        public long? InvestingActivityOther { get; set; }
+        public long? Investments { get; set; }
+        public long LongTermDebt { get; set; }
+        public long LongTermInvestments { get; set; }
+        public long MinorityInterest { get; set; }
+        public long? NetBorrowings { get; set; }
+        public long NetIncome { get; set; }
+        public long NetIncomeBasic { get; set; }
+        public long? NetTangibleAssets { get; set; }
+        public long OperatingExpense { get; set; }
+        public long OperatingIncome { get; set; }
+        public long? OperatingRevenue { get; set; }
+        public long OtherAssets { get; set; }
+        public long OtherCurrentAssets { get; set; }
+        public long? OtherCurrentLiabilities { get; set; }
+        public long OtherIncomeExpenseNet { get; set; }
+        public long? OtherLiabilities { get; set; }
+        public long PretaxIncome { get; set; }
+        public long PropertyPlantEquipment { get; set; }
+        public long Receivables { get; set; }
+        public DateTime ReportDate { get; set; }
+        public long ResearchAndDevelopment { get; set; }
+        public long RetainedEarnings { get; set; }
+        public long Revenue { get; set; }
+        public long SellingGeneralAndAdmin { get; set; }
+        public long ShareholderEquity { get; set; }
+        public long ShortTermDebt { get; set; }
+        public long? ShortTermInvestments { get; set; }
+        public string Symbol { get; set; }
+        public long TotalAssets { get; set; }
+        public long TotalCash { get; set; }
+        public long TotalDebt { get; set; }
+        public long TotalInvestingCashFlows { get; set; }
+        public long TotalLiabilities { get; set; }
+        public long TotalRevenue { get; set; }
+        public long TreasuryStock { get; set; }
+        public string Id { get; set; }
+        public string Key { get; set; }
+        public string Subkey { get; set; }
+        public decimal Updated { get; set; }
+        public decimal Date { get; set; }
+    }
+}

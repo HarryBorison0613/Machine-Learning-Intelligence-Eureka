@@ -1,0 +1,128 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12 ">
+      <h1 class="text-center">{{selectedSymbol}} Company</h1>
+      <p-table [value]="companySummary" responsiveLayout="scroll" styleClass="p-datatable-gridlines"
+                [loading]="companyLoading">
+        <ng-template pTemplate="caption">
+          <div class="d-flex justify-content-end">
+            <div>
+              <p-autoComplete 
+                #companySymbol 
+                [(ngModel)]="selectedSymbol" 
+                [suggestions]="filteredSymbols" 
+                (completeMethod)="filterSymbol($event)"
+                [minLength]="1" 
+                (onSelect)="getCompany(companySymbol.value)" 
+                placeholder="Search symbol">
+              </p-autoComplete>
+              <button 
+                pButton 
+                type="button" 
+                icon="pi pi-times" 
+                class="p-button-outlined"
+                (click)="cancel()">
+              </button>
+            </div>
+          </div>
+        </ng-template>
+      <ng-template pTemplate="header">
+            <tr>
+                <th>Symbol</th>
+                <th>Company Name</th>
+                <th>Exchange</th>
+                <th>Industry</th>
+                <th>Website</th>
+                <th>CEO</th>
+                <th>Issue Type</th>
+                <th>Sector</th>
+                <th>Primary Sec Code</th>
+                <th>Employees</th>
+                <th>Address</th>
+                <th>Address2</th>
+                <th>State</th>
+                <th>City</th>
+                <th>Zip</th>
+                <th>Country</th>
+                <th>Phone</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-summary>
+            <tr>
+                <td>{{summary.symbol}}</td>
+                <td>{{summary.companyName}}</td>
+                <td>{{summary.exchange}}</td>
+                <td>{{summary.industry}}%</td>
+                <td>{{summary.website}}</td>
+                <td>{{summary.ceo}}</td>
+                <td>{{summary.issueType}}</td>
+                <td>{{summary.sector}}</td>
+                <td>{{summary.primarySicCode}}</td>
+                <td>{{summary.employees}}</td>
+                <td>{{summary.address}}</td>
+                <td>{{summary.address2}}%</td>
+                <td>{{summary.state}}</td>
+                <td>{{summary.city}}</td>
+                <td>{{summary.zip}}</td>
+                <td>{{summary.country}}</td>
+                <td>{{summary.phone}}</td>
+              </tr>
+        </ng-template>
+      </p-table>
+    </div>
+    <div class="col-md-12 mt-5">
+      <p-card header="Description" [style]="{'width': '100%', 'margin-bottom': '2em'}">
+        {{companyDescription}}
+      </p-card>
+    </div>
+    <div class="col-md-12 mt-5">
+      <h1 class="text-center">Company Tags</h1>
+      <p-table 
+        #dt2 
+        [value]="companyTags" 
+        dataKey="size"
+        [rows]="5" 
+        [showCurrentPageReport]="true" 
+        [rowsPerPageOptions]="[5,10,20]" 
+        [loading]="companyLoading" styleClass="p-datatable-gridlines"
+        [paginator]="true" 
+        currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+          <div class="d-flex justify-content-between">
+            <div>
+              <button pButton 
+                label="Clear" 
+                class="p-button-outlined" 
+                icon="pi pi-filter-slash" 
+                (click)="clear(dt2)">
+              </button>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Tags
+                        <p-columnFilter type="text" field="tag" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.tag}}
+                </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+              <tr>
+                  <td colspan="3">No collections found.</td>
+              </tr>
+          </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

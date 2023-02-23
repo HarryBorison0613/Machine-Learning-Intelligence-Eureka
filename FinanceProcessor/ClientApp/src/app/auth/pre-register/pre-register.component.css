@@ -1,0 +1,58 @@
+p {
+  font-family: Lato;
+}
+
+body {
+  padding: 30px;
+}
+
+.pre-register-form {
+  max-width: 500px;
+  padding: 40px 30px 60px 30px;
+  margin: auto;
+  background-color: rgb(255, 255, 255, 1);
+  border-radius: 10px;
+}
+
+.pre-register-form h1::first-letter {
+  font-size: 40px;
+  color: #000000;
+}
+
+.pre-register-form h1 {
+  font-size: 20px;
+  color: #000000;
+}
+
+.pre-register-btn {
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.pre-register-btn button i {
+  padding-right: 5px;
+}
+
+.agreement a {
+  text-decoration: none;
+  color: #0fa4f0;
+  cursor: pointer;
+}
+
+.accept-terms {
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.accept-terms label {
+  padding-top: 2px;
+}
+
+.showpassword-eye {
+  display: flex;
+  cursor: pointer;
+}
+
+.showpassword-eye span {
+  border-color: #2b3553 !important;
+}

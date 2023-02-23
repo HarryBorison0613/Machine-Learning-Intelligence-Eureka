@@ -1,0 +1,186 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center">{{selectedCryptoQuote}} Cryptocurrency Quote</h1>
+        <p-table #dt1 
+        [value]="cryptoQuote" 
+        dataKey="id"
+        [rows]="10" [showCurrentPageReport]="true" 
+        [rowsPerPageOptions]="[10,25,50]" 
+        [loading]="cryptoQuoteLoading" styleClass="p-datatable-gridlines"
+        [paginator]="true" 
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        responsiveLayout="scroll">
+            <ng-template pTemplate="caption">
+                <div class="d-flex justify-content-between">
+                    <button 
+                      pButton 
+                      label="Clear" 
+                      class="p-button-outlined" 
+                      icon="pi pi-filter-slash" 
+                      (click)="clear(dt1)">
+                      </button>
+                    <p-autoComplete 
+                      #cryptoQuote 
+                      [(ngModel)]="selectedCryptoQuote" 
+                      [suggestions]="filteredSymbols" 
+                      (completeMethod)="filterSymbol($event)"
+                      [minLength]="1" 
+                      (onSelect)="getCryptoQuote(cryptoQuote.value)" 
+                      placeholder="Search symbol">
+                    </p-autoComplete>
+                </div>
+              <h6 class="mt-4">Please use <i class="pi pi-filter"></i> for advanced search</h6>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>    
+                    <th>
+                      <div class="flex justify-content-center align-items-center">
+                        Symbol
+                        <p-columnFilter type="text" field="symbol" display="menu"></p-columnFilter>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="flex justify-content-center align-items-center">
+                        Primary Exchange
+                        <p-columnFilter type="text" field="primaryExchange" display="menu"></p-columnFilter>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="flex justify-content-center align-items-center">
+                        Sector
+                        <p-columnFilter type="text" field="sector" display="menu"></p-columnFilter>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="flex justify-content-center align-items-center">
+                        Calculation Price
+                        <p-columnFilter type="text" field="calculationPrice" display="menu"></p-columnFilter>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="flex justify-content-center align-items-center">
+                        Latest Price
+                        <p-columnFilter type="numeric" field="latestPrice" display="menu"></p-columnFilter>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="flex justify-content-center align-items-center">
+                        Latest Source
+                        <p-columnFilter type="text" field="ltestSource" display="menu"></p-columnFilter>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="flex justify-content-center align-items-center">
+                        Latest Update
+                        <p-columnFilter type="numeric" field="latestUpdate" display="menu"></p-columnFilter>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="flex justify-content-center align-items-center">
+                        Latest Volume
+                        <p-columnFilter type="numeric" field="latestVolume" display="menu"></p-columnFilter>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="flex justify-content-center align-items-center">
+                        Bid Price
+                        <p-columnFilter type="numeric" field="bidPrice" display="menu"></p-columnFilter>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="flex justify-content-center align-items-center">
+                        Bid Size
+                        <p-columnFilter type="numeric" field="bidSize" display="menu"></p-columnFilter>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="flex justify-content-center align-items-center">
+                        Ask Price
+                        <p-columnFilter type="numeric" field="askPrice" display="menu"></p-columnFilter>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="flex justify-content-center align-items-center">
+                        Ask Size
+                        <p-columnFilter type="numeric" field="askSize" display="menu"></p-columnFilter>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="flex justify-content-center align-items-center">
+                        High
+                        <p-columnFilter type="numeric" field="high" display="menu"></p-columnFilter>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="flex justify-content-center align-items-center">
+                        Low
+                        <p-columnFilter type="numeric" field="low" display="menu"></p-columnFilter>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="flex justify-content-center align-items-center">
+                        Previous Close
+                        <p-columnFilter type="numeric" field="previousClose" display="menu"></p-columnFilter>
+                      </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-collection>
+                <tr>
+                    <td>
+                      {{collection.symbol}}
+                    </td>
+                    <td>
+                      {{collection.primaryExchange}}
+                    </td>
+                    <td>
+                      {{collection.sector}}
+                    </td>
+                    <td>
+                      {{collection.calculationPrice}}
+                    </td>
+                    <td>
+                      {{collection.latestPrice}}
+                    </td>
+                    <td>
+                      {{collection.ltestSource}}
+                    </td>
+                    <td>
+                      {{collection.latestUpdate}}
+                    </td>
+                    <td>
+                      {{collection.latestVolume}}
+                    </td>
+                    <td>
+                      {{collection.bidPrice}}
+                    </td>
+                    <td>
+                      {{collection.bidSize}}
+                    </td>
+                    <td>
+                      {{collection.askPrice}}
+                    </td>
+                    <td>
+                      {{collection.askSize}}
+                    </td>
+                    <td>
+                      {{collection.high}}
+                    </td>
+                    <td>
+                      {{collection.low}}
+                    </td>
+                    <td>
+                      {{collection.previousClose}}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="15">No collections found.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+a {
+    font-size: 12px;
+    color: white;
+    font-weight: bold;
+    /* text-decoration: underline; */
+    text-align: center;
+}
+
+.table-card :hover a {
+    color: #4567bb;
+    text-decoration: underline;
+}
+
+th {
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+td {
+    font-size: 10px;
+}
+
+td, th {
+    white-space: nowrap;
+}

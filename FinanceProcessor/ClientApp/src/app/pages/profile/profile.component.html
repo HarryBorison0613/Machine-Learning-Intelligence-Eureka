@@ -1,0 +1,299 @@
+<div class="content row">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header"><h5 class="title">Edit Profile</h5></div>
+      <div class="card-body">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-md-6 pr-md-1">
+              <div class="form-group">
+                <label> Display Name </label>
+                <input
+                  class="form-control"
+                  [(ngModel)]="dispalyName"
+                  [ngModelOptions]="{ standalone: true }"
+                  placeholder="Display Name"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div class="col-md-6 pl-md-1">
+              <div class="form-group">
+                <label for="exampleInputEmail1"> Email address </label>
+                <input
+                  class="form-control"
+                  formControlName="email"
+                  placeholder="me@email.com"
+                  type="email"
+                  [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
+                />
+                <div
+                  *ngIf="submitted && f['email'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['email'].errors['required']">
+                    Email is required
+                  </div>
+                  <div *ngIf="f['email'].errors['email']">Email is invalid</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 pr-md-1">
+              <div class="form-group">
+                <label> First Name </label>
+                <input
+                  class="form-control"
+                  formControlName="firstName"
+                  placeholder="First Name"
+                  type="text"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['firstName'].errors
+                  }"
+                />
+                <div
+                  *ngIf="submitted && f['firstName'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['firstName'].errors['required']">
+                    First Name is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 pl-md-1">
+              <div class="form-group">
+                <label> Last Name </label>
+                <input
+                  class="form-control"
+                  formControlName="lastName"
+                  placeholder="Last Name"
+                  type="text"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['lastName'].errors
+                  }"
+                />
+                <div
+                  *ngIf="submitted && f['lastName'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['lastName'].errors['required']">
+                    Last Name is required
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 pr-md-1">
+              <div class="form-group">
+                <label> Address </label>
+                <input
+                  class="form-control"
+                  formControlName="address"
+                  placeholder="Home Address"
+                  type="text"
+                  [ngClass]="{ 'is-invalid': submitted && f['address'].errors }"
+                />
+                <div
+                  *ngIf="submitted && f['address'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['address'].errors['required']">
+                    Address is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2 pl-md-1 pr-md-1">
+              <div class="form-group">
+                <label> Apt Suite </label>
+                <input
+                  class="form-control"
+                  formControlName="aptSuite"
+                  placeholder="Apt Suite"
+                  type="text"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['aptSuite'].errors
+                  }"
+                />
+                <div
+                  *ngIf="submitted && f['aptSuite'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['aptSuite'].errors['required']">
+                    Apt is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 pl-md-1">
+              <div class="form-group">
+                <label> City </label>
+                <input
+                  class="form-control"
+                  formControlName="city"
+                  placeholder="City"
+                  type="text"
+                  [ngClass]="{ 'is-invalid': submitted && f['city'].errors }"
+                />
+                <div
+                  *ngIf="submitted && f['city'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['city'].errors['required']">
+                    City is required
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 pr-md-1">
+              <div class="form-group">
+                <label> Postal Code </label>
+                <input
+                  class="form-control"
+                  formControlName="postalCode"
+                  placeholder="ZIP/Postal Code"
+                  type="text"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['postalCode'].errors
+                  }"
+                />
+                <div
+                  *ngIf="submitted && f['postalCode'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['postalCode'].errors['required']">
+                    Postal Code is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 px-md-1">
+              <div class="form-group">
+                <label> Region Code (State/Province) </label>
+                <input
+                  class="form-control"
+                  #input
+                  (input)="input.value = $event.target.value.toUpperCase()"
+                  formControlName="regionCode"
+                  placeholder="CA for California"
+                  type="text"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['regionCode'].errors
+                  }"
+                />
+                <div
+                  *ngIf="submitted && f['regionCode'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['regionCode'].errors['required']">
+                    Region Code is required
+                  </div>
+                  <div *ngIf="f['regionCode'].errors['minlength']">
+                    Region Code must be at least 2 characters
+                  </div>
+                  <div *ngIf="f['regionCode'].errors['maxlength']">
+                    Region Code must not exceed 2 characters
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 pl-md-1">
+              <div class="form-group country-filter">
+                <label> Country Code </label>
+                <p-autoComplete
+                  [(ngModel)]="selectedCountry"
+                  [ngModelOptions]="{ standalone: true }"
+                  [suggestions]="filteredCountries"
+                  (completeMethod)="filterCountry($event)"
+                  field="code"
+                  [minLength]="1"
+                  [dropdown]="true"
+                  [virtualScroll]="true"
+                  placeholder="Input Country!"
+                  class="d-flex"
+                >
+                  <ng-template let-country pTemplate="item">
+                    <div class="country-item">
+                      <div>{{ country.name }}</div>
+                    </div>
+                  </ng-template>
+                </p-autoComplete>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8">
+              <div class="form-group">
+                <label> About Me </label>
+                <textarea
+                  class="form-control"
+                  formControlName="aboutMe"
+                  cols="80"
+                  placeholder="Here can be your description"
+                  rows="4"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-fill btn-danger" type="submit">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card card-user">
+      <div class="card-body">
+        <p class="card-text"></p>
+        <div class="author">
+          <div class="block block-one"></div>
+          <div class="block block-two"></div>
+          <div class="block block-three"></div>
+          <div class="block block-four"></div>
+          <a href="javascript:void(0)">
+            <img alt="..." class="avatar" src="assets/img/user.png" />
+            <h5 class="title">{{ this.userName }}</h5>
+          </a>
+          <p class="description">Preferred User</p>
+        </div>
+        <div class="card-description"></div>
+      </div>
+      <div class="card-footer">
+        <div class="button-container">
+          <button
+            class="btn btn-icon btn-round btn-facebook"
+            href="javascript:void(0)"
+          >
+            <i class="fab fa-facebook"> </i>
+          </button>
+          <button
+            class="btn btn-icon btn-round btn-twitter"
+            href="javascript:void(0)"
+          >
+            <i class="fab fa-twitter"> </i>
+          </button>
+          <button
+            class="btn btn-icon btn-round btn-google"
+            href="javascript:void(0)"
+          >
+            <i class="fab fa-google-plus"> </i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-spinner
+  bdColor="rgba(0,0,0,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-fall"
+>
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>

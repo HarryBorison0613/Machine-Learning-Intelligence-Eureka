@@ -1,0 +1,263 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center">{{selectedSymbol}} Insider Transations</h1>
+        <p-table 
+        #dt1 
+        [value]="insiderTransactions" 
+        dataKey="id"
+        [rows]="5" 
+        [showCurrentPageReport]="true" 
+        [rowsPerPageOptions]="[10,25,50]" 
+        [loading]="insiderTransactionsLoading" 
+        styleClass="p-datatable-gridlines"
+        [paginator]="true" 
+        currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['directIndirect','reportedTitle','symbol','id','key','subkey','transactionCode']" 
+        responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between">
+              <div>
+                <button 
+                  pButton 
+                  label="Clear" 
+                  class="p-button-outlined" 
+                  icon="pi pi-filter-slash" 
+                  (click)="clear(dt1)">
+                </button>
+              </div>
+              <div>
+                <p-autoComplete 
+                  #insiderTransactionsSymbol 
+                  [(ngModel)]="selectedSymbol" 
+                  [suggestions]="filteredSymbols" 
+                  (completeMethod)="filterSymbol($event)"
+                  [minLength]="1" 
+                  (onSelect)="getInsiderTransactions(insiderTransactionsSymbol.value)" placeholder="Search symbol">
+                </p-autoComplete>
+                <button 
+                  pButton 
+                  type="button" 
+                  icon="pi pi-times" 
+                  class="p-button-outlined"
+                  (click)="cancel()">
+                </button>
+              </div>
+            </div>
+          <h6 class="mt-4">Please use <i class="pi pi-filter"></i> for advanced search</h6>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Symbol
+                        <p-columnFilter type="text" field="symbol" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        ConversionOrExercisePrice
+                        <p-columnFilter type="numeric" field="conversionOrExercisePrice" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        DirectIndirect
+                        <p-columnFilter type="numeric" field="directIndirect" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        EffectiveDate
+                        <p-columnFilter type="date" field="effectiveDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        FilingDate
+                        <p-columnFilter type="date" field="filingDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Full Name
+                        <p-columnFilter type="text" field="fullName" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Is10b51
+                        <p-columnFilter type="boolean" field="is10b51" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        PostShares
+                        <p-columnFilter type="numeric" field="postShares" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Reported Title
+                        <p-columnFilter type="text" field="reportedTitle" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Transaction Code
+                        <p-columnFilter type="text" field="transactionCode" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Transaction Date
+                        <p-columnFilter type="date" field="transactionDate" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Transaction Price
+                        <p-columnFilter type="numeric" field="transactionPricee" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Transaction Shares
+                        <p-columnFilter type="numeric" field="transactionShares" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Transaction Value
+                        <p-columnFilter type="numeric" field="transactionValue" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Id
+                        <p-columnFilter type="numeric" field="id" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Key
+                        <p-columnFilter type="numeric" field="key" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Subkey
+                        <p-columnFilter type="numeric" field="subkey" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Date
+                        <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        Updated
+                        <p-columnFilter type="date" field="updated" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        TranPrice
+                        <p-columnFilter type="numeric" field="tranPrice" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        TranShares
+                        <p-columnFilter type="numeric" field="tranShares" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-content-center align-items-center">
+                        TranValue
+                        <p-columnFilter type="numeric" field="tranValue" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-collection>
+            <tr>
+                <td>
+                    {{collection.symbol}}
+                </td>
+                <td>
+                    {{collection.conversionOrExercisePrice}}
+                </td>
+                <td>
+                    {{collection.directIndirect}}
+                </td>
+                <td>
+                    {{collection.effectiveDate | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.filingDate | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.fullName}}
+                </td>
+                <td>
+                    {{collection.is10b51}}
+                </td>
+                <td>
+                    {{collection.postShares}}
+                </td>
+                <td>
+                    {{collection.reportedTitle}}
+                </td>
+                <td>
+                    {{collection.transactioinCode}}
+                </td>
+                <td>
+                    {{collection.transactionDate | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.transactionPrice}}
+                </td>
+                <td>
+                    {{collection.transactionShares}}
+                </td>
+                <td>
+                    {{collection.transactionValue}}
+                </td>
+                <td>
+                    {{collection.id}}
+                </td>
+                <td>
+                    {{collection.key}}
+                </td>
+                <td>
+                    {{collection.subkey}}
+                </td>
+                <td>
+                    {{collection.date | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.updated | date: 'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{collection.tranPrice}}
+                </td>
+                <td>
+                    {{collection.tranShares}}
+                </td>
+                <td>
+                    {{collection.tranValue}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="22">No collections found.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    </div>
+  </div>
+</div>

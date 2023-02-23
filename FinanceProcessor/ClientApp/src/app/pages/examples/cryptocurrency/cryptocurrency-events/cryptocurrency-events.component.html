@@ -1,0 +1,114 @@
+<div class=" content">
+  <div class=" row">
+    <div class="col-md-12">
+      <h1 class="text-center">{{selectedCryptoEventsSymbol}} Cryptocurrency Events</h1>
+        <p-table #dt1 
+        [value]="cryptoEvents" 
+        dataKey="id"
+        [rows]="10" [showCurrentPageReport]="true" 
+        [rowsPerPageOptions]="[10,25,50]" 
+        [loading]="cryptoEventsLoading" styleClass="p-datatable-gridlines"
+        [paginator]="true" 
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        responsiveLayout="scroll">
+            <ng-template pTemplate="caption">
+                <div class="d-flex justify-content-between">
+                    <button 
+                      pButton 
+                      label="Clear" 
+                      class="p-button-outlined" 
+                      icon="pi pi-filter-slash" 
+                      (click)="clear(dt1)">
+                      </button>
+                    <p-autoComplete 
+                      #cryptoEventsSymbol 
+                      [(ngModel)]="selectedCryptoEventsSymbol" 
+                      [suggestions]="filteredSymbols" 
+                      (completeMethod)="filterSymbol($event)"
+                      [minLength]="1" 
+                      (onSelect)="getCryptoEvents(cryptoEventsSymbol.value)" 
+                      placeholder="Search symbol">
+                    </p-autoComplete>
+                </div>
+              <h6 class="mt-4">Please use <i class="pi pi-filter"></i> for advanced search</h6>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>    
+                    <th>
+                      <div class="flex justify-content-center align-items-center">
+                        Symbol
+                        <p-columnFilter type="text" field="symbol" display="menu"></p-columnFilter>
+                      </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-center align-items-center">
+                          EventType
+                          <p-columnFilter type="text" field="eventType" display="menu"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-center align-items-center">
+                          Timestamp
+                          <p-columnFilter type="date" field="timestamp" display="menu"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-center align-items-center">
+                          Reason
+                          <p-columnFilter type="text" field="reason" display="menu"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-center align-items-center">
+                          Price
+                          <p-columnFilter type="numeric" field="price" display="menu"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-center align-items-center">
+                          Size
+                          <p-columnFilter type="numeric" field="size" display="menu"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-center align-items-center">
+                          Side
+                          <p-columnFilter type="text" field="side" display="menu"></p-columnFilter>
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-collection>
+                <tr>
+                    <td>
+                      {{collection.symbol}}
+                    </td>
+                    <td>
+                      {{collection.eventType}}
+                    </td>
+                    <td>
+                      {{collection.timestamp}}
+                    </td>
+                    <td>
+                      {{collection.reason}}
+                    </td>
+                    <td>
+                      {{collection.price}}
+                    </td>
+                    <td>
+                      {{collection.size}}
+                    </td>
+                    <td>
+                      {{collection.side}}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="7">No collections found.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+  </div>
+</div>

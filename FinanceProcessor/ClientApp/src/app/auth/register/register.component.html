@@ -1,0 +1,238 @@
+<div class="full-page register-page">
+  <div class="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-5 ml-auto">
+          <div class="info-area info-horizontal mt-5">
+            <div class="icon icon-warning">
+              <i class="tim-icons icon-wifi"> </i>
+            </div>
+            <div class="description">
+              <h3 class="info-title">MLI</h3>
+              <p class="description">
+                We've created the Marchine Learning Intelligence of the website.
+                It was a very interesting collaboration.
+              </p>
+            </div>
+          </div>
+          <div class="info-area info-horizontal">
+            <div class="icon icon-primary">
+              <i class="tim-icons icon-triangle-right-17"> </i>
+            </div>
+            <div class="description">
+              <h3 class="info-title">Fully Coded in Angular 13</h3>
+              <p class="description">
+                We've developed the website with Angular 13. You can access
+                almost of resources.
+              </p>
+            </div>
+          </div>
+          <div class="info-area info-horizontal">
+            <div class="icon icon-info">
+              <i class="tim-icons icon-trophy"> </i>
+            </div>
+            <div class="description">
+              <h3 class="info-title">Built Audience</h3>
+              <p class="description">
+                There are also user friendly services for this product.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-7 mr-auto">
+          <div class="register-form">
+            <h1 class="title">Register</h1>
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+              <div class="form-group">
+                <label>First Name</label>
+                <input
+                  type="text"
+                  formControlName="firstname"
+                  class="form-control text-dark"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['firstname'].errors
+                  }"
+                />
+                <div
+                  *ngIf="submitted && f['firstname'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['firstname'].errors['required']">
+                    First name is required
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Last Name</label>
+                <input
+                  type="text"
+                  formControlName="lastname"
+                  class="form-control text-dark"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['lastname'].errors
+                  }"
+                />
+                <div
+                  *ngIf="submitted && f['lastname'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['lastname'].errors['required']">
+                    Last Name is required
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Email</label>
+                <input
+                  type="email"
+                  formControlName="email"
+                  class="form-control text-dark"
+                  [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
+                />
+                <div
+                  *ngIf="submitted && f['email'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['email'].errors['required']">
+                    Email is required
+                  </div>
+                  <div *ngIf="f['email'].errors['email']">Email is invalid</div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Password</label>
+                <div class="input-group">
+                  <input
+                    [type]="fieldTextType ? 'text' : 'password'"
+                    formControlName="password"
+                    class="form-control text-dark"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['password'].errors
+                    }"
+                  />
+                  <div class="showpassword-eye">
+                    <span class="input-group-text">
+                      <i
+                        class="fa"
+                        [ngClass]="{
+                          'fa-eye-slash': !fieldTextType,
+                          'fa-eye': fieldTextType
+                        }"
+                        (click)="toggleFieldTextType()"
+                      ></i>
+                    </span>
+                  </div>
+
+                  <div
+                    *ngIf="submitted && f['password'].errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f['password'].errors['required']">
+                      Password is required
+                    </div>
+                    <div *ngIf="f['password'].errors['minlength']">
+                      Password must be at least 6 characters
+                    </div>
+                    <div *ngIf="f['password'].errors['maxlength']">
+                      Username must not exceed 40 characters
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Confirm Password</label>
+                <div class="input-group">
+                  <input
+                    [type]="repeatFieldTextType ? 'text' : 'password'"
+                    formControlName="confirmPassword"
+                    class="form-control text-dark"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['confirmPassword'].errors
+                    }"
+                  />
+                  <div class="showpassword-eye">
+                    <span class="input-group-text">
+                      <i
+                        class="fa"
+                        [ngClass]="{
+                          'fa-eye-slash': !repeatFieldTextType,
+                          'fa-eye': repeatFieldTextType
+                        }"
+                        (click)="toggleRepeatFieldTextType()"
+                      ></i>
+                    </span>
+                  </div>
+
+                  <div
+                    *ngIf="submitted && f['confirmPassword'].errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f['confirmPassword'].errors['required']">
+                      Confirm Password is required
+                    </div>
+                    <div *ngIf="f['confirmPassword'].errors['matching']">
+                      Confirm Password does not match
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accept-terms">
+                <input
+                  type="checkbox"
+                  formControlName="acceptTerms"
+                  class="form-check-input"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['acceptTerms'].errors
+                  }"
+                />
+                <label for="acceptTerms" class="form-check-label">
+                  I agree to the
+                  <a href="javascript:void(0)"> terms and conditions </a>.
+                </label>
+                <div
+                  *ngIf="submitted && f['acceptTerms'].errors"
+                  class="invalid-feedback"
+                >
+                  Accept Terms is required
+                </div>
+              </div>
+
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary">Register</button>
+                <button
+                  type="button"
+                  (click)="onReset()"
+                  class="btn btn-warning float-right"
+                >
+                  Reset
+                </button>
+              </div>
+              <div>
+                <div class="pull-right mt-3">
+                  <h6>
+                    <a class="link footer-link" href="./#/login">
+                      Already Have Account
+                    </a>
+                  </h6>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-spinner
+  bdColor="rgba(0,0,0,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-fall"
+>
+  <p style="font-size: 20px; color: white">Registering...</p>
+</ngx-spinner>

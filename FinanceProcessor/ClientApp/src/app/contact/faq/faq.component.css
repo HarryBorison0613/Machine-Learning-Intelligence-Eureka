@@ -1,0 +1,20 @@
+.title h1 {
+    font-style: italic;
+}
+
+.content {
+    font-size: 1.2rem;
+}
+
+.content p em {
+    font-size: 3rem;
+    color: brown;
+}
+
+.content p {
+    font-style: italic;
+}
+
+.title h1 {
+    color: brown;
+}
